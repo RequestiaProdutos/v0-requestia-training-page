@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, Monitor, Award, CheckCircle2, ClockFading, CalendarCheck, MapPin, MonitorPlay, LoaderCircle } from 'lucide-react'
+import { ArrowLeft, Monitor, Award, CheckCircle2, ClockFading, CalendarCheck, MapPin, MonitorPlay } from 'lucide-react'
 import { EnrollFormEssentials } from '@/components/enroll-form-essentials'
 import { EnrollFormFoundations } from '@/components/enroll-form-foundations'
 import { EnrollFormExpert } from '@/components/enroll-form-expert'
@@ -39,7 +39,6 @@ interface FormData {
 
 export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     role: '',
@@ -149,9 +148,8 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
 
     // Prepare confirmation data
     const confirmationData = {
@@ -168,9 +166,6 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
       compFinEmail: formData.compFinEmail,
       additionalParticipants: formData.additionalParticipants || []
     }
-
-    // Simulate 2 second loading
-    await new Promise(resolve => setTimeout(resolve, 2000))
 
     // Redirect to confirmation page with data
     const encodedData = encodeURIComponent(JSON.stringify(confirmationData))
@@ -193,14 +188,6 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
   if (!isOpen) return null
 
   return (
-    <>
-      {isLoading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="flex flex-col items-center justify-center">
-            <LoaderCircle className="w-16 h-16 text-[#0D5B9C] animate-spin" />
-          </div>
-        </div>
-      )}
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto no-scrollbar p-4 pt-10">
       <div className="w-full max-w-5xl bg-white rounded-lg mt-4">
         {/* Header */}
@@ -347,8 +334,8 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
             {renderForm()}
           </div>
         </div>
+        </div>
       </div>
     </div>
-    </>
   )
 }
