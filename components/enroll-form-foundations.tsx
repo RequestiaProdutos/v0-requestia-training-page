@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronDown, ChevronUp, Edit2, Trash2, Plus } from 'lucide-react'
 import { Input } from './ui/input'
+import Link from "next/link";
 
 interface AdditionalParticipant {
   id: string
@@ -534,12 +535,14 @@ export function EnrollFormFoundations({ formData, onFormDataChange, onSubmit }: 
           </div>
 
           {/* Submit Button */}
-          <Button
-            type="submit"
-            className="w-full px-8 py-6 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-2xl"
-          >
-            Confirmar inscrição
-          </Button>
+          <Link href="/nova-rota">
+            <Button
+              type="submit"
+              className="w-full px-8 py-6 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-2xl"
+            >
+              Confirmar inscrição
+            </Button>
+          </Link>
         </form>
       </div >
     </div >
