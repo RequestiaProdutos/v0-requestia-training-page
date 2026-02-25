@@ -40,22 +40,17 @@ function ConfirmationPageContent() {
 
   useEffect(() => {
     try {
-      // Simulate loading screen for 2 seconds
-      const timer = setTimeout(() => {
-        const dataParam = searchParams.get('data')
-        if (dataParam) {
-          try {
-            const decodedData = JSON.parse(decodeURIComponent(dataParam))
-            setConfirmationData(decodedData)
-            setConfirmationNumber(generateConfirmationNumber())
-          } catch (parseError) {
-            console.error('Error parsing data:', parseError)
-          }
+      const dataParam = searchParams.get('data')
+      if (dataParam) {
+        try {
+          const decodedData = JSON.parse(decodeURIComponent(dataParam))
+          setConfirmationData(decodedData)
+          setConfirmationNumber(generateConfirmationNumber())
+        } catch (parseError) {
+          console.error('Error parsing data:', parseError)
         }
-        setIsLoading(false)
-      }, 2000)
-
-      return () => clearTimeout(timer)
+      }
+      setIsLoading(false)
     } catch (error) {
       console.error('Error in confirmation page:', error)
       setIsLoading(false)

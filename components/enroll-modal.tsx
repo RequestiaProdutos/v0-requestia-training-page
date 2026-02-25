@@ -39,7 +39,6 @@ interface FormData {
 
 export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     role: '',
@@ -149,9 +148,8 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
 
     // Prepare confirmation data
     const confirmationData = {
@@ -168,9 +166,6 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
       compFinEmail: formData.compFinEmail,
       additionalParticipants: formData.additionalParticipants || []
     }
-
-    // Simulate 2 second loading
-    await new Promise(resolve => setTimeout(resolve, 2000))
 
     // Redirect to confirmation page with data
     const encodedData = encodeURIComponent(JSON.stringify(confirmationData))
