@@ -109,6 +109,18 @@ export function EnrollFormFoundations({ formData, onFormDataChange, onSubmit }: 
       isPCD: null,
       pcdDescription: ''
     })
+
+    // Update parent form data with additional participants
+    const participantsForForm = additionalParticipants.map(p => ({
+      addName: p.addName,
+      role: p.role,
+      email: p.email,
+      phone: p.phone
+    }))
+    onFormDataChange({
+      ...formData,
+      additionalParticipants: participantsForForm
+    })
   }
 
   const handleEditParticipant = (participant: AdditionalParticipant) => {
@@ -127,6 +139,18 @@ export function EnrollFormFoundations({ formData, onFormDataChange, onSubmit }: 
 
   const handleDeleteParticipant = (id: string) => {
     setAdditionalParticipants(prev => prev.filter(p => p.id !== id))
+    // Update parent form data
+    const updatedParticipants = additionalParticipants.filter(p => p.id !== id)
+    const participantsForForm = updatedParticipants.map(p => ({
+      addName: p.addName,
+      role: p.role,
+      email: p.email,
+      phone: p.phone
+    }))
+    onFormDataChange({
+      ...formData,
+      additionalParticipants: participantsForForm
+    })
   }
 
   const handleCancel = () => {
