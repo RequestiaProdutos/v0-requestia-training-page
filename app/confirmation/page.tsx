@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Lock, Calendar, MapPin, Clock, Award, Mail, Download, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { ContactModal } from '@/components/contact-modal'
 
 function generateConfirmationNumber() {
   return `REQ-${Math.floor(Math.random() * 100000000)}`
@@ -71,16 +72,15 @@ export default function ConfirmationPage() {
   return (
     <div className="min-h-screen bg-[#F4F7FA]">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <Image src="/LogoRequestia.png" alt="Requestia" width={120} height={40} className="h-8 w-auto" />
-          </Link>
-          <Link href="/">
-            <Button variant="outline" size="sm">
-              ← Dúvidas
-            </Button>
-          </Link>
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between">
+          <img
+            src="/LogoRequestia.png"
+            alt="Requestia Logo"
+            width={140}
+            height={44}
+          />
+          <ContactModal />
         </div>
       </header>
 
