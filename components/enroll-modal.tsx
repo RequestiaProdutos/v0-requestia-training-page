@@ -175,8 +175,6 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
     // Redirect to confirmation page with data
     const encodedData = encodeURIComponent(JSON.stringify(confirmationData))
     router.push(`/confirmation?data=${encodedData}`)
-    
-    setIsLoading(false)
   }
 
   const renderForm = () => {

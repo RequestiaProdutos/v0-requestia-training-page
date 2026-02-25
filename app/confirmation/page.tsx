@@ -3,9 +3,9 @@
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Lock, Calendar, MapPin, Clock, Award, Mail, Phone, Building2, UserCheck, ArrowLeft, DownloadIcon } from 'lucide-react'
+import { Lock, Calendar, MapPin, Clock, Award, Mail, Phone, Building2, ArrowLeft, DownloadIcon, LoaderCircle } from 'lucide-react'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Image from 'next/image'
 
 interface ConfirmationData {
@@ -32,36 +32,57 @@ function generateConfirmationNumber() {
   return `REQ-${Math.floor(Math.random() * 100000000)}`
 }
 
-export default function ConfirmationPage() {
+function ConfirmationPageContent() {
   const searchParams = useSearchParams()
   const [confirmationData, setConfirmationData] = useState<ConfirmationData | null>(null)
   const [confirmationNumber, setConfirmationNumber] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     try {
-      const dataParam = searchParams.get('data')
-      if (dataParam) {
-        const decodedData = JSON.parse(decodeURIComponent(dataParam))
-        setConfirmationData(decodedData)
-        setConfirmationNumber(generateConfirmationNumber())
-      }
+      // Simulate loading screen for 2 seconds
+      const timer = setTimeout(() => {
+        const dataParam = searchParams.get('data')
+        if (dataParam) {
+          try {
+            const decodedData = JSON.parse(decodeURIComponent(dataParam))
+            setConfirmationData(decodedData)
+            setConfirmationNumber(generateConfirmationNumber())
+          } catch (parseError) {
+            console.error('Error parsing data:', parseError)
+          }
+        }
+        setIsLoading(false)
+      }, 2000)
+
+      return () => clearTimeout(timer)
     } catch (error) {
-      console.error('Error decoding confirmation data:', error)
+      console.error('Error in confirmation page:', error)
+      setIsLoading(false)
     }
   }, [searchParams])
 
-  if (!confirmationData) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center">
-        <p className="text-gray-600">Carregando informações de confirmação...</p>
+        <div className="flex flex-col items-center justify-center gap-4">
+          <LoaderCircle className="w-16 h-16 text-[#0D5B9C] animate-spin" />
+        </div>
       </div>
     )
   }
 
-  const levelColors: { [key: string]: string } = {
-    'essentials': 'from-[#F2A57B] to-[#E97334]',
-    'foundations': 'from-[#6F8EAA] to-[#B3C6D9]',
-    'expert': 'from-[#E7B15C] to-[#DE9627]'
+  if (!confirmationData) {
+    return (
+      <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Erro ao carregar informações de confirmação</p>
+          <Link href="/">
+            <Button variant="outline">Voltar para página inicial</Button>
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   const getLevelDetails = () => {
@@ -82,9 +103,9 @@ export default function ConfirmationPage() {
         }
       case 'expert':
         return {
-          date: '9 a 11 de novembro de 2026',
-          location: 'Campinas, SP',
-          duration: '3 dias intensivos',
+          date: 'A confirmar',
+          location: 'A confirmar',
+          duration: '5 dias intensivos',
           certification: 'Requestia Expert'
         }
       default:
@@ -102,191 +123,220 @@ export default function ConfirmationPage() {
   return (
     <div className="min-h-screen bg-[#F4F7FA]">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between">
-          <img
-            src="/LogoRequestia.png"
-            alt="Requestia Logo"
-            width={140}
-            height={44}
-          />
-          <Button variant="outline" className="border-2 border-[#0D5B9C] text-[#0D5B9C]">
-            Dúvidas
-          </Button>
+      <header className="bg-white border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/">
+            <Image src="/LogoRequestia.png" alt="Requestia" width={120} height={40} className="h-8 w-auto" />
+          </Link>
+          <Link href="/">
+            <Button variant="outline" size="sm">
+              ← Dúvidas
+            </Button>
+          </Link>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-6xl mx-auto px-6 py-12">
         {/* Success Message */}
         <div className="text-center mb-12">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-full bg-[#E3F2FD] flex items-center justify-center">
-              <Lock className="w-8 h-8 text-[#0D5B9C]" />
+            <div className="p-4 bg-green-50 rounded-full">
+              <Lock className="w-10 h-10 text-green-600" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-[#00233f] mb-2">Inscrição confirmada!</h1>
-          <p className="text-gray-600">Receberemos sua solicitação de inscrição para o treinamento</p>
-        </div>
-
-        {/* Confirmation Number */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-[#EFF2FC] px-4 py-2 rounded-lg border border-[#0D5B9C]/20">
-            <span className="text-sm text-[#5F7990] font-medium">Solicitação:</span>
-            <span className="text-sm font-mono font-bold text-[#0D5B9C]">{confirmationNumber}</span>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Inscrição confirmada!</h1>
+          <p className="text-gray-600">Recebemos sua solicitação de inscrição para o treinamento</p>
+          
+          {/* Confirmation Number */}
+          <div className="mt-6 inline-block bg-white border border-gray-200 rounded-lg px-6 py-3">
+            <span className="text-gray-600 text-sm">Solicitação:</span>
+            <span className="font-semibold text-gray-900 ml-2">{confirmationNumber}</span>
           </div>
         </div>
 
-        {/* Course Details Card */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-8 mb-8">
-          {/* Level Badge and Title */}
-          <div className="mb-8 pb-8 border-b">
-            <Badge className={`bg-gradient-to-b ${levelColors[confirmationData.level]} text-white border-0 px-3 py-1 rounded-full mb-4`}>
-              {confirmationData.levelNumber}
-            </Badge>
-            <h2 className="text-3xl font-bold text-[#00233f] mb-2">{confirmationData.levelName}</h2>
+        {/* Training Details Card */}
+        <div className="bg-white rounded-lg border border-gray-200 p-8 mb-8">
+          {/* Level Badge */}
+          <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-100">
+            {confirmationData.levelNumber}
+          </Badge>
+
+          {/* Level Name */}
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">{confirmationData.levelName}</h2>
+
+          {/* Details Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-gray-200">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <Calendar className="w-5 h-5 text-gray-600" />
+                <span className="text-sm font-semibold text-gray-700">Data</span>
+              </div>
+              <p className="text-gray-900 font-semibold">{details.date}</p>
+            </div>
+
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <MapPin className="w-5 h-5 text-gray-600" />
+                <span className="text-sm font-semibold text-gray-700">Local</span>
+              </div>
+              <p className="text-gray-900 font-semibold">{details.location}</p>
+            </div>
+
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <Clock className="w-5 h-5 text-gray-600" />
+                <span className="text-sm font-semibold text-gray-700">Duração</span>
+              </div>
+              <p className="text-gray-900 font-semibold">{details.duration}</p>
+            </div>
+
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <Award className="w-5 h-5 text-gray-600" />
+                <span className="text-sm font-semibold text-gray-700">Certificação</span>
+              </div>
+              <p className="text-gray-900 font-semibold">{details.certification}</p>
+            </div>
           </div>
 
-          {/* Course Info Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 pb-8 border-b">
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2 mb-2">
-                <Calendar className="w-5 h-5 text-[#5F7990]" />
-                <span className="text-xs text-[#5F7990] font-medium">Data</span>
-              </div>
-              <span className="text-sm font-medium text-[#00233f]">{details.date}</span>
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2 mb-2">
-                <MapPin className="w-5 h-5 text-[#5F7990]" />
-                <span className="text-xs text-[#5F7990] font-medium">Local</span>
-              </div>
-              <span className="text-sm font-medium text-[#00233f]">{details.location}</span>
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2 mb-2">
-                <Clock className="w-5 h-5 text-[#5F7990]" />
-                <span className="text-xs text-[#5F7990] font-medium">Duração</span>
-              </div>
-              <span className="text-sm font-medium text-[#00233f]">{details.duration}</span>
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2 mb-2">
-                <Award className="w-5 h-5 text-[#5F7990]" />
-                <span className="text-xs text-[#5F7990] font-medium">Certificação</span>
-              </div>
-              <span className="text-sm font-medium text-[#00233f]">{details.certification}</span>
-            </div>
-          </div>
-
-          {/* Participant Data */}
+          {/* Participant Info */}
           <div className="mb-8">
-            <h3 className="text-lg font-bold text-[#00233f] mb-6">Dados do participante</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-6">Dados do participante</h3>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               <div>
-                <p className="text-sm text-[#5F7990] font-medium mb-1">Allianza Gasparotto Namikawa</p>
-                <p className="text-xs text-[#5F7990] mb-3">{confirmationData.email}</p>
-                <p className="text-sm font-medium text-[#00233f] mb-1">{confirmationData.role}</p>
-                <p className="text-xs text-[#5F7990]">{confirmationData.phone}</p>
+                <span className="text-sm text-gray-600">Nome</span>
+                <p className="font-semibold text-gray-900">{confirmationData.fullName}</p>
               </div>
               <div>
-                <p className="text-sm text-[#5F7990] font-medium mb-1">Necessidades Especiais (PCD)</p>
-                <p className="text-sm font-medium text-[#00233f]">Não</p>
-                <p className="text-xs text-[#5F7990] mt-3">Lorem ipsum dolor sit amet.</p>
+                <span className="text-sm text-gray-600">Email</span>
+                <p className="font-semibold text-gray-900">{confirmationData.email}</p>
               </div>
               <div>
-                <p className="text-sm text-[#5F7990] font-medium mb-1">Empresa</p>
-                <p className="text-sm font-medium text-[#00233f]">{confirmationData.company}</p>
-                <p className="text-xs text-[#5F7990]">{confirmationData.compFinName}</p>
-                <p className="text-xs text-[#5F7990]">{confirmationData.compFinEmail}</p>
+                <span className="text-sm text-gray-600">Cargo</span>
+                <p className="font-semibold text-gray-900">{confirmationData.role}</p>
               </div>
+              <div>
+                <span className="text-sm text-gray-600">Empresa</span>
+                <p className="font-semibold text-gray-900">{confirmationData.company}</p>
+              </div>
+              <div>
+                <span className="text-sm text-gray-600">Telefone</span>
+                <p className="font-semibold text-gray-900">{confirmationData.phone}</p>
+              </div>
+              {confirmationData.compFinName && (
+                <div>
+                  <span className="text-sm text-gray-600">Responsável Financeiro</span>
+                  <p className="font-semibold text-gray-900">{confirmationData.compFinName}</p>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Additional Participants */}
           {confirmationData.additionalParticipants && confirmationData.additionalParticipants.length > 0 && (
-            <div className="mb-8 pb-8 border-b">
-              <h3 className="text-lg font-bold text-[#00233f] mb-6">Participantes Adicionais</h3>
-              <div className="space-y-6">
+            <div className="mb-8 pt-8 border-t border-gray-200">
+              <h3 className="text-lg font-bold text-gray-900 mb-6">Participantes Adicionais</h3>
+              <div className="space-y-4">
                 {confirmationData.additionalParticipants.map((participant, index) => (
-                  <div key={index} className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-[#DEEAF4] flex items-center justify-center text-sm font-bold text-[#0D5B9C]">
-                      {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-[#00233f]">{participant.addName}</p>
-                      <p className="text-xs text-[#5F7990]">{participant.email}</p>
-                      <p className="text-sm text-[#5F7990] mt-1">{participant.role}</p>
-                      <p className="text-xs text-[#5F7990]">{participant.phone}</p>
+                  <div key={index} className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex items-start gap-4">
+                      <div className="font-semibold text-gray-700 bg-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                        {index + 1}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-gray-900">{participant.addName}</p>
+                        <p className="text-sm text-gray-600">{participant.email}</p>
+                        <p className="text-sm text-gray-600">{participant.role}</p>
+                        <p className="text-sm text-gray-600">{participant.phone}</p>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
+        </div>
 
-          {/* Next Steps */}
-          <div className="mb-8">
-            <h3 className="text-lg font-bold text-[#00233f] mb-6">Próximos passos</h3>
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-[#0D5B9C] text-white flex items-center justify-center text-sm font-bold shrink-0">
-                  1
-                </div>
-                <div>
-                  <p className="font-semibold text-[#00233f]">Confirmação por e-mail</p>
-                  <p className="text-sm text-[#5F7990] mt-1">Você receberá um e-mail de confirmação com todos os detalhes da inscrição.</p>
-                </div>
+        {/* Next Steps Card */}
+        <div className="bg-white rounded-lg border border-gray-200 p-8 mb-8">
+          <h3 className="text-lg font-bold text-gray-900 mb-6">Próximos passos</h3>
+          <div className="space-y-4">
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">1</div>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-[#0D5B9C] text-white flex items-center justify-center text-sm font-bold shrink-0">
-                  2
-                </div>
-                <div>
-                  <p className="font-semibold text-[#00233f]">Validação da equipe</p>
-                  <p className="text-sm text-[#5F7990] mt-1">Nossa equipe de treinamento validará sua inscrição em até 2 dias úteis.</p>
-                </div>
+              <div>
+                <h4 className="font-semibold text-gray-900">Confirmação por e-mail</h4>
+                <p className="text-gray-600 text-sm">Você receberá um e-mail de confirmação com todos os detalhes da inscrição.</p>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-[#0D5B9C] text-white flex items-center justify-center text-sm font-bold shrink-0">
-                  3
-                </div>
-                <div>
-                  <p className="font-semibold text-[#00233f]">Instruções de preparação</p>
-                  <p className="text-sm text-[#5F7990] mt-1">Após a validação, você receberá instruções detalhadas de preparação e acesso ao material do treinamento.</p>
-                </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">2</div>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900">Validação da equipe</h4>
+                <p className="text-gray-600 text-sm">Nossa equipe de treinamento validará sua inscrição em até 2 dias úteis.</p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">3</div>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900">Instruções de preparação</h4>
+                <p className="text-gray-600 text-sm">Após a validação, você receberá instruções detalhadas de preparação e acesso ao material do treinamento.</p>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Action Buttons */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <Button variant="outline" className="border-2 border-[#0D5B9C] text-[#0D5B9C] h-12">
-              <Mail className="w-4 h-4 mr-2" />
-              Reenviar confirmação por e-mail
-            </Button>
-            <Button className="bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 h-12">
-              <DownloadIcon className="w-4 h-4 mr-2" />
-              Baixar comprovante (PDF)
-            </Button>
-          </div>
+        {/* Action Buttons */}
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <Button variant="outline" className="w-full" size="lg">
+            <Mail className="w-4 h-4 mr-2" />
+            Reenviar confirmação por e-mail
+          </Button>
+          <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" size="lg">
+            <DownloadIcon className="w-4 h-4 mr-2" />
+            Baixar comprovante (PDF)
+          </Button>
+        </div>
 
-          {/* Help Section */}
-          <div className="bg-[#F9FAFB] rounded-lg p-6 border border-gray-200">
-            <h4 className="font-semibold text-[#00233f] mb-2">Precisa de ajuda?</h4>
-            <p className="text-sm text-[#5F7990] mb-2">Entre em contato com nossa equipe de suporte em caso de dúvidas ou alterações necessárias.</p>
-            <p className="text-sm font-medium text-[#0D5B9C]">mkt@requestia.com</p>
-          </div>
+        {/* Help Section */}
+        <div className="bg-white rounded-lg border border-gray-200 p-8 mb-8">
+          <h3 className="text-lg font-bold text-gray-900 mb-3">Precisa de ajuda?</h3>
+          <p className="text-gray-600 mb-4">Entre em contato com nossa equipe de suporte em caso de dúvidas ou alterações necessárias.</p>
+          <p className="text-gray-900 font-semibold">mkt@requestia.com</p>
         </div>
 
         {/* Back Button */}
         <div className="text-center">
-          <Link href="/" className="inline-flex items-center gap-2 text-[#0D5B9C] hover:text-[#0D5B9C]/80 font-medium">
-            <ArrowLeft className="w-4 h-4" />
-            Voltar para trilha de treinamentos
+          <Link href="/">
+            <Button variant="ghost" className="text-blue-600 hover:text-blue-700">
+              ← Voltar para trilha de treinamentos
+            </Button>
           </Link>
         </div>
       </main>
     </div>
+  )
+}
+
+export default function ConfirmationPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <LoaderCircle className="w-16 h-16 text-[#0D5B9C] animate-spin" />
+        </div>
+      </div>
+    }>
+      <ConfirmationPageContent />
+    </Suspense>
   )
 }
