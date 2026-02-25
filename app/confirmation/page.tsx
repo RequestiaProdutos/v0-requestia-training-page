@@ -147,7 +147,7 @@ function ConfirmationPageContent() {
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Inscrição confirmada!</h1>
           <p className="text-gray-600">Recebemos sua solicitação de inscrição para o treinamento</p>
-          
+
           {/* Confirmation Number */}
           <div className="mt-6 inline-block bg-white border border-gray-200 rounded-lg px-6 py-3">
             <span className="text-gray-600 text-sm">Solicitação:</span>
@@ -203,7 +203,7 @@ function ConfirmationPageContent() {
           {/* Participant Info */}
           <div className="mb-8">
             <h3 className="text-lg font-bold text-gray-900 mb-6">Dados do participante</h3>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               <div>
                 <span className="text-sm text-gray-600">Nome</span>
@@ -264,7 +264,7 @@ function ConfirmationPageContent() {
           <h3 className="text-lg font-bold text-gray-900 mb-6">Próximos passos</h3>
           <div className="space-y-4">
             <div className="flex gap-4">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">1</div>
               </div>
               <div>
@@ -274,7 +274,7 @@ function ConfirmationPageContent() {
             </div>
 
             <div className="flex gap-4">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">2</div>
               </div>
               <div>
@@ -284,7 +284,7 @@ function ConfirmationPageContent() {
             </div>
 
             <div className="flex gap-4">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">3</div>
               </div>
               <div>

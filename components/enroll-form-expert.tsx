@@ -25,6 +25,12 @@ interface FormData {
   company: string
   compFinName: string
   compFinEmail: string
+  additionalParticipants?: Array<{
+    addName: string
+    role: string
+    email: string
+    phone: string
+  }>
 }
 
 interface EnrollFormExpertProps {

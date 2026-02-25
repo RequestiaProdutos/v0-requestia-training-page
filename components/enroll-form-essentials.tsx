@@ -11,6 +11,12 @@ interface FormData {
   email: string
   phone: string
   agreePrivacy: boolean
+  additionalParticipants?: Array<{
+    addName: string
+    role: string
+    email: string
+    phone: string
+  }>
 }
 
 interface EnrollFormEssentialsProps {
