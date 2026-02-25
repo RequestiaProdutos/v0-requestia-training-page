@@ -34,41 +34,6 @@ export default function ConfirmationPage() {
 
   const confirmationNumber = generateConfirmationNumber()
 
-  const getLevelDetails = () => {
-    switch (confirmationData.level) {
-      case 'essentials':
-        return {
-          date: 'Online',
-          location: 'Online',
-          duration: '5 horas',
-          certification: 'Requestia Essentials',
-        }
-      case 'foundations':
-        return {
-          date: '4 a 6 de maio de 2026',
-          location: 'Campinas, SP',
-          duration: '3 dias intensivos',
-          certification: 'Requestia Foundations',
-        }
-      case 'expert':
-        return {
-          date: 'A confirmar',
-          location: 'A confirmar',
-          duration: '5 dias intensivos',
-          certification: 'Requestia Expert',
-        }
-      default:
-        return {
-          date: '',
-          location: '',
-          duration: '',
-          certification: '',
-        }
-    }
-  }
-
-  const details = getLevelDetails()
-
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -122,7 +87,7 @@ export default function ConfirmationPage() {
                 <Calendar className="w-5 h-5 text-gray-600" />
                 <span className="text-sm font-semibold text-gray-700">Data</span>
               </div>
-              <p className="text-gray-900 font-semibold">{details.date}</p>
+              <p className="text-gray-900 font-semibold">{confirmationData.date}</p>
             </div>
 
             <div>
@@ -130,7 +95,7 @@ export default function ConfirmationPage() {
                 <MapPin className="w-5 h-5 text-gray-600" />
                 <span className="text-sm font-semibold text-gray-700">Local</span>
               </div>
-              <p className="text-gray-900 font-semibold">{details.location}</p>
+              <p className="text-gray-900 font-semibold">{confirmationData.location}</p>
             </div>
 
             <div>
@@ -138,7 +103,7 @@ export default function ConfirmationPage() {
                 <Clock className="w-5 h-5 text-gray-600" />
                 <span className="text-sm font-semibold text-gray-700">Duração</span>
               </div>
-              <p className="text-gray-900 font-semibold">{details.duration}</p>
+              <p className="text-gray-900 font-semibold">{confirmationData.duration}</p>
             </div>
 
             <div>
@@ -146,7 +111,7 @@ export default function ConfirmationPage() {
                 <Award className="w-5 h-5 text-gray-600" />
                 <span className="text-sm font-semibold text-gray-700">Certificação</span>
               </div>
-              <p className="text-gray-900 font-semibold">{details.certification}</p>
+              <p className="text-gray-900 font-semibold">{confirmationData.certification}</p>
             </div>
           </div>
 

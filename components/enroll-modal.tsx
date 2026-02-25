@@ -155,12 +155,52 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
     console.log('[v0] handleSubmit called')
     console.log('[v0] formData:', formData)
 
+    // Get training details based on level
+    const getTrainingDetails = () => {
+      switch (level) {
+        case 'essentials':
+          return {
+            date: 'Online',
+            location: 'Online',
+            duration: '5 horas',
+            certification: 'Requestia Essentials'
+          }
+        case 'foundations':
+          return {
+            date: '4 a 6 de maio de 2026',
+            location: 'Campinas, SP',
+            duration: '3 dias intensivos',
+            certification: 'Requestia Foundations'
+          }
+        case 'expert':
+          return {
+            date: 'A confirmar',
+            location: 'A confirmar',
+            duration: '5 dias intensivos',
+            certification: 'Requestia Expert'
+          }
+        default:
+          return {
+            date: '',
+            location: '',
+            duration: '',
+            certification: ''
+          }
+      }
+    }
+
+    const trainingDetails = getTrainingDetails()
+
     // Prepare confirmation data
     const confirmationData = {
       level: level,
       levelNumber: level === 'essentials' ? 'Nível 1' : level === 'foundations' ? 'Nível 2' : 'Nível 3',
       levelName: level === 'essentials' ? 'Requestia Essentials' : level === 'foundations' ? 'Requestia Foundations' : 'Requestia Expert',
       levelColor: level === 'essentials' ? 'from-[#F2A57B] to-[#E97334]' : level === 'foundations' ? 'from-[#6F8EAA] to-[#B3C6D9]' : 'from-[#E7B15C] to-[#DE9627]',
+      date: trainingDetails.date,
+      location: trainingDetails.location,
+      duration: trainingDetails.duration,
+      certification: trainingDetails.certification,
       fullName: formData.fullName,
       role: formData.role,
       company: formData.company,

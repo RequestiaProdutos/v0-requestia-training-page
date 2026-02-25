@@ -14,6 +14,10 @@ interface ConfirmationData {
   levelNumber: string
   levelName: string
   levelColor: string
+  date: string
+  location: string
+  duration: string
+  certification: string
   fullName: string
   role: string
   company: string
