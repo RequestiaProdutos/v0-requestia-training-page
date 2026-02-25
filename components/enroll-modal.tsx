@@ -152,6 +152,8 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('[v0] handleSubmit called')
+    console.log('[v0] formData:', formData)
 
     // Prepare confirmation data
     const confirmationData = {
@@ -169,9 +171,12 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
       additionalParticipants: formData.additionalParticipants || []
     }
 
+    console.log('[v0] confirmationData:', confirmationData)
+
     // Save data to context
     setConfirmationData(confirmationData)
 
+    console.log('[v0] Navigating to /confirmation')
     // Redirect to confirmation page
     router.push('/confirmation')
   }

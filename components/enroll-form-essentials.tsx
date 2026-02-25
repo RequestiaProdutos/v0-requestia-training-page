@@ -47,7 +47,7 @@ export function EnrollFormEssentials({ formData, onFormDataChange, onSubmit }: E
     <div className="md:col-span-2 border p-6 shadow-lg shadow-[#004680]/10 rounded-2xl flex flex-col h-[65vh]">
       <h3 className="text-2xl font-normal text-[#00233f] mb-6">Dados para inscrição</h3>
 
-      <form className="flex flex-col flex-1">
+      <form className="flex flex-col flex-1" onSubmit={onSubmit}>
         <div className="flex-1 overflow-y-auto no-scrollbar pr-2">
           <button
             type="button"
