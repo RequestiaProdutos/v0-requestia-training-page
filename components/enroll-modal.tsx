@@ -188,14 +188,6 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
   if (!isOpen) return null
 
   return (
-    <>
-      {isLoading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="flex flex-col items-center justify-center">
-            <LoaderCircle className="w-16 h-16 text-[#0D5B9C] animate-spin" />
-          </div>
-        </div>
-      )}
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto no-scrollbar p-4 pt-10">
       <div className="w-full max-w-5xl bg-white rounded-lg mt-4">
         {/* Header */}
@@ -344,6 +336,5 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
         </div>
       </div>
     </div>
-    </>
   )
 }
