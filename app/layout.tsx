@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { EnrollmentProvider } from '@/contexts/enrollment-context'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -37,7 +38,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="font-sans antialiased bg-gradient-to-b from-[#f4f7fa] to-white">
-        {children}
+        <EnrollmentProvider>
+          {children}
+        </EnrollmentProvider>
         <Analytics />
       </body>
     </html>

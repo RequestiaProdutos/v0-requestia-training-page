@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useEnrollment } from '@/contexts/enrollment-context'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, Monitor, Award, CheckCircle2, ClockFading, CalendarCheck, MapPin, MonitorPlay, LoaderCircle } from 'lucide-react'
+import { ArrowLeft, Monitor, Award, CheckCircle2, ClockFading, CalendarCheck, MapPin, MonitorPlay } from 'lucide-react'
 import { EnrollFormEssentials } from '@/components/enroll-form-essentials'
 import { EnrollFormFoundations } from '@/components/enroll-form-foundations'
 import { EnrollFormExpert } from '@/components/enroll-form-expert'
@@ -39,6 +40,7 @@ interface FormData {
 
 export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
   const router = useRouter()
+  const { setConfirmationData } = useEnrollment()
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     role: '',
@@ -167,9 +169,11 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
       additionalParticipants: formData.additionalParticipants || []
     }
 
-    // Redirect to confirmation page with data
-    const encodedData = encodeURIComponent(JSON.stringify(confirmationData))
-    router.push(`/confirmation?data=${encodedData}`)
+    // Save data to context
+    setConfirmationData(confirmationData)
+
+    // Redirect to confirmation page
+    router.push('/confirmation')
   }
 
   const renderForm = () => {

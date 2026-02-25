@@ -1,84 +1,37 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
+import { useEnrollment } from '@/contexts/enrollment-context'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Lock, Calendar, MapPin, Clock, Award, Mail, Phone, Building2, ArrowLeft, DownloadIcon, LoaderCircle } from 'lucide-react'
+import { Lock, Calendar, MapPin, Clock, Award, Mail, Download, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { useState, useEffect, Suspense } from 'react'
 import Image from 'next/image'
-
-interface ConfirmationData {
-  level: string
-  levelNumber: string
-  levelName: string
-  levelColor: string
-  fullName: string
-  role: string
-  company: string
-  email: string
-  phone: string
-  compFinName: string
-  compFinEmail: string
-  additionalParticipants: Array<{
-    addName: string
-    role: string
-    email: string
-    phone: string
-  }>
-}
 
 function generateConfirmationNumber() {
   return `REQ-${Math.floor(Math.random() * 100000000)}`
 }
 
-function ConfirmationPageContent() {
-  const searchParams = useSearchParams()
-  const [confirmationData, setConfirmationData] = useState<ConfirmationData | null>(null)
-  const [confirmationNumber, setConfirmationNumber] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    try {
-      const dataParam = searchParams.get('data')
-      if (dataParam) {
-        try {
-          const decodedData = JSON.parse(decodeURIComponent(dataParam))
-          setConfirmationData(decodedData)
-          setConfirmationNumber(generateConfirmationNumber())
-        } catch (parseError) {
-          console.error('Error parsing data:', parseError)
-        }
-      }
-      setIsLoading(false)
-    } catch (error) {
-      console.error('Error in confirmation page:', error)
-      setIsLoading(false)
-    }
-  }, [searchParams])
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center gap-4">
-          <LoaderCircle className="w-16 h-16 text-[#0D5B9C] animate-spin" />
-        </div>
-      </div>
-    )
-  }
+export default function ConfirmationPage() {
+  const { confirmationData } = useEnrollment()
 
   if (!confirmationData) {
     return (
       <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600 mb-4">Erro ao carregar informações de confirmação</p>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">Nenhuma inscrição encontrada</h1>
+          <p className="text-gray-600 mb-6">Por favor, preencha o formulário de inscrição para continuar.</p>
           <Link href="/">
-            <Button variant="outline">Voltar para página inicial</Button>
+            <Button className="bg-[#0D5B9C] hover:bg-[#0D5B9C]/90">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Voltar para trilha de treinamentos
+            </Button>
           </Link>
         </div>
       </div>
     )
   }
+
+  const confirmationNumber = generateConfirmationNumber()
 
   const getLevelDetails = () => {
     switch (confirmationData.level) {
@@ -94,7 +47,7 @@ function ConfirmationPageContent() {
           date: '4 a 6 de maio de 2026',
           location: 'Campinas, SP',
           duration: '3 dias intensivos',
-          certification: 'Requestia Foundation'
+          certification: 'Requestia Foundations'
         }
       case 'expert':
         return {
@@ -206,7 +159,7 @@ function ConfirmationPageContent() {
               </div>
               <div>
                 <span className="text-sm text-gray-600">Email</span>
-                <p className="font-semibold text-gray-900">{confirmationData.email}</p>
+                <p className="font-semibold text-gray-900 break-all">{confirmationData.email}</p>
               </div>
               <div>
                 <span className="text-sm text-gray-600">Cargo</span>
@@ -297,7 +250,7 @@ function ConfirmationPageContent() {
             Reenviar confirmação por e-mail
           </Button>
           <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" size="lg">
-            <DownloadIcon className="w-4 h-4 mr-2" />
+            <Download className="w-4 h-4 mr-2" />
             Baixar comprovante (PDF)
           </Button>
         </div>
@@ -319,19 +272,5 @@ function ConfirmationPageContent() {
         </div>
       </main>
     </div>
-  )
-}
-
-export default function ConfirmationPage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center gap-4">
-          <LoaderCircle className="w-16 h-16 text-[#0D5B9C] animate-spin" />
-        </div>
-      </div>
-    }>
-      <ConfirmationPageContent />
-    </Suspense>
   )
 }
