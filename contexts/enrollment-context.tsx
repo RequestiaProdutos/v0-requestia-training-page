@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, ReactNode, useState } from 'react'
+import { createContext, useContext, ReactNode, useState, useEffect } from 'react'
 
 interface AdditionalParticipant {
   addName: string
@@ -32,7 +32,39 @@ interface EnrollmentContextType {
 const EnrollmentContext = createContext<EnrollmentContextType | undefined>(undefined)
 
 export function EnrollmentProvider({ children }: { children: ReactNode }) {
-  const [confirmationData, setConfirmationData] = useState<ConfirmationData | null>(null)
+  const [confirmationData, setConfirmationDataState] = useState<ConfirmationData | null>(null)
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  // Load from sessionStorage on mount
+  useEffect(() => {
+    try {
+      const stored = sessionStorage.getItem('enrollmentData')
+      if (stored) {
+        const data = JSON.parse(stored)
+        console.log('[v0] Loaded from sessionStorage:', data)
+        setConfirmationDataState(data)
+      }
+    } catch (error) {
+      console.error('[v0] Error loading from sessionStorage:', error)
+    }
+    setIsHydrated(true)
+  }, [])
+
+  // Save to sessionStorage when data changes
+  const setConfirmationData = (data: ConfirmationData) => {
+    console.log('[v0] Setting confirmation data:', data)
+    setConfirmationDataState(data)
+    try {
+      sessionStorage.setItem('enrollmentData', JSON.stringify(data))
+      console.log('[v0] Saved to sessionStorage')
+    } catch (error) {
+      console.error('[v0] Error saving to sessionStorage:', error)
+    }
+  }
+
+  if (!isHydrated) {
+    return null
+  }
 
   return (
     <EnrollmentContext.Provider value={{ confirmationData, setConfirmationData }}>
