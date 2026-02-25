@@ -3,7 +3,7 @@
 import { useEnrollment } from '@/contexts/enrollment-context'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Lock, Calendar, MapPin, Clock, Award, Mail, Download, ArrowLeft } from 'lucide-react'
+import { LockKeyhole, Calendar, MapPin, Clock, Award, Mail, Download, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ContactModal } from '@/components/contact-modal'
@@ -41,28 +41,28 @@ export default function ConfirmationPage() {
           date: 'Online',
           location: 'Online',
           duration: '5 horas',
-          certification: 'Requestia Essentials'
+          certification: 'Requestia Essentials',
         }
       case 'foundations':
         return {
           date: '4 a 6 de maio de 2026',
           location: 'Campinas, SP',
           duration: '3 dias intensivos',
-          certification: 'Requestia Foundations'
+          certification: 'Requestia Foundations',
         }
       case 'expert':
         return {
           date: 'A confirmar',
           location: 'A confirmar',
           duration: '5 dias intensivos',
-          certification: 'Requestia Expert'
+          certification: 'Requestia Expert',
         }
       default:
         return {
           date: '',
           location: '',
           duration: '',
-          certification: ''
+          certification: '',
         }
     }
   }
@@ -70,9 +70,9 @@ export default function ConfirmationPage() {
   const details = getLevelDetails()
 
   return (
-    <div className="min-h-screen bg-[#F4F7FA]">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-md shadow-[#004680]/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between">
           <img
             src="/LogoRequestia.png"
@@ -89,15 +89,15 @@ export default function ConfirmationPage() {
         {/* Success Message */}
         <div className="text-center mb-12">
           <div className="flex justify-center mb-4">
-            <div className="p-4 bg-green-50 rounded-full">
-              <Lock className="w-10 h-10 text-green-600" />
+            <div className="p-6 bg-[#F4F7FA] rounded-full">
+              <LockKeyhole className="w-10 h-10 text-[#0D5B9C]" />
             </div>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Inscrição confirmada!</h1>
           <p className="text-gray-600">Recebemos sua solicitação de inscrição para o treinamento</p>
 
           {/* Confirmation Number */}
-          <div className="mt-6 inline-block bg-white border border-gray-200 rounded-lg px-6 py-3">
+          <div className="mt-6 inline-block bg-[#f4f7fa] border border-[#DCDCDD] rounded-lg px-6 py-3">
             <span className="text-gray-600 text-sm">Solicitação:</span>
             <span className="font-semibold text-gray-900 ml-2">{confirmationNumber}</span>
           </div>
@@ -106,12 +106,14 @@ export default function ConfirmationPage() {
         {/* Training Details Card */}
         <div className="bg-white rounded-lg border border-gray-200 p-8 mb-8">
           {/* Level Badge */}
-          <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-100">
+          <Badge className="bg-gradient-to-b from-[#F2A57B] to-[#E97334] px-5 py-1 rounded-full mb-4">
             {confirmationData.levelNumber}
           </Badge>
 
           {/* Level Name */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">{confirmationData.levelName}</h2>
+          <div className="mb-8 border-b pb-5">
+            <h2 className="text-3xl font-medium text-[#00233f] mb-2">{confirmationData.levelName}</h2>
+          </div>
 
           {/* Details Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-gray-200">
