@@ -66,7 +66,7 @@ export function ContactModal() {
             </h2>
 
             {/* Description */}
-            <p className="text-sm text-[#5F7990] mb-4 flex-shrink-0">
+            <p className="text-sm text-[#5F7990] mb-4 shrink-0">
               Tem dúvidas sobre o treinamento? Envie sua mensagem e nossa equipe retornará em breve.
             </p>
 
@@ -117,7 +117,7 @@ export function ContactModal() {
               />
 
               {/* Buttons */}
-              <div className="flex gap-3 justify-end pt-2 flex-shrink-0">
+              <div className="flex gap-3 justify-end pt-2 shrink-0">
                 <Button
                   type="button"
                   onClick={handleCancel}

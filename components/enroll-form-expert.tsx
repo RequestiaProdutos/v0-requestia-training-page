@@ -399,10 +399,10 @@ export function EnrollFormExpert({ formData, onFormDataChange, onSubmit }: Enrol
                     </div>
                     <div className="text-sm text-[#787979] space-y-2">
                       <div className="flex flex-wrap gap-x-4 gap-y-2">
-                        <span className="min-w-[100px] break-words">{participant.addName}</span>
-                        <span className="min-w-[100px] break-words">{participant.email}</span>
-                        <span className="min-w-[100px] break-words">{participant.role}</span>
-                        <span className="min-w-[100px] break-words">{participant.phone}</span>
+                        <span className="min-w-[100px] wrap-break-word">{participant.addName}</span>
+                        <span className="min-w-[100px] wrap-break-word">{participant.email}</span>
+                        <span className="min-w-[100px] wrap-break-word">{participant.role}</span>
+                        <span className="min-w-[100px] wrap-break-word">{participant.phone}</span>
                       </div>
                       <div className="mt-2">
                         <span className="font-normal">PCD:</span>{" "}
