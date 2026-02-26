@@ -15,10 +15,6 @@ function generateConfirmationNumber() {
 export default function ConfirmationPage() {
   const { confirmationData } = useEnrollment()
 
-  console.log('[v0] Confirmation page mounted')
-  console.log('[v0] confirmationData from context:', confirmationData)
-  console.log('[v0] sessionStorage enrollmentData:', sessionStorage.getItem('enrollmentData'))
-
   if (!confirmationData) {
     return (
       <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center">
