@@ -119,33 +119,62 @@ export default function ConfirmationPage() {
           <div className="mb-8">
             <h3 className="text-lg font-bold text-gray-900 mb-6">Dados do participante</h3>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              <div>
-                <span className="text-sm text-gray-600">Nome</span>
-                <p className="font-semibold text-gray-900">{confirmationData.fullName}</p>
-              </div>
-              <div>
-                <span className="text-sm text-gray-600">Email</span>
-                <p className="font-semibold text-gray-900 break-all">{confirmationData.email}</p>
-              </div>
-              <div>
-                <span className="text-sm text-gray-600">Cargo</span>
-                <p className="font-semibold text-gray-900">{confirmationData.role}</p>
-              </div>
-              <div>
-                <span className="text-sm text-gray-600">Empresa</span>
-                <p className="font-semibold text-gray-900">{confirmationData.company}</p>
-              </div>
-              <div>
-                <span className="text-sm text-gray-600">Telefone</span>
-                <p className="font-semibold text-gray-900">{confirmationData.phone}</p>
-              </div>
-              {confirmationData.compFinName && (
+            <div className="grid grid-cols-3 gap-12">
+              {/* Column 1 */}
+              <div className="space-y-6">
                 <div>
-                  <span className="text-sm text-gray-600">Responsável Financeiro</span>
-                  <p className="font-semibold text-gray-900">{confirmationData.compFinName}</p>
+                  <span className="text-sm text-gray-600">Nome</span>
+                  <p className="font-semibold text-gray-900">{confirmationData.fullName}</p>
                 </div>
-              )}
+                <div>
+                  <span className="text-sm text-gray-600">Email</span>
+                  <p className="font-semibold text-gray-900 break-all">{confirmationData.email}</p>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-600">Cargo</span>
+                  <p className="font-semibold text-gray-900">{confirmationData.role}</p>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-600">Telefone</span>
+                  <p className="font-semibold text-gray-900">{confirmationData.phone}</p>
+                </div>
+              </div>
+
+              {/* Column 2 */}
+              <div className="space-y-6">
+                <div>
+                  <span className="text-sm text-gray-600">Necessidades Especiais (PCD)</span>
+                  <p className="font-semibold text-gray-900">
+                    {confirmationData.isPCD === null || confirmationData.isPCD === undefined ? '—' : confirmationData.isPCD ? 'Sim' : 'Não'}
+                  </p>
+                </div>
+                {confirmationData.pcdDescription && (
+                  <div>
+                    <span className="text-sm text-gray-600">Descrição PCD</span>
+                    <p className="font-semibold text-gray-900">{confirmationData.pcdDescription}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Column 3 */}
+              <div className="space-y-6">
+                <div>
+                  <span className="text-sm text-gray-600">Empresa</span>
+                  <p className="font-semibold text-gray-900">{confirmationData.company}</p>
+                </div>
+                {confirmationData.compFinName && (
+                  <div>
+                    <span className="text-sm text-gray-600">Responsável Financeiro</span>
+                    <p className="font-semibold text-gray-900">{confirmationData.compFinName}</p>
+                  </div>
+                )}
+                {confirmationData.compFinEmail && (
+                  <div>
+                    <span className="text-sm text-gray-600">Email (Financeiro)</span>
+                    <p className="font-semibold text-gray-900 break-all">{confirmationData.compFinEmail}</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

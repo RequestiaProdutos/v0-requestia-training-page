@@ -30,6 +30,8 @@ interface FormData {
   budget?: string
   compFinName?: string
   compFinEmail?: string
+  isPCD?: boolean | null
+  pcdDescription?: string
   additionalParticipants?: Array<{
     addName: string
     role: string
@@ -152,19 +154,16 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('[v0] handleSubmit called')
-    console.log('[v0] formData:', formData)
+
+    // Only redirect to confirmation for Foundations and Expert
+    if (level === 'essentials') {
+      onClose()
+      return
+    }
 
     // Get training details based on level
     const getTrainingDetails = () => {
       switch (level) {
-        case 'essentials':
-          return {
-            date: 'Online',
-            location: 'Online',
-            duration: '5 horas',
-            certification: 'Requestia Essentials'
-          }
         case 'foundations':
           return {
             date: '4 a 6 de maio de 2026',
@@ -194,9 +193,9 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
     // Prepare confirmation data
     const confirmationData = {
       level: level,
-      levelNumber: level === 'essentials' ? 'Nível 1' : level === 'foundations' ? 'Nível 2' : 'Nível 3',
-      levelName: level === 'essentials' ? 'Requestia Essentials' : level === 'foundations' ? 'Requestia Foundations' : 'Requestia Expert',
-      levelColor: level === 'essentials' ? 'from-[#F2A57B] to-[#E97334]' : level === 'foundations' ? 'from-[#6F8EAA] to-[#B3C6D9]' : 'from-[#E7B15C] to-[#DE9627]',
+      levelNumber: level === 'foundations' ? 'Nível 2' : 'Nível 3',
+      levelName: level === 'foundations' ? 'Requestia Foundations' : 'Requestia Expert',
+      levelColor: level === 'foundations' ? 'from-[#6F8EAA] to-[#B3C6D9]' : 'from-[#E7B15C] to-[#DE9627]',
       date: trainingDetails.date,
       location: trainingDetails.location,
       duration: trainingDetails.duration,
@@ -208,15 +207,14 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
       phone: formData.phone,
       compFinName: formData.compFinName,
       compFinEmail: formData.compFinEmail,
+      isPCD: formData.isPCD,
+      pcdDescription: formData.pcdDescription,
       additionalParticipants: formData.additionalParticipants || []
     }
-
-    console.log('[v0] confirmationData:', confirmationData)
 
     // Save data to context
     setConfirmationData(confirmationData)
 
-    console.log('[v0] Navigating to /confirmation')
     // Redirect to confirmation page
     router.push('/confirmation')
   }

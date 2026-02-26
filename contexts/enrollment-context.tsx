@@ -25,6 +25,8 @@ interface ConfirmationData {
   phone: string
   compFinName?: string
   compFinEmail?: string
+  isPCD?: boolean | null
+  pcdDescription?: string
   additionalParticipants?: AdditionalParticipant[]
 }
 
