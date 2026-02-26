@@ -154,9 +154,12 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('[v0] handleSubmit called, level:', level)
+    console.log('[v0] formData:', formData)
 
     // Only redirect to confirmation for Foundations and Expert
     if (level === 'essentials') {
+      console.log('[v0] Level is essentials, closing modal')
       onClose()
       return
     }
@@ -212,9 +215,13 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
       additionalParticipants: formData.additionalParticipants || []
     }
 
+    console.log('[v0] confirmationData prepared:', confirmationData)
+    console.log('[v0] calling setConfirmationData')
+
     // Save data to context
     setConfirmationData(confirmationData)
 
+    console.log('[v0] Navigating to /confirmation')
     // Redirect to confirmation page
     router.push('/confirmation')
   }

@@ -58,11 +58,12 @@ export function EnrollmentProvider({ children }: { children: ReactNode }) {
 
   // Save to sessionStorage when data changes
   const setConfirmationData = (data: ConfirmationData) => {
-    console.log('[v0] Setting confirmation data:', data)
+    console.log('[v0] setConfirmationData called with:', data)
     setConfirmationDataState(data)
     try {
-      sessionStorage.setItem('enrollmentData', JSON.stringify(data))
-      console.log('[v0] Saved to sessionStorage')
+      const jsonString = JSON.stringify(data)
+      sessionStorage.setItem('enrollmentData', jsonString)
+      console.log('[v0] Saved to sessionStorage, stored:', sessionStorage.getItem('enrollmentData'))
     } catch (error) {
       console.error('[v0] Error saving to sessionStorage:', error)
     }
