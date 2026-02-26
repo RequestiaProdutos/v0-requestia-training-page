@@ -47,30 +47,22 @@ export function EnrollmentProvider({ children }: { children: ReactNode }) {
       const stored = sessionStorage.getItem('enrollmentData')
       if (stored) {
         const data = JSON.parse(stored)
-        console.log('[v0] Loaded from sessionStorage:', data)
         setConfirmationDataState(data)
       }
     } catch (error) {
-      console.error('[v0] Error loading from sessionStorage:', error)
+      console.error('Error loading from sessionStorage:', error)
     }
     setIsHydrated(true)
   }, [])
 
   // Save to sessionStorage when data changes
   const setConfirmationData = (data: ConfirmationData) => {
-    console.log('[v0] setConfirmationData called with:', data)
     setConfirmationDataState(data)
     try {
-      const jsonString = JSON.stringify(data)
-      sessionStorage.setItem('enrollmentData', jsonString)
-      console.log('[v0] Saved to sessionStorage, stored:', sessionStorage.getItem('enrollmentData'))
+      sessionStorage.setItem('enrollmentData', JSON.stringify(data))
     } catch (error) {
-      console.error('[v0] Error saving to sessionStorage:', error)
+      console.error('Error saving to sessionStorage:', error)
     }
-  }
-
-  if (!isHydrated) {
-    return null
   }
 
   return (
