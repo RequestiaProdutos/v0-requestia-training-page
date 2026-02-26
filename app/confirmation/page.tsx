@@ -3,7 +3,7 @@
 import { useEnrollment } from '@/contexts/enrollment-context'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { LockKeyhole, Calendar, MapPin, Clock, Award, Mail, Download, ArrowLeft } from 'lucide-react'
+import { LockKeyhole, Calendar, MapPin, Clock, Award, Mail, Download, ArrowLeft, ClockFading, CalendarCheck } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ContactModal } from '@/components/contact-modal'
@@ -82,36 +82,36 @@ export default function ConfirmationPage() {
 
           {/* Details Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-gray-200">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <Calendar className="w-5 h-5 text-gray-600" />
-                <span className="text-sm font-semibold text-gray-700">Data</span>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <CalendarCheck className="w-7 h-7 text-gray-700" />
+                <p className="text-sm text-[#5F7990] font-medium">Data</p>
               </div>
-              <p className="text-gray-900 font-semibold">{confirmationData.date}</p>
+              <p className="text-base font-medium text-gray-800 ml-9">{confirmationData.date}</p>
             </div>
 
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <MapPin className="w-5 h-5 text-gray-600" />
-                <span className="text-sm font-semibold text-gray-700">Local</span>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-7 h-7 text-gray-700" />
+                <p className="text-sm text-[#5F7990] font-medium">Local</p>
               </div>
-              <p className="text-gray-900 font-semibold">{confirmationData.location}</p>
+              <p className="text-base font-medium text-gray-800 ml-9">{confirmationData.location}</p>
             </div>
 
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <Clock className="w-5 h-5 text-gray-600" />
-                <span className="text-sm font-semibold text-gray-700">Duração</span>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <ClockFading className="w-7 h-7 text-gray-700" />
+                <p className="text-sm text-[#5F7990] font-medium">Duração</p>
               </div>
-              <p className="text-gray-900 font-semibold">{confirmationData.duration}</p>
+              <p className="text-base font-medium text-gray-800 ml-9">{confirmationData.duration}</p>
             </div>
 
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <Award className="w-5 h-5 text-gray-600" />
-                <span className="text-sm font-semibold text-gray-700">Certificação</span>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <Award className="w-7 h-7 text-gray-700" />
+                <p className="text-sm text-[#5F7990] font-medium">Certificação</p>
               </div>
-              <p className="text-gray-900 font-semibold">{confirmationData.certification}</p>
+              <p className="text-base font-medium text-gray-800 ml-9">{confirmationData.certification}</p>
             </div>
           </div>
 
