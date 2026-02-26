@@ -24,8 +24,8 @@ interface FormData {
   phone: string
   agreePrivacy: boolean
   company: string
-  compFinName: string
-  compFinEmail: string
+  compFinName?: string
+  compFinEmail?: string
   additionalParticipants?: Array<{
     addName: string
     role: string
