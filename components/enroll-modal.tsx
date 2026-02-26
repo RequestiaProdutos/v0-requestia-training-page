@@ -154,7 +154,8 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('[v0] handleSubmit called, level:', level)
+    console.log('[v0] handleSubmit called')
+    console.log('[v0] level:', level)
     console.log('[v0] formData:', formData)
 
     // Only redirect to confirmation for Foundations and Expert
@@ -163,6 +164,70 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
       onClose()
       return
     }
+
+    console.log('[v0] Level is not essentials, preparing confirmation data')
+
+    // Get training details based on level
+    const getTrainingDetails = () => {
+      switch (level) {
+        case 'foundations':
+          return {
+            date: '4 a 6 de maio de 2026',
+            location: 'Campinas, SP',
+            duration: '3 dias intensivos',
+            certification: 'Requestia Foundations'
+          }
+        case 'expert':
+          return {
+            date: 'A confirmar',
+            location: 'A confirmar',
+            duration: '5 dias intensivos',
+            certification: 'Requestia Expert'
+          }
+        default:
+          return {
+            date: '',
+            location: '',
+            duration: '',
+            certification: ''
+          }
+      }
+    }
+
+    const trainingDetails = getTrainingDetails()
+
+    // Prepare confirmation data
+    const confirmationData = {
+      level: level,
+      levelNumber: level === 'foundations' ? 'Nível 2' : 'Nível 3',
+      levelName: level === 'foundations' ? 'Requestia Foundations' : 'Requestia Expert',
+      levelColor: level === 'foundations' ? 'from-[#6F8EAA] to-[#B3C6D9]' : 'from-[#E7B15C] to-[#DE9627]',
+      date: trainingDetails.date,
+      location: trainingDetails.location,
+      duration: trainingDetails.duration,
+      certification: trainingDetails.certification,
+      fullName: formData.fullName,
+      role: formData.role,
+      company: formData.company,
+      email: formData.email,
+      phone: formData.phone,
+      compFinName: formData.compFinName,
+      compFinEmail: formData.compFinEmail,
+      isPCD: formData.isPCD,
+      pcdDescription: formData.pcdDescription,
+      additionalParticipants: formData.additionalParticipants || []
+    }
+
+    console.log('[v0] confirmationData:', confirmationData)
+    console.log('[v0] calling setConfirmationData')
+
+    // Save data to context
+    setConfirmationData(confirmationData)
+
+    console.log('[v0] data saved, pushing to /confirmation')
+    // Redirect to confirmation page
+    router.push('/confirmation')
+  }
 
     // Get training details based on level
     const getTrainingDetails = () => {
