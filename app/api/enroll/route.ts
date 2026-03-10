@@ -188,6 +188,7 @@ export async function POST(request: Request) {
     }
 
     console.log('[v0] Email sent successfully:', data)
+    return Response.json({ success: true, messageId: data?.id })
   } catch (error) {
     console.error('[v0] Error sending email:', error)
     return Response.json(
@@ -195,5 +196,4 @@ export async function POST(request: Request) {
       { status: 500 }
     )
   }
-}
 }
