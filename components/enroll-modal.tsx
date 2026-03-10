@@ -274,13 +274,13 @@ export function EnrollModal({ isOpen, onClose, level, foundationsDate = '4-6' }:
   const renderForm = () => {
     switch (level) {
       case 'essentials':
-        return <EnrollFormEssentials formData={formData} onFormDataChange={setFormData} onSubmit={handleSubmit} />
+        return <EnrollFormEssentials formData={formData} onFormDataChange={setFormData} onSubmit={handleSubmit} isLoading={isLoading} />
       case 'foundations':
         return <EnrollFormFoundations formData={formData} onFormDataChange={setFormData} onSubmit={handleSubmit} isLoading={isLoading} />
       case 'expert':
         return <EnrollFormExpert formData={formData} onFormDataChange={setFormData} onSubmit={handleSubmit} />
       default:
-        return <EnrollFormEssentials formData={formData} onFormDataChange={setFormData} onSubmit={handleSubmit} />
+        return <EnrollFormEssentials formData={formData} onFormDataChange={setFormData} onSubmit={handleSubmit} isLoading={isLoading} />
     }
   }
 

@@ -23,9 +23,10 @@ interface EnrollFormEssentialsProps {
   formData: FormData
   onFormDataChange: (data: FormData) => void
   onSubmit: (e: React.FormEvent) => void
+  isLoading?: boolean
 }
 
-export function EnrollFormEssentials({ formData, onFormDataChange, onSubmit }: EnrollFormEssentialsProps) {
+export function EnrollFormEssentials({ formData, onFormDataChange, onSubmit, isLoading = false }: EnrollFormEssentialsProps) {
   const [isParticipantDataExpanded, setIsParticipantDataExpanded] = useState(true)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -143,8 +144,12 @@ export function EnrollFormEssentials({ formData, onFormDataChange, onSubmit }: E
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full px-8 py-6 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-sm">
-            Confirmar inscrição
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-full px-8 py-6 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? 'Enviando...' : 'Confirmar inscrição'}
           </Button>
         </div>
       </form>
