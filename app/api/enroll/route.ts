@@ -2,7 +2,11 @@ import { Resend } from 'resend'
 
 export async function POST(request: Request) {
   try {
+    console.log('[v0] API route called')
+    console.log('[v0] RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY)
+    
     if (!process.env.RESEND_API_KEY) {
+      console.error('[v0] RESEND_API_KEY is not configured')
       return Response.json(
         { error: 'RESEND_API_KEY is not configured' },
         { status: 500 }
@@ -10,7 +14,11 @@ export async function POST(request: Request) {
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY)
+    console.log('[v0] Resend instance created')
+    
     const body = await request.json()
+    console.log('[v0] Request body received:', { courseTitle: body.courseTitle, fullName: body.fullName })
+    
     const {
       courseTitle,
       level,
@@ -148,6 +156,7 @@ export async function POST(request: Request) {
       </html>
     `
 
+    console.log('[v0] Sending email to:', recipients)
     const { data, error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
       to: recipients,

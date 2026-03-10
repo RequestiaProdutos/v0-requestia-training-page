@@ -489,13 +489,13 @@ export function EnrollModal({ isOpen, onClose, level, foundationsDate = '4-6' }:
             )}
 
             {submissionState === 'error' && (
-              <div className="flex flex-col items-center justify-center py-12">
+              <div className="w-full h-full flex flex-col items-center justify-center">
                 <img
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Erro-BXNqabAyyRsYccD4xOlKl31lpPDZYe.png"
                   alt="Erro"
-                  className="w-full h-64 object-contain"
+                  className="w-full h-64 object-contain mb-8"
                 />
-                <div className="mt-8 w-full px-6 flex gap-3">
+                <div className="w-full px-6 flex gap-3">
                   <Button
                     onClick={() => {
                       setSubmissionState('form')
