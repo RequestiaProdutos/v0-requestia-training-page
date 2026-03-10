@@ -61,6 +61,7 @@ export function EnrollModal({ isOpen, onClose, level, foundationsDate = '4-6' }:
     additionalParticipants: []
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [submissionState, setSubmissionState] = useState<'form' | 'loading' | 'success' | 'error'>('form')
 
   const getLevelData = () => {
     switch (level) {
@@ -163,6 +164,7 @@ export function EnrollModal({ isOpen, onClose, level, foundationsDate = '4-6' }:
     }
 
     setIsLoading(true)
+    setSubmissionState('loading')
 
     try {
       // Get course title based on level and date
@@ -203,70 +205,91 @@ export function EnrollModal({ isOpen, onClose, level, foundationsDate = '4-6' }:
         throw new Error('Failed to send email')
       }
 
-      // For essentials, just close modal
+      setSubmissionState('success')
+      setIsLoading(false)
+
+      // For Essentials, close after a delay
       if (level === 'essentials') {
-        alert('Inscrição realizada com sucesso! Verifique seu e-mail.')
-        onClose()
-        setIsLoading(false)
+        setTimeout(() => {
+          onClose()
+          setSubmissionState('form')
+          setFormData({
+            fullName: '',
+            role: '',
+            company: '',
+            email: '',
+            phone: '',
+            agreePrivacy: false,
+            experience: '',
+            department: '',
+            currentSolution: '',
+            goals: '',
+            budget: '',
+            compFinName: '',
+            compFinEmail: '',
+            additionalParticipants: []
+          })
+        }, 2000)
         return
       }
 
-      // For foundations and expert, redirect to confirmation page
-      const getTrainingDetails = () => {
-        switch (level) {
-          case 'foundations':
-            const foundationsDateStr = foundationsDate === '4-6' ? '4 a 6 de maio de 2026' : '14 a 16 de maio de 2026'
-            return {
-              date: foundationsDateStr,
-              location: 'Campinas, SP',
-              duration: '3 dias intensivos',
-              certification: 'Requestia Foundations'
-            }
-          case 'expert':
-            return {
-              date: '9 a 11 de novembro de 2026',
-              location: 'Campinas, SP',
-              duration: '3 dias intensivos',
-              certification: 'Requestia Expert'
-            }
-          default:
-            return {
-              date: '',
-              location: '',
-              duration: '',
-              certification: ''
-            }
+      // For Foundations and Expert, wait for user to close, then redirect
+      setTimeout(() => {
+        const getTrainingDetails = () => {
+          switch (level) {
+            case 'foundations':
+              const foundationsDateStr = foundationsDate === '4-6' ? '4 a 6 de maio de 2026' : '14 a 16 de maio de 2026'
+              return {
+                date: foundationsDateStr,
+                location: 'Campinas, SP',
+                duration: '3 dias intensivos',
+                certification: 'Requestia Foundations'
+              }
+            case 'expert':
+              return {
+                date: '9 a 11 de novembro de 2026',
+                location: 'Campinas, SP',
+                duration: '3 dias intensivos',
+                certification: 'Requestia Expert'
+              }
+            default:
+              return {
+                date: '',
+                location: '',
+                duration: '',
+                certification: ''
+              }
+          }
         }
-      }
 
-      const trainingDetails = getTrainingDetails()
-      const confirmationData = {
-        level: level,
-        levelNumber: level === 'foundations' ? 'Nível 2' : 'Nível 3',
-        levelName: level === 'foundations' ? 'Requestia Foundations' : 'Requestia Expert',
-        levelColor: level === 'foundations' ? 'from-[#6F8EAA] to-[#B3C6D9]' : 'from-[#E7B15C] to-[#DE9627]',
-        date: trainingDetails.date,
-        location: trainingDetails.location,
-        duration: trainingDetails.duration,
-        certification: trainingDetails.certification,
-        fullName: formData.fullName,
-        role: formData.role,
-        company: formData.company,
-        email: formData.email,
-        phone: formData.phone,
-        compFinName: formData.compFinName,
-        compFinEmail: formData.compFinEmail,
-        isPCD: formData.isPCD,
-        pcdDescription: formData.pcdDescription,
-        additionalParticipants: formData.additionalParticipants || []
-      }
+        const trainingDetails = getTrainingDetails()
+        const confirmationData = {
+          level: level,
+          levelNumber: level === 'foundations' ? 'Nível 2' : 'Nível 3',
+          levelName: level === 'foundations' ? 'Requestia Foundations' : 'Requestia Expert',
+          levelColor: level === 'foundations' ? 'from-[#6F8EAA] to-[#B3C6D9]' : 'from-[#E7B15C] to-[#DE9627]',
+          date: trainingDetails.date,
+          location: trainingDetails.location,
+          duration: trainingDetails.duration,
+          certification: trainingDetails.certification,
+          fullName: formData.fullName,
+          role: formData.role,
+          company: formData.company,
+          email: formData.email,
+          phone: formData.phone,
+          compFinName: formData.compFinName,
+          compFinEmail: formData.compFinEmail,
+          isPCD: formData.isPCD,
+          pcdDescription: formData.pcdDescription,
+          additionalParticipants: formData.additionalParticipants || []
+        }
 
-      setConfirmationData(confirmationData)
-      router.push('/confirmation')
+        setConfirmationData(confirmationData)
+        router.push('/confirmation')
+      }, 2000)
     } catch (error) {
       console.error('Error:', error)
-      alert('Erro ao enviar inscrição. Tente novamente.')
-    } finally {
+      setSubmissionState('error')
       setIsLoading(false)
     }
   }
@@ -430,7 +453,99 @@ export function EnrollModal({ isOpen, onClose, level, foundationsDate = '4-6' }:
             </div>
 
             {/* Right Column - Render Form based on level */}
-            {renderForm()}
+            {submissionState === 'form' && renderForm()}
+            
+            {submissionState === 'loading' && (
+              <div className="flex flex-col items-center justify-center py-12">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Carregamento-KhtkURY1663qfcvS3E3ODpISORj67E.png"
+                  alt="Carregando"
+                  className="w-full h-64 object-contain"
+                />
+              </div>
+            )}
+
+            {submissionState === 'success' && (
+              <div className="flex flex-col items-center justify-center py-12">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sucesso-UHrZBuIXtzEsx9dHGErlpm5wrVyxkT.png"
+                  alt="Sucesso"
+                  className="w-full h-64 object-contain"
+                />
+                <div className="mt-8 w-full px-6">
+                  <Button
+                    onClick={() => {
+                      onClose()
+                      setSubmissionState('form')
+                      setFormData({
+                        fullName: '',
+                        role: '',
+                        company: '',
+                        email: '',
+                        phone: '',
+                        agreePrivacy: false,
+                        experience: '',
+                        department: '',
+                        currentSolution: '',
+                        goals: '',
+                        budget: '',
+                        compFinName: '',
+                        compFinEmail: '',
+                        additionalParticipants: []
+                      })
+                    }}
+                    className="w-full px-8 py-3 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-sm"
+                  >
+                    Fechar
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {submissionState === 'error' && (
+              <div className="flex flex-col items-center justify-center py-12">
+                <img
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Erro-BXNqabAyyRsYccD4xOlKl31lpPDZYe.png"
+                  alt="Erro"
+                  className="w-full h-64 object-contain"
+                />
+                <div className="mt-8 w-full px-6 flex gap-3">
+                  <Button
+                    onClick={() => {
+                      setSubmissionState('form')
+                    }}
+                    className="flex-1 px-8 py-3 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-sm"
+                  >
+                    Tentar novamente
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      onClose()
+                      setSubmissionState('form')
+                      setFormData({
+                        fullName: '',
+                        role: '',
+                        company: '',
+                        email: '',
+                        phone: '',
+                        agreePrivacy: false,
+                        experience: '',
+                        department: '',
+                        currentSolution: '',
+                        goals: '',
+                        budget: '',
+                        compFinName: '',
+                        compFinEmail: '',
+                        additionalParticipants: []
+                      })
+                    }}
+                    className="flex-1 px-8 py-3 bg-white border-2 border-[#0D5B9C] text-[#0D5B9C] hover:bg-[#0D5B9C]/5 font-semibold text-sm rounded-sm"
+                  >
+                    Fechar
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
