@@ -208,85 +208,14 @@ export function EnrollModal({ isOpen, onClose, level, foundationsDate = '4-6' }:
       setSubmissionState('success')
       setIsLoading(false)
 
-      // For Essentials, close after a delay
+      // For all forms, show success screen then handle based on level
       if (level === 'essentials') {
-        setTimeout(() => {
-          onClose()
-          setSubmissionState('form')
-          setFormData({
-            fullName: '',
-            role: '',
-            company: '',
-            email: '',
-            phone: '',
-            agreePrivacy: false,
-            experience: '',
-            department: '',
-            currentSolution: '',
-            goals: '',
-            budget: '',
-            compFinName: '',
-            compFinEmail: '',
-            additionalParticipants: []
-          })
-        }, 2000)
+        // Essentials: close after showing success
         return
       }
 
       // For Foundations and Expert, wait for user to close, then redirect
-      setTimeout(() => {
-        const getTrainingDetails = () => {
-          switch (level) {
-            case 'foundations':
-              const foundationsDateStr = foundationsDate === '4-6' ? '4 a 6 de maio de 2026' : '14 a 16 de maio de 2026'
-              return {
-                date: foundationsDateStr,
-                location: 'Campinas, SP',
-                duration: '3 dias intensivos',
-                certification: 'Requestia Foundations'
-              }
-            case 'expert':
-              return {
-                date: '9 a 11 de novembro de 2026',
-                location: 'Campinas, SP',
-                duration: '3 dias intensivos',
-                certification: 'Requestia Expert'
-              }
-            default:
-              return {
-                date: '',
-                location: '',
-                duration: '',
-                certification: ''
-              }
-          }
-        }
-
-        const trainingDetails = getTrainingDetails()
-        const confirmationData = {
-          level: level,
-          levelNumber: level === 'foundations' ? 'Nível 2' : 'Nível 3',
-          levelName: level === 'foundations' ? 'Requestia Foundations' : 'Requestia Expert',
-          levelColor: level === 'foundations' ? 'from-[#6F8EAA] to-[#B3C6D9]' : 'from-[#E7B15C] to-[#DE9627]',
-          date: trainingDetails.date,
-          location: trainingDetails.location,
-          duration: trainingDetails.duration,
-          certification: trainingDetails.certification,
-          fullName: formData.fullName,
-          role: formData.role,
-          company: formData.company,
-          email: formData.email,
-          phone: formData.phone,
-          compFinName: formData.compFinName,
-          compFinEmail: formData.compFinEmail,
-          isPCD: formData.isPCD,
-          pcdDescription: formData.pcdDescription,
-          additionalParticipants: formData.additionalParticipants || []
-        }
-
-        setConfirmationData(confirmationData)
-        router.push('/confirmation')
-      }, 2000)
+      return
     } catch (error) {
       console.error('Error:', error)
       setSubmissionState('error')
@@ -475,28 +404,85 @@ export function EnrollModal({ isOpen, onClose, level, foundationsDate = '4-6' }:
                 <div className="mt-8 w-full px-6">
                   <Button
                     onClick={() => {
-                      onClose()
-                      setSubmissionState('form')
-                      setFormData({
-                        fullName: '',
-                        role: '',
-                        company: '',
-                        email: '',
-                        phone: '',
-                        agreePrivacy: false,
-                        experience: '',
-                        department: '',
-                        currentSolution: '',
-                        goals: '',
-                        budget: '',
-                        compFinName: '',
-                        compFinEmail: '',
-                        additionalParticipants: []
-                      })
+                      // For Essentials, just close
+                      if (level === 'essentials') {
+                        onClose()
+                        setSubmissionState('form')
+                        setFormData({
+                          fullName: '',
+                          role: '',
+                          company: '',
+                          email: '',
+                          phone: '',
+                          agreePrivacy: false,
+                          experience: '',
+                          department: '',
+                          currentSolution: '',
+                          goals: '',
+                          budget: '',
+                          compFinName: '',
+                          compFinEmail: '',
+                          additionalParticipants: []
+                        })
+                        return
+                      }
+
+                      // For Foundations and Expert, redirect to confirmation
+                      const getTrainingDetails = () => {
+                        switch (level) {
+                          case 'foundations':
+                            const foundationsDateStr = foundationsDate === '4-6' ? '4 a 6 de maio de 2026' : '14 a 16 de maio de 2026'
+                            return {
+                              date: foundationsDateStr,
+                              location: 'Campinas, SP',
+                              duration: '3 dias intensivos',
+                              certification: 'Requestia Foundations'
+                            }
+                          case 'expert':
+                            return {
+                              date: '9 a 11 de novembro de 2026',
+                              location: 'Campinas, SP',
+                              duration: '3 dias intensivos',
+                              certification: 'Requestia Expert'
+                            }
+                          default:
+                            return {
+                              date: '',
+                              location: '',
+                              duration: '',
+                              certification: ''
+                            }
+                        }
+                      }
+
+                      const trainingDetails = getTrainingDetails()
+                      const confirmationData = {
+                        level: level,
+                        levelNumber: level === 'foundations' ? 'Nível 2' : 'Nível 3',
+                        levelName: level === 'foundations' ? 'Requestia Foundations' : 'Requestia Expert',
+                        levelColor: level === 'foundations' ? 'from-[#6F8EAA] to-[#B3C6D9]' : 'from-[#E7B15C] to-[#DE9627]',
+                        date: trainingDetails.date,
+                        location: trainingDetails.location,
+                        duration: trainingDetails.duration,
+                        certification: trainingDetails.certification,
+                        fullName: formData.fullName,
+                        role: formData.role,
+                        company: formData.company,
+                        email: formData.email,
+                        phone: formData.phone,
+                        compFinName: formData.compFinName,
+                        compFinEmail: formData.compFinEmail,
+                        isPCD: formData.isPCD,
+                        pcdDescription: formData.pcdDescription,
+                        additionalParticipants: formData.additionalParticipants || []
+                      }
+
+                      setConfirmationData(confirmationData)
+                      router.push('/confirmation')
                     }}
                     className="w-full px-8 py-3 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-sm"
                   >
-                    Fechar
+                    {level === 'essentials' ? 'Fechar' : 'Continuar'}
                   </Button>
                 </div>
               </div>

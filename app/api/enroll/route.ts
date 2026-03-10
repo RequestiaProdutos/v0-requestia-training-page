@@ -27,7 +27,8 @@ export async function POST(request: Request) {
     const recipients = [
       'produtos@requestia.com',
       'caroline.rodrigues@requestia.com',
-      'isabela.cassolla@requestia.com'
+      'isabela.cassolla@requestia.com',
+      'philipe.shima@requestia.com'
     ]
 
     const participantsList = additionalParticipants
