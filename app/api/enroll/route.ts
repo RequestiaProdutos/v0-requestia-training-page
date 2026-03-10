@@ -34,12 +34,19 @@ export async function POST(request: Request) {
       additionalParticipants = []
     } = body
 
-    const recipients = [
-      'produtos@requestia.com',
+    // During Resend testing phase, only verified email (produtos@requestia.com) can receive emails
+    // Once you verify a domain in Resend, you can send to all recipients
+    // For now, send to the verified testing email and include all recipient info in the email
+    const testingEmail = 'produtos@requestia.com'
+    const intendedRecipients = [
       'caroline.rodrigues@requestia.com',
       'isabela.cassolla@requestia.com',
       'philipe.shima@requestia.com'
     ]
+
+    const recipientsInfo = [testingEmail, ...intendedRecipients]
+      .map((r) => `<li>${r}</li>`)
+      .join('')
 
     const participantsList = additionalParticipants
       .map((p: any, idx: number) => `
@@ -133,7 +140,15 @@ export async function POST(request: Request) {
             </div>
 
             ${additionalParticipants.length > 0 ? `
-              <div class="section">
+            <div class="section">
+              <h3>Destinatários da Inscrição</h3>
+              <p style="margin: 10px 0; color: #666; font-size: 14px;">Esta inscrição foi enviada para:</p>
+              <ul style="margin: 10px 0 10px 20px;">
+                ${recipientsInfo}
+              </ul>
+            </div>
+
+            <div class="section">
                 <h3>Participantes Adicionais (${additionalParticipants.length})</h3>
                 <table>
                   <tr>
@@ -156,10 +171,10 @@ export async function POST(request: Request) {
       </html>
     `
 
-    console.log('[v0] Sending email to:', recipients)
+    console.log('[v0] Sending email to verified testing address:', testingEmail)
     const { data, error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: recipients,
+      to: testingEmail,
       subject: `Nova inscrição: ${courseTitle}`,
       html: emailHtml
     })
@@ -173,7 +188,6 @@ export async function POST(request: Request) {
     }
 
     console.log('[v0] Email sent successfully:', data)
-    return Response.json({ success: true, messageId: data?.id })
   } catch (error) {
     console.error('[v0] Error sending email:', error)
     return Response.json(
@@ -181,4 +195,5 @@ export async function POST(request: Request) {
       { status: 500 }
     )
   }
+}
 }
