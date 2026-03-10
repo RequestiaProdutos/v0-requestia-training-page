@@ -101,7 +101,7 @@ export default function Home() {
                 <div className="relative z-20 flex items-center justify-center">
                   <div className="w-32 h-32 sm:w-48 sm:h-48 lg:w-[280px] lg:h-[280px] rounded-full overflow-hidden shrink-0">
                     <img
-                      src="https://freepngimg.com/download/food/139203-food-plate-top-nutrition-view.png"
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Group%206-lWSofWunqYKgOwfKpYtQd4a395GnH0.png"
                       alt="Professional profile"
                       className="w-full h-full object-cover"
                     />
