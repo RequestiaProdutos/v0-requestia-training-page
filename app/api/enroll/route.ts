@@ -148,16 +148,25 @@ export async function POST(request: Request) {
       </html>
     `
 
-    const response = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
       to: recipients,
       subject: `Nova inscrição: ${courseTitle}`,
       html: emailHtml
     })
 
-    return Response.json({ success: true, messageId: response.id })
+    if (error) {
+      console.error('[v0] Resend error:', error)
+      return Response.json(
+        { error: 'Failed to send email', details: error.message },
+        { status: 500 }
+      )
+    }
+
+    console.log('[v0] Email sent successfully:', data)
+    return Response.json({ success: true, messageId: data?.id })
   } catch (error) {
-    console.error('Error sending email:', error)
+    console.error('[v0] Error sending email:', error)
     return Response.json(
       { error: 'Failed to send email', details: (error as Error).message },
       { status: 500 }
