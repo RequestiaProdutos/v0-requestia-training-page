@@ -1,13 +1,15 @@
 import { Resend } from 'resend'
 
-if (!process.env.RESEND_API_KEY) {
-  throw new Error('RESEND_API_KEY environment variable is not set')
-}
-
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export async function POST(request: Request) {
   try {
+    if (!process.env.RESEND_API_KEY) {
+      return Response.json(
+        { error: 'RESEND_API_KEY is not configured' },
+        { status: 500 }
+      )
+    }
+
+    const resend = new Resend(process.env.RESEND_API_KEY)
     const body = await request.json()
     const {
       courseTitle,
