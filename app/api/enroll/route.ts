@@ -84,6 +84,14 @@ export async function POST(request: Request) {
             </div>
 
             <div class="section">
+              <h3>Destinatários da Inscrição</h3>
+              <p style="margin: 10px 0; color: #666; font-size: 14px;">Esta inscrição foi enviada para:</p>
+              <ul style="margin: 10px 0 10px 20px;">
+                ${recipientsInfo}
+              </ul>
+            </div>
+
+            <div class="section">
               <h3>Dados do Participante Principal</h3>
               <table>
                 <tr>
@@ -140,15 +148,7 @@ export async function POST(request: Request) {
             </div>
 
             ${additionalParticipants.length > 0 ? `
-            <div class="section">
-              <h3>Destinatários da Inscrição</h3>
-              <p style="margin: 10px 0; color: #666; font-size: 14px;">Esta inscrição foi enviada para:</p>
-              <ul style="margin: 10px 0 10px 20px;">
-                ${recipientsInfo}
-              </ul>
-            </div>
-
-            <div class="section">
+              <div class="section">
                 <h3>Participantes Adicionais (${additionalParticipants.length})</h3>
                 <table>
                   <tr>
@@ -196,5 +196,4 @@ export async function POST(request: Request) {
       { status: 500 }
     )
   }
-}
 }
