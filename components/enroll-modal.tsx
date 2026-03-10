@@ -14,6 +14,7 @@ interface EnrollModalProps {
   isOpen: boolean
   onClose: () => void
   level: 'essentials' | 'foundations' | 'expert'
+  foundationsDate?: '4-6' | '14-16'
 }
 
 interface FormData {
@@ -40,7 +41,7 @@ interface FormData {
   }>
 }
 
-export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
+export function EnrollModal({ isOpen, onClose, level, foundationsDate = '4-6' }: EnrollModalProps) {
   const router = useRouter()
   const { setConfirmationData } = useEnrollment()
   const [formData, setFormData] = useState<FormData>({
@@ -59,6 +60,7 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
     compFinEmail: '',
     additionalParticipants: []
   })
+  const [isLoading, setIsLoading] = useState(false)
 
   const getLevelData = () => {
     switch (level) {
@@ -93,7 +95,7 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
           title: 'Inscreva-se no Requestia Foundations',
           description: 'Administre a plataforma no dia a dia com um treinamento prático.',
           tInfo1: 'Data',
-          rInfo1: '4 a 6 de maio de 2026',
+          rInfo1: foundationsDate === '4-6' ? '4 a 6 de maio de 2026' : '14 a 16 de maio de 2026',
           tInfo2: 'Local',
           access: 'Campinas-SP',
           tInfo3: 'Duração',
@@ -152,81 +154,121 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('[v0] handleSubmit called')
-    console.log('[v0] level:', level)
-    console.log('[v0] formData:', formData)
-
-    // Only redirect to confirmation for Foundations and Expert
-    if (level === 'essentials') {
-      console.log('[v0] Level is essentials, closing modal')
-      onClose()
+    
+    if (!formData.agreePrivacy) {
+      alert('Por favor, concorde com a política de privacidade.')
       return
     }
 
-    console.log('[v0] Level is not essentials, preparing confirmation data')
+    setIsLoading(true)
 
-    // Get training details based on level
-    const getTrainingDetails = () => {
-      switch (level) {
-        case 'foundations':
-          return {
-            date: '4 a 6 de maio de 2026',
-            location: 'Campinas, SP',
-            duration: '3 dias intensivos',
-            certification: 'Requestia Foundations'
-          }
-        case 'expert':
-          return {
-            date: 'A confirmar',
-            location: 'A confirmar',
-            duration: '5 dias intensivos',
-            certification: 'Requestia Expert'
-          }
-        default:
-          return {
-            date: '',
-            location: '',
-            duration: '',
-            certification: ''
-          }
+    try {
+      // Get course title based on level and date
+      const getCourseTitle = () => {
+        if (level === 'foundations') {
+          const date = foundationsDate === '4-6' ? '4 a 6 de maio de 2026' : '14 a 16 de maio de 2026'
+          return `Requestia Foundations ${date}`
+        }
+        if (level === 'expert') {
+          return 'Requestia Expert 9 a 11 de novembro de 2026'
+        }
+        return 'Requestia Essentials'
       }
+
+      const courseTitle = getCourseTitle()
+
+      // Send email with form data
+      const response = await fetch('/api/enroll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          courseTitle,
+          level,
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          role: formData.role,
+          company: formData.company,
+          compFinName: formData.compFinName,
+          compFinEmail: formData.compFinEmail,
+          isPCD: formData.isPCD || false,
+          pcdDescription: formData.pcdDescription || '',
+          additionalParticipants: formData.additionalParticipants || []
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to send email')
+      }
+
+      // For essentials, just close modal
+      if (level === 'essentials') {
+        alert('Inscrição realizada com sucesso! Verifique seu e-mail.')
+        onClose()
+        setIsLoading(false)
+        return
+      }
+
+      // For foundations and expert, redirect to confirmation page
+      const getTrainingDetails = () => {
+        switch (level) {
+          case 'foundations':
+            const foundationsDateStr = foundationsDate === '4-6' ? '4 a 6 de maio de 2026' : '14 a 16 de maio de 2026'
+            return {
+              date: foundationsDateStr,
+              location: 'Campinas, SP',
+              duration: '3 dias intensivos',
+              certification: 'Requestia Foundations'
+            }
+          case 'expert':
+            return {
+              date: '9 a 11 de novembro de 2026',
+              location: 'Campinas, SP',
+              duration: '3 dias intensivos',
+              certification: 'Requestia Expert'
+            }
+          default:
+            return {
+              date: '',
+              location: '',
+              duration: '',
+              certification: ''
+            }
+        }
+      }
+
+      const trainingDetails = getTrainingDetails()
+      const confirmationData = {
+        level: level,
+        levelNumber: level === 'foundations' ? 'Nível 2' : 'Nível 3',
+        levelName: level === 'foundations' ? 'Requestia Foundations' : 'Requestia Expert',
+        levelColor: level === 'foundations' ? 'from-[#6F8EAA] to-[#B3C6D9]' : 'from-[#E7B15C] to-[#DE9627]',
+        date: trainingDetails.date,
+        location: trainingDetails.location,
+        duration: trainingDetails.duration,
+        certification: trainingDetails.certification,
+        fullName: formData.fullName,
+        role: formData.role,
+        company: formData.company,
+        email: formData.email,
+        phone: formData.phone,
+        compFinName: formData.compFinName,
+        compFinEmail: formData.compFinEmail,
+        isPCD: formData.isPCD,
+        pcdDescription: formData.pcdDescription,
+        additionalParticipants: formData.additionalParticipants || []
+      }
+
+      setConfirmationData(confirmationData)
+      router.push('/confirmation')
+    } catch (error) {
+      console.error('Error:', error)
+      alert('Erro ao enviar inscrição. Tente novamente.')
+    } finally {
+      setIsLoading(false)
     }
-
-    const trainingDetails = getTrainingDetails()
-
-    // Prepare confirmation data
-    const confirmationData = {
-      level: level,
-      levelNumber: level === 'foundations' ? 'Nível 2' : 'Nível 3',
-      levelName: level === 'foundations' ? 'Requestia Foundations' : 'Requestia Expert',
-      levelColor: level === 'foundations' ? 'from-[#6F8EAA] to-[#B3C6D9]' : 'from-[#E7B15C] to-[#DE9627]',
-      date: trainingDetails.date,
-      location: trainingDetails.location,
-      duration: trainingDetails.duration,
-      certification: trainingDetails.certification,
-      fullName: formData.fullName,
-      role: formData.role,
-      company: formData.company,
-      email: formData.email,
-      phone: formData.phone,
-      compFinName: formData.compFinName,
-      compFinEmail: formData.compFinEmail,
-      isPCD: formData.isPCD,
-      pcdDescription: formData.pcdDescription,
-      additionalParticipants: formData.additionalParticipants || []
-    }
-
-    console.log('[v0] confirmationData:', confirmationData)
-    console.log('[v0] calling setConfirmationData')
-
-    // Save data to context
-    setConfirmationData(confirmationData)
-
-    console.log('[v0] data saved, pushing to /confirmation')
-    // Redirect to confirmation page
-    router.push('/confirmation')
   }
 
   const renderForm = () => {
@@ -234,7 +276,7 @@ export function EnrollModal({ isOpen, onClose, level }: EnrollModalProps) {
       case 'essentials':
         return <EnrollFormEssentials formData={formData} onFormDataChange={setFormData} onSubmit={handleSubmit} />
       case 'foundations':
-        return <EnrollFormFoundations formData={formData} onFormDataChange={setFormData} onSubmit={handleSubmit} />
+        return <EnrollFormFoundations formData={formData} onFormDataChange={setFormData} onSubmit={handleSubmit} isLoading={isLoading} />
       case 'expert':
         return <EnrollFormExpert formData={formData} onFormDataChange={setFormData} onSubmit={handleSubmit} />
       default:

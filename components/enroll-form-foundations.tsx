@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronDown, ChevronUp, Edit2, Trash2, Plus } from 'lucide-react'
 import { Input } from './ui/input'
-import Link from "next/link";
 
 interface AdditionalParticipant {
   id: string
@@ -38,9 +37,10 @@ interface EnrollFormFoundationsProps {
   formData: FormData & { experience?: string; department?: string }
   onFormDataChange: (data: FormData & { experience?: string; department?: string }) => void
   onSubmit: (e: React.FormEvent) => void
+  isLoading?: boolean
 }
 
-export function EnrollFormFoundations({ formData, onFormDataChange, onSubmit }: EnrollFormFoundationsProps) {
+export function EnrollFormFoundations({ formData, onFormDataChange, onSubmit, isLoading = false }: EnrollFormFoundationsProps) {
   const [isParticipantDataExpanded, setIsParticipantDataExpanded] = useState(true)
   const [isCompanyDataExpanded, setIsCompanyDataExpanded] = useState(true)
   const [isAddParticipantExpanded, setIsAddParticipantExpanded] = useState(true)
@@ -541,14 +541,13 @@ export function EnrollFormFoundations({ formData, onFormDataChange, onSubmit }: 
           </div>
 
           {/* Submit Button */}
-          <Link href="/confirmation">
-            <Button
-              type="submit"
-              className="w-full px-8 py-6 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-2xl"
-            >
-              Confirmar inscrição
-            </Button>
-          </Link>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-full px-8 py-6 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? 'Enviando...' : 'Confirmar inscrição'}
+          </Button>
         </form>
       </div >
     </div >
