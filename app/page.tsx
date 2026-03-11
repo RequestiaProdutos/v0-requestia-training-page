@@ -101,7 +101,7 @@ export default function Home() {
                 <div className="relative z-20 flex items-center justify-center">
                   <div className="w-32 h-32 sm:w-48 sm:h-48 lg:w-[280px] lg:h-[280px] rounded-full overflow-hidden shrink-0">
                     <img
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Group%206-lWSofWunqYKgOwfKpYtQd4a395GnH0.png"
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Group%206-uDdFg4i84mgBmvtbBQ5htK3jJSPzV7.png"
                       alt="Professional profile"
                       className="w-full h-full object-cover"
                     />
@@ -138,7 +138,7 @@ export default function Home() {
       <section className="relative overflow-hidden bg-[#F4F7FA]">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
           <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#00233f] mb-4">
+            <h2 className="text-[28px] font-semibold text-[#00233f] mb-4">
               Níveis de treinamento
             </h2>
             <p className="text-2xl font-regular text-[#5F7990]">
