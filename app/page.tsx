@@ -1,15 +1,45 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Brain, GraduationCap, BookOpen, Clock, Gift, Award, CircleCheck, Info, MapPin, ClockFading, Lock, CalendarCheck, Quote } from 'lucide-react'
-import { ContactModal } from '@/components/contact-modal'
-import { EnrollModal } from '@/components/enroll-modal'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Brain,
+  GraduationCap,
+  BookOpen,
+  Clock,
+  Gift,
+  Award,
+  CircleCheck,
+  Info,
+  MapPin,
+  ClockFading,
+  Lock,
+  CalendarCheck,
+  Quote,
+} from "lucide-react";
+import { ContactModal } from "@/components/contact-modal";
+import { EnrollModal } from "@/components/enroll-modal";
+
+type Level = "essentials" | "foundations" | "expert";
+
+interface TrainingSession {
+  id: string;
+  date: string;
+  location: string;
+  duration: string;
+}
 
 export default function Home() {
-  const [selectedLevel, setSelectedLevel] = useState('essentials')
-  const [enrollModalOpen, setEnrollModalOpen] = useState(false)
+  const [selectedLevel, setSelectedLevel] = useState<Level>("essentials");
+  const [enrollModalOpen, setEnrollModalOpen] = useState(false);
+  const [selectedSession, setSelectedSession] =
+    useState<TrainingSession | null>(null);
+
+  const openEnrollModal = (session: TrainingSession | null = null) => {
+    setSelectedSession(session);
+    setEnrollModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-[#F4F7FA]">
@@ -59,7 +89,8 @@ export default function Home() {
 
               {/* Description */}
               <p className="text-sm sm:text-lg text-gray-600 leading-relaxed max-w-xl">
-                Desenvolva suas habilidades por meio de uma jornada estruturada de aprendizagem, com conteúdo prático e certificação oficial.
+                Desenvolva suas habilidades por meio de uma jornada estruturada
+                de aprendizagem, com conteúdo prático e certificação oficial.
               </p>
             </div>
 
@@ -70,7 +101,7 @@ export default function Home() {
                 {/* SVG 1 (principal horizontal lines) */}
                 <svg
                   className="absolute"
-                  style={{ left: '20px', top: '-40px' }}
+                  style={{ left: "20px", top: "-40px" }}
                   width="540"
                   height="483"
                   viewBox="0 0 540 483"
@@ -78,20 +109,31 @@ export default function Home() {
                   xmlns="http://www.w3.org/2000/svg"
                   preserveAspectRatio="none"
                 >
-                  <path d="M0.5 0V122C0.5 139.673 14.8269 154 32.5 154H507.5C525.173 154 539.5 168.327 539.5 186V362.5C539.5 380.173 525.173 394.5 507.5 394.5H178.312C160.638 394.5 146.312 408.827 146.312 426.5V483" stroke="#5F7990" strokeDasharray="6 6" strokeWidth="1.5" />
+                  <path
+                    d="M0.5 0V122C0.5 139.673 14.8269 154 32.5 154H507.5C525.173 154 539.5 168.327 539.5 186V362.5C539.5 380.173 525.173 394.5 507.5 394.5H178.312C160.638 394.5 146.312 408.827 146.312 426.5V483"
+                    stroke="#5F7990"
+                    strokeDasharray="6 6"
+                    strokeWidth="1.5"
+                  />
                 </svg>
 
                 {/* SVG 2 (lateral right lines) */}
                 <svg
                   className="absolute"
-                  style={{ right: '-140px', top: '-40px' }}
+                  style={{ right: "-140px", top: "-40px" }}
                   width="62"
                   height="455"
                   viewBox="0 0 62 455"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path d="M61.5 454.5H32.5C14.8269 454.5 0.5 440.173 0.5 422.5V0.5" stroke="#5F7990" strokeLinecap="round" strokeDasharray="6 6" strokeWidth="1.5" />
+                  <path
+                    d="M61.5 454.5H32.5C14.8269 454.5 0.5 440.173 0.5 422.5V0.5"
+                    stroke="#5F7990"
+                    strokeLinecap="round"
+                    strokeDasharray="6 6"
+                    strokeWidth="1.5"
+                  />
                 </svg>
               </div>
 
@@ -132,7 +174,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section >
+      </section>
 
       {/* Training Levels Section */}
       <section className="relative overflow-hidden bg-[#F4F7FA]">
@@ -142,28 +184,28 @@ export default function Home() {
               Níveis de treinamento
             </h2>
             <p className="text-2xl font-regular text-[#5F7990]">
-              Escolha o nível adequado ao seu momento e avanço na trilha de capacitação.
+              Escolha o nível adequado ao seu momento e avanço na trilha de
+              capacitação.
             </p>
           </div>
 
           {/* Level buttons */}
           <div className="flex justify-center mb-12">
             <div className="relative flex items-center bg-[#E3EDF5] p-5 rounded-full">
-
-              {[
-                { id: 'essentials', label: 'Essentials' },
-                { id: 'foundations', label: 'Foundations' },
-                { id: 'expert', label: 'Expert' }
-              ].map((level, index, arr) => (
+              {([
+                { id: "essentials", label: "Essentials" },
+                { id: "foundations", label: "Foundations" },
+                { id: "expert", label: "Expert" },
+              ] as const).map((level, index, arr) => (
                 <div key={level.id} className="relative flex items-center">
-
                   <button
                     onClick={() => setSelectedLevel(level.id)}
                     className={`relative z-10 px-5 py-2 rounded-full text-base sm:text-xl font-regular transition-all
-            ${selectedLevel === level.id
-                        ? 'bg-[#0D5B9C] text-white'
-                        : 'bg-[#CBDDEF] text-white/70 hover:bg-[#ACC8E4]'
-                      }`}
+            ${
+              selectedLevel === level.id
+                ? "bg-[#0D5B9C] text-white"
+                : "bg-[#CBDDEF] text-white/70 hover:bg-[#ACC8E4]"
+            }`}
                   >
                     {level.label}
                   </button>
@@ -172,13 +214,15 @@ export default function Home() {
                   {index < arr.length - 1 && (
                     <div className="relative flex items-center justify-center w-12">
                       <div className="absolute w-full h-[2px] bg-[#CBDDEF]" />
-                      <div className={`relative z-10 w-4 h-4 rounded-full ${selectedLevel === level.id
-                        ? 'bg-[#0D5B9C]'
-                        : 'bg-[#CBDDEF]'
-                        }`} />
+                      <div
+                        className={`relative z-10 w-4 h-4 rounded-full ${
+                          selectedLevel === level.id
+                            ? "bg-[#0D5B9C]"
+                            : "bg-[#CBDDEF]"
+                        }`}
+                      />
                     </div>
                   )}
-
                 </div>
               ))}
             </div>
@@ -191,18 +235,26 @@ export default function Home() {
         {/* Level indicator */}
         <div className="flex items-start gap-4 mb-12">
           <div className="w-12 h-12 rounded-full bg-gradient-to-b from-[#003765] to-[#206EB0] text-white flex items-center justify-center text-xl font-regular shrink-0">
-            {selectedLevel === 'essentials' ? '1' : selectedLevel === 'foundations' ? '2' : '3'}
+            {selectedLevel === "essentials"
+              ? "1"
+              : selectedLevel === "foundations"
+                ? "2"
+                : "3"}
           </div>
           <div>
             <h3 className="text-2xl font-regular text-[#00233f]">
-              {selectedLevel === 'essentials' ? 'Requestia Essentials' : selectedLevel === 'foundations' ? 'Requestia Foundations' : 'Requestia Expert'}
+              {selectedLevel === "essentials"
+                ? "Requestia Essentials"
+                : selectedLevel === "foundations"
+                  ? "Requestia Foundations"
+                  : "Requestia Expert"}
             </h3>
             <p className="text-lg font-regular text-[#5F7990]">
-              {selectedLevel === 'essentials'
-                ? 'Conheça os conceitos fundamentais para administrar a plataforma Requestia.'
-                : selectedLevel === 'foundations'
-                  ? 'Administre a plataforma no dia a dia com um treinamento prático.'
-                  : 'Domine funcionalidades avançadas e otimize a plataforma.'}
+              {selectedLevel === "essentials"
+                ? "Conheça os conceitos fundamentais para administrar a plataforma Requestia."
+                : selectedLevel === "foundations"
+                  ? "Administre a plataforma no dia a dia com um treinamento prático."
+                  : "Domine funcionalidades avançadas e otimize a plataforma."}
             </p>
           </div>
         </div>
@@ -215,7 +267,7 @@ export default function Home() {
 
           {/* Course Cards Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {selectedLevel === 'essentials' && (
+            {selectedLevel === "essentials" && (
               <div className="bg-white rounded-2xl border border-gray-300 overflow-hidden p-6 shadow-lg shadow-gray-100">
                 {/* Course badges */}
                 <div className="flex flex-wrap gap-3 mb-6">
@@ -241,9 +293,9 @@ export default function Home() {
                 {/* Learning objectives */}
                 <div className="space-y-3 mb-8">
                   {[
-                    'Navegue pela plataforma e entenda sua estrutura',
-                    'Realize as configurações iniciais de administração',
-                    'Realize as configurações iniciais de administração'
+                    "Navegue pela plataforma e entenda sua estrutura",
+                    "Realize as configurações iniciais de administração",
+                    "Realize as configurações iniciais de administração",
                   ].map((objective, index) => (
                     <div key={index} className="flex items-start gap-3">
                       <CircleCheck className="w-5 h-5 text-[#0d5b9c] shrink-0 mt-0.5" />
@@ -253,22 +305,27 @@ export default function Home() {
                 </div>
 
                 {/* Enroll button */}
-                <Button onClick={() => setEnrollModalOpen(true)} className="w-full px-6 py-2 bg-white border-2 border-[#e35205] text-[#e35205] hover:bg-[#e35205]/5 font-regular">
+                <Button
+                  onClick={() => openEnrollModal()}
+                  className="w-full px-6 py-2 bg-white border-2 border-[#e35205] text-[#e35205] hover:bg-[#e35205]/5 font-regular"
+                >
                   Inscrever-se
                 </Button>
               </div>
             )}
 
-            {selectedLevel === 'foundations' && (
+            {selectedLevel === "foundations" && (
               <>
                 {/* Foundation Course Card 1 */}
                 <div className="bg-white rounded-2xl border border-gray-300 overflow-hidden p-6">
-
                   {/* Date section */}
                   <div className="mb-6 p-4 bg-[#E9EEF2] rounded-lg flex items-center gap-3">
                     <CalendarCheck className="w-5 h-5 text-gray-700" />
                     <div className="flex-1">
-                      <p className="font-regular text-gray-600"> <b>4 a 6 de maio</b> | Segunda a quarta-feira</p>
+                      <p className="font-regular text-gray-600">
+                        {" "}
+                        <b>4 a 6 de maio</b> | Segunda a quarta-feira
+                      </p>
                     </div>
                     <button>
                       <Info className="w-5 h-5 text-gray-600" />
@@ -277,39 +334,59 @@ export default function Home() {
 
                   {/* Course description */}
                   <p className="text-gray-600 text-sm mb-6">
-                    Crie e edite processos, configure fluxos e formulários e evolua processos com mais autonomia no dia a dia da administração da plataforma.
+                    Crie e edite processos, configure fluxos e formulários e
+                    evolua processos com mais autonomia no dia a dia da
+                    administração da plataforma.
                   </p>
 
                   {/* Course info items */}
                   <div className="flex flex-wrap gap-6 mb-6 pb-6 border-b border-gray-200">
                     <div className="flex items-center gap-2">
                       <MapPin className="w-5 h-5 text-gray-700" />
-                      <span className="text-sm text-gray-700">Campinas, SP</span>
+                      <span className="text-sm text-gray-700">
+                        Campinas, SP
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <ClockFading className="w-5 h-5 text-gray-700" />
-                      <span className="text-sm text-gray-700">3 dias intensivos</span>
+                      <span className="text-sm text-gray-700">
+                        3 dias intensivos
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Award className="w-5 h-5 text-gray-700" />
-                      <span className="text-sm text-gray-700">Certificado oficial</span>
+                      <span className="text-sm text-gray-700">
+                        Certificado oficial
+                      </span>
                     </div>
                   </div>
 
                   {/* Enroll button */}
-                  <Button onClick={() => setEnrollModalOpen(true)} className="w-full px-6 py-3 bg-white border-2 border-[#e35205] text-[#e35205] hover:bg-[#e35205]/5 font-semibold text-base">
+                  <Button
+                    onClick={() =>
+                      openEnrollModal({
+                        id: "foundations-may-2026",
+                        date: "4 a 6 de maio de 2026",
+                        location: "Campinas, SP",
+                        duration: "3 dias intensivos",
+                      })
+                    }
+                    className="w-full px-6 py-3 bg-white border-2 border-[#e35205] text-[#e35205] hover:bg-[#e35205]/5 font-semibold text-base"
+                  >
                     Inscrever-se
                   </Button>
                 </div>
 
                 {/* Foundation Course Card 2 */}
                 <div className="bg-white rounded-2xl border border-gray-300 overflow-hidden p-6">
-
                   {/* Date section */}
                   <div className="mb-6 p-4 bg-[#E9EEF2] rounded-lg flex items-center gap-3">
                     <CalendarCheck className="w-5 h-5 text-gray-700" />
                     <div className="flex-1">
-                      <p className="font-regular text-gray-600"> <b>14 a 16 de maio</b> | Segunda a quarta-feira</p>
+                      <p className="font-regular text-gray-600">
+                        {" "}
+                        <b>1 a 3 de setembro</b> | Terça a quinta-feira
+                      </p>
                     </div>
                     <button>
                       <Info className="w-5 h-5 text-gray-600" />
@@ -318,41 +395,61 @@ export default function Home() {
 
                   {/* Course description */}
                   <p className="text-gray-600 text-sm mb-6">
-                    Crie e edite processos, configure fluxos e formulários e evolua processos com mais autonomia no dia a dia da administração da plataforma.
+                    Crie e edite processos, configure fluxos e formulários e
+                    evolua processos com mais autonomia no dia a dia da
+                    administração da plataforma.
                   </p>
 
                   {/* Course info items */}
                   <div className="flex flex-wrap gap-6 mb-6 pb-6 border-b border-gray-200">
                     <div className="flex items-center gap-2">
                       <MapPin className="w-5 h-5 text-gray-700" />
-                      <span className="text-sm text-gray-700">Campinas, SP</span>
+                      <span className="text-sm text-gray-700">
+                        Campinas, SP
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <ClockFading className="w-5 h-5 text-gray-700" />
-                      <span className="text-sm text-gray-700">3 dias intensivos</span>
+                      <span className="text-sm text-gray-700">
+                        3 dias intensivos
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Award className="w-5 h-5 text-gray-700" />
-                      <span className="text-sm text-gray-700">Certificado oficial</span>
+                      <span className="text-sm text-gray-700">
+                        Certificado oficial
+                      </span>
                     </div>
                   </div>
 
                   {/* Enroll button */}
-                  <Button onClick={() => setEnrollModalOpen(true)} className="w-full px-6 py-3 bg-white border-2 border-[#e35205] text-[#e35205] hover:bg-[#e35205]/5 font-semibold text-base">
+                  <Button
+                    onClick={() =>
+                      openEnrollModal({
+                        id: "foundations-september-2026",
+                        date: "1 a 3 de setembro de 2026",
+                        location: "Campinas, SP",
+                        duration: "3 dias intensivos",
+                      })
+                    }
+                    className="w-full px-6 py-3 bg-white border-2 border-[#e35205] text-[#e35205] hover:bg-[#e35205]/5 font-semibold text-base"
+                  >
                     Inscrever-se
                   </Button>
                 </div>
               </>
             )}
 
-            {selectedLevel === 'expert' && (
+            {selectedLevel === "expert" && (
               <div className="bg-white rounded-2xl border border-gray-300 overflow-hidden p-6">
-
                 {/* Date section */}
                 <div className="mb-6 p-4 bg-[#E9EEF2] rounded-lg flex items-center gap-3">
                   <CalendarCheck className="w-5 h-5 text-gray-700" />
                   <div className="flex-1">
-                    <p className="font-regular text-gray-600"> <b>9 a 11 de novembro</b> | Segunda a quarta-feira</p>
+                    <p className="font-regular text-gray-600">
+                      {" "}
+                      <b>03 a 05 de novembro</b> | Terça a quinta-feira
+                    </p>
                   </div>
                   <button>
                     <Info className="w-5 h-5 text-gray-600" />
@@ -361,7 +458,9 @@ export default function Home() {
 
                 {/* Course description */}
                 <p className="text-gray-600 text-sm mb-6">
-                  Trabalhe com integrações, automações e recursos técnicos avançados para lidar com cenários mais complexos de uso da plataforma.
+                  Trabalhe com integrações, automações e recursos técnicos
+                  avançados para lidar com cenários mais complexos de uso da
+                  plataforma.
                 </p>
 
                 {/* Course info items */}
@@ -372,16 +471,23 @@ export default function Home() {
                   </div>
                   <div className="flex items-center gap-2">
                     <ClockFading className="w-5 h-5 text-gray-700" />
-                    <span className="text-sm text-gray-700">3 dias intensivos</span>
+                    <span className="text-sm text-gray-700">
+                      3 dias intensivos
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Award className="w-5 h-5 text-gray-700" />
-                    <span className="text-sm text-gray-700">Certificado oficial</span>
+                    <span className="text-sm text-gray-700">
+                      Certificado oficial
+                    </span>
                   </div>
                 </div>
 
                 {/* Enroll button */}
-                <Button onClick={() => setEnrollModalOpen(true)} className="w-full px-6 py-3 bg-white border-2 border-[#e35205] text-[#e35205] hover:bg-[#e35205]/5 font-semibold text-base">
+                <Button
+                  onClick={() => openEnrollModal()}
+                  className="w-full px-6 py-3 bg-white border-2 border-[#e35205] text-[#e35205] hover:bg-[#e35205]/5 font-semibold text-base"
+                >
                   Inscrever-se
                 </Button>
               </div>
@@ -393,13 +499,15 @@ export default function Home() {
       {/* Testimonial Section */}
       <section className="max-w-7xl mx-auto px-6 py-16">
         <div className="rounded-2xl bg-[#F2F6FA] border border-[#5F7990]/40 px-10 py-10">
-
           {/* Quote Icon */}
           <Quote className="w-10 h-10 text-[#0D5B9C] mb-6" />
 
           {/* Testimonial text */}
           <p className="text-[#3F556B] text-base leading-relaxed italic mb-8 max-w-4xl">
-            “O treinamento é fundamental para quem utiliza a plataforma, pois amplia a compreensão sobre suas possibilidades e mostra até onde é possível evoluir com a tecnologia. Conteúdo produtivo, com temas relevantes e aplicáveis ao dia a dia.”
+            “O treinamento é fundamental para quem utiliza a plataforma, pois
+            amplia a compreensão sobre suas possibilidades e mostra até onde é
+            possível evoluir com a tecnologia. Conteúdo produtivo, com temas
+            relevantes e aplicáveis ao dia a dia.”
           </p>
 
           {/* Divider */}
@@ -415,15 +523,11 @@ export default function Home() {
               <p className="text-[#1F2D3D] font-semibold">
                 Mario Henrique Pingnate
               </p>
-              <p className="text-[#0D5B9C] text-sm">
-                Banco Rendimento
-              </p>
+              <p className="text-[#0D5B9C] text-sm">Banco Rendimento</p>
             </div>
           </div>
-
         </div>
       </section>
-
 
       {/* Footer spacing */}
       <div className="h-16"></div>
@@ -432,8 +536,9 @@ export default function Home() {
       <EnrollModal
         isOpen={enrollModalOpen}
         onClose={() => setEnrollModalOpen(false)}
-        level={selectedLevel as 'essentials' | 'foundations' | 'expert'}
+        level={selectedLevel}
+        session={selectedSession}
       />
     </div>
-  )
+  );
 }
