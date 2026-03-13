@@ -1,57 +1,70 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 
 interface FormData {
-  fullName: string
-  role: string
-  company: string
-  email: string
-  phone: string
-  agreePrivacy: boolean
+  fullName: string;
+  role: string;
+  company: string;
+  email: string;
+  phone: string;
+  agreePrivacy: boolean;
   additionalParticipants?: Array<{
-    addName: string
-    role: string
-    email: string
-    phone: string
-  }>
+    addName: string;
+    role: string;
+    email: string;
+    phone: string;
+  }>;
 }
 
 interface EnrollFormEssentialsProps {
-  formData: FormData
-  onFormDataChange: (data: FormData) => void
-  onSubmit: (e: React.FormEvent) => void
+  formData: FormData;
+  onFormDataChange: (data: FormData) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  isSubmitting?: boolean;
 }
 
-export function EnrollFormEssentials({ formData, onFormDataChange, onSubmit }: EnrollFormEssentialsProps) {
-  const [isParticipantDataExpanded, setIsParticipantDataExpanded] = useState(true)
+export function EnrollFormEssentials({
+  formData,
+  onFormDataChange,
+  onSubmit,
+  isSubmitting = false,
+}: EnrollFormEssentialsProps) {
+  const [isParticipantDataExpanded, setIsParticipantDataExpanded] =
+    useState(true);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target as HTMLInputElement
-    if (type === 'checkbox') {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value, type } = e.target as HTMLInputElement;
+    if (type === "checkbox") {
       onFormDataChange({
         ...formData,
-        [name]: (e.target as HTMLInputElement).checked
-      })
+        [name]: (e.target as HTMLInputElement).checked,
+      });
     } else {
       onFormDataChange({
         ...formData,
-        [name]: value
-      })
+        [name]: value,
+      });
     }
-  }
+  };
 
   return (
     <div className="md:col-span-2 border p-6 shadow-lg shadow-[#004680]/10 rounded-2xl flex flex-col h-[65vh]">
-      <h3 className="text-2xl font-normal text-[#00233f] mb-6">Dados para inscrição</h3>
+      <h3 className="text-2xl font-normal text-[#00233f] mb-6">
+        Dados para inscrição
+      </h3>
 
       <form className="flex flex-col flex-1" onSubmit={onSubmit}>
         <div className="flex-1 overflow-y-auto no-scrollbar pr-2">
           <button
             type="button"
-            onClick={() => setIsParticipantDataExpanded(!isParticipantDataExpanded)}
+            onClick={() =>
+              setIsParticipantDataExpanded(!isParticipantDataExpanded)
+            }
             className="w-full flex items-center justify-between py-2 hover:opacity-80 transition-opacity"
           >
             <h4 className="text-normal font-normal text-[#00233f]">
@@ -138,16 +151,29 @@ export function EnrollFormEssentials({ formData, onFormDataChange, onSubmit }: E
               className="mt-1 w-4 h-4 rounded border-gray-300 text-[#0D5B9C] cursor-pointer"
             />
             <label className="text-xs text-[#5F7990] cursor-pointer">
-              Ao enviar este formulário, concordo com a utilização de todos dados informados para o recebimento de contato comercial. Confirmo que li e concordo com a Política de Privacidade.
+              Ao enviar este formulário, concordo com a utilização de todos
+              dados informados para o recebimento de contato comercial. Confirmo
+              que li e concordo com a Política de Privacidade.
             </label>
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full px-8 py-6 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-sm">
-            Confirmar inscrição
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full px-8 py-6 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-sm disabled:opacity-70 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Processando...
+              </>
+            ) : (
+              "Confirmar inscrição"
+            )}
           </Button>
         </div>
       </form>
     </div>
-  )
+  );
 }

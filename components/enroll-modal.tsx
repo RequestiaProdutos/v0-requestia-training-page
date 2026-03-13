@@ -54,6 +54,8 @@ interface FormData {
     role: string;
     email: string;
     phone: string;
+    isPCD?: boolean | null;
+    pcdDescription?: string;
   }>;
 }
 
@@ -65,6 +67,7 @@ export function EnrollModal({
 }: EnrollModalProps) {
   const router = useRouter();
   const { setConfirmationData } = useEnrollment();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     role: "",
@@ -193,85 +196,121 @@ export function EnrollModal({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("[v0] handleSubmit called");
-    console.log("[v0] level:", level);
-    console.log("[v0] formData:", formData);
 
-    // Only redirect to confirmation for Foundations and Expert
-    if (level === "essentials") {
-      console.log("[v0] Level is essentials, closing modal");
-      onClose();
-      return;
-    }
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
-    console.log("[v0] Level is not essentials, preparing confirmation data");
-
-    // Get training details based on level
     const getTrainingDetails = () => {
-      switch (level) {
-        case "foundations":
-          return {
-            date: foundationSession.date,
-            location: foundationSession.location,
-            duration: foundationSession.duration,
-            certification: "Requestia Foundations",
-          };
-        case "expert":
-          return {
-            date: "A confirmar",
-            location: "A confirmar",
-            duration: "5 dias intensivos",
-            certification: "Requestia Expert",
-          };
-        default:
-          return {
-            date: "",
-            location: "",
-            duration: "",
-            certification: "",
-          };
+      if (level === "foundations") {
+        return {
+          date: foundationSession.date,
+          location: foundationSession.location,
+          duration: foundationSession.duration,
+          certification: "Requestia Foundations",
+        };
       }
+      if (level === "expert") {
+        return {
+          date: "3 a 5 de novembro de 2026",
+          location: "Campinas, SP",
+          duration: "3 dias intensivos",
+          certification: "Requestia Expert",
+        };
+      }
+      return {
+        date: "Online e gratuito",
+        location: "Plataforma Requestia LMS",
+        duration: "5 horas",
+        certification: "Requestia Essentials",
+      };
     };
 
     const trainingDetails = getTrainingDetails();
 
-    // Prepare confirmation data
-    const confirmationData = {
-      level: level,
-      levelNumber: level === "foundations" ? "Nível 2" : "Nível 3",
-      levelName:
-        level === "foundations" ? "Requestia Foundations" : "Requestia Expert",
-      levelColor:
-        level === "foundations"
-          ? "from-[#6F8EAA] to-[#B3C6D9]"
-          : "from-[#E7B15C] to-[#DE9627]",
-      date: trainingDetails.date,
-      location: trainingDetails.location,
-      duration: trainingDetails.duration,
-      certification: trainingDetails.certification,
-      fullName: formData.fullName,
-      role: formData.role,
-      company: formData.company,
-      email: formData.email,
-      phone: formData.phone,
-      compFinName: formData.compFinName,
-      compFinEmail: formData.compFinEmail,
-      isPCD: formData.isPCD,
-      pcdDescription: formData.pcdDescription,
-      additionalParticipants: formData.additionalParticipants || [],
+    const emailPayload = {
+      level,
+      training: trainingDetails,
+      participant: {
+        fullName: formData.fullName.trim(),
+        role: formData.role.trim(),
+        company: formData.company.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        compFinName: formData.compFinName?.trim() || undefined,
+        compFinEmail: formData.compFinEmail?.trim() || undefined,
+        isPCD: formData.isPCD,
+        pcdDescription: formData.pcdDescription?.trim() || undefined,
+      },
+      additionalParticipants: formData.additionalParticipants ?? [],
     };
 
-    console.log("[v0] confirmationData:", confirmationData);
-    console.log("[v0] calling setConfirmationData");
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(emailPayload),
+      });
 
-    // Save data to context
-    setConfirmationData(confirmationData);
+      if (!response.ok) {
+        throw new Error("Falha ao enviar e-mail");
+      }
 
-    console.log("[v0] data saved, pushing to /confirmation");
-    // Redirect to confirmation page
-    router.push("/confirmation");
+      const getLevelInfo = () => {
+        switch (level) {
+          case "essentials":
+            return {
+              levelNumber: "Nível 1",
+              levelName: "Requestia Essentials",
+              levelColor: "from-[#F2A57B] to-[#E97334]",
+            };
+          case "foundations":
+            return {
+              levelNumber: "Nível 2",
+              levelName: "Requestia Foundations",
+              levelColor: "from-[#6F8EAA] to-[#B3C6D9]",
+            };
+          case "expert":
+            return {
+              levelNumber: "Nível 3",
+              levelName: "Requestia Expert",
+              levelColor: "from-[#E7B15C] to-[#DE9627]",
+            };
+        }
+      };
+
+      const levelInfo = getLevelInfo();
+
+      setConfirmationData({
+        level: level,
+        levelNumber: levelInfo.levelNumber,
+        levelName: levelInfo.levelName,
+        levelColor: levelInfo.levelColor,
+        date: trainingDetails.date,
+        location: trainingDetails.location,
+        duration: trainingDetails.duration,
+        certification: trainingDetails.certification,
+        fullName: formData.fullName,
+        role: formData.role,
+        company: formData.company,
+        email: formData.email,
+        phone: formData.phone,
+        compFinName: formData.compFinName,
+        compFinEmail: formData.compFinEmail,
+        isPCD: formData.isPCD,
+        pcdDescription: formData.pcdDescription,
+        additionalParticipants: formData.additionalParticipants || [],
+      });
+
+      router.push("/confirmation");
+    } catch (err) {
+      console.error(err);
+      console.log(
+        "Não foi possível concluir sua inscrição agora. Tente novamente.",
+      );
+      setIsSubmitting(false);
+    }
   };
 
   const renderForm = () => {
@@ -282,6 +321,7 @@ export function EnrollModal({
             formData={formData}
             onFormDataChange={setFormData}
             onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
           />
         );
       case "foundations":
@@ -290,6 +330,7 @@ export function EnrollModal({
             formData={formData}
             onFormDataChange={setFormData}
             onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
           />
         );
       case "expert":
@@ -298,6 +339,7 @@ export function EnrollModal({
             formData={formData}
             onFormDataChange={setFormData}
             onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
           />
         );
       default:
@@ -306,6 +348,7 @@ export function EnrollModal({
             formData={formData}
             onFormDataChange={setFormData}
             onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
           />
         );
     }
