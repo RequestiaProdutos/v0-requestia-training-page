@@ -3,28 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Loader2 } from "lucide-react";
-
-interface FormData {
-  fullName: string;
-  role: string;
-  company: string;
-  email: string;
-  phone: string;
-  agreePrivacy: boolean;
-  additionalParticipants?: Array<{
-    addName: string;
-    role: string;
-    email: string;
-    phone: string;
-  }>;
-}
-
-interface EnrollFormEssentialsProps {
-  formData: FormData;
-  onFormDataChange: (data: FormData) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  isSubmitting?: boolean;
-}
+import type { EnrollFormEssentialsProps } from "@/types/enrollment";
 
 export function EnrollFormEssentials({
   formData,

@@ -2,212 +2,69 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  ChevronDown,
-  ChevronUp,
-  Edit2,
-  Trash2,
-  Plus,
-  Loader2,
-} from "lucide-react";
+import { ChevronDown, ChevronUp, Edit2, Trash2, Loader2 } from "lucide-react";
 import { Input } from "./ui/input";
+import { useAdditionalParticipants } from "@/hooks/use-additional-participants";
+import type {
+  AdvancedFormData,
+  Level,
+  AdditionalParticipantWithId,
+} from "@/types/enrollment";
 
-interface AdditionalParticipant {
-  id: string;
-  addName: string;
-  company: string;
-  role: string;
-  email: string;
-  phone: string;
-  isPCD: boolean | null;
-  pcdDescription: string;
-}
-
-interface FormData {
-  fullName: string;
-  role: string;
-  email: string;
-  phone: string;
-  agreePrivacy: boolean;
-  company: string;
-  compFinName?: string;
-  compFinEmail?: string;
-  isPCD?: boolean | null;
-  pcdDescription?: string;
-  additionalParticipants?: Array<{
-    addName: string;
-    role: string;
-    email: string;
-    phone: string;
-    isPCD?: boolean | null;
-    pcdDescription?: string;
-  }>;
-}
-
-interface EnrollFormFoundationsProps {
-  formData: FormData & { experience?: string; department?: string };
-  onFormDataChange: (
-    data: FormData & { experience?: string; department?: string },
-  ) => void;
+interface EnrollFormAdvancedProps {
+  level: Extract<Level, "foundations" | "expert">;
+  formData: AdvancedFormData;
+  onFormDataChange: (data: AdvancedFormData) => void;
   onSubmit: (e: React.FormEvent) => void;
   isSubmitting?: boolean;
 }
 
-export function EnrollFormFoundations({
+export function EnrollFormAdvanced({
   formData,
   onFormDataChange,
   onSubmit,
   isSubmitting = false,
-}: EnrollFormFoundationsProps) {
+}: EnrollFormAdvancedProps) {
+  // Section expansion states
   const [isParticipantDataExpanded, setIsParticipantDataExpanded] =
     useState(true);
   const [isCompanyDataExpanded, setIsCompanyDataExpanded] = useState(true);
   const [isAddParticipantExpanded, setIsAddParticipantExpanded] =
     useState(true);
+
+  // PCD states
   const [isPCDNeeded, setIsPCDNeeded] = useState<boolean | null>(null);
   const [pcdDescription, setPCDDescription] = useState("");
-  const [additionalParticipants, setAdditionalParticipants] = useState<
-    AdditionalParticipant[]
-  >([]);
-  const [isAddingParticipant, setIsAddingParticipant] = useState(false);
-  const [editingParticipantId, setEditingParticipantId] = useState<
-    string | null
-  >(null);
-  const [formParticipant, setFormParticipant] = useState<
-    Omit<AdditionalParticipant, "id">
-  >({
-    addName: "",
-    company: "",
-    role: "",
-    email: "",
-    phone: "",
-    isPCD: null,
-    pcdDescription: "",
+
+  // Additional participants hook
+  const {
+    participants: additionalParticipants,
+    isAdding: isAddingParticipant,
+    formData: formParticipant,
+    editingId: editingParticipantId,
+    handleAdd: handleAddParticipant,
+    handleCancel,
+    handleSave: handleSaveParticipant,
+    handleEdit,
+    handleDelete,
+    handleFormChange: setFormParticipant,
+  } = useAdditionalParticipants((participants) => {
+    onFormDataChange({ ...formData, additionalParticipants: participants });
   });
 
   const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const { name, value, type } = e.target as HTMLInputElement;
-    if (type === "checkbox") {
-      onFormDataChange({
-        ...formData,
-        [name]: (e.target as HTMLInputElement).checked,
-      });
-    } else {
-      onFormDataChange({
-        ...formData,
-        [name]: value,
-      });
-    }
+    const { name, value } = e.target;
+    onFormDataChange({ ...formData, [name]: value });
   };
 
-  const handleAddParticipant = () => {
-    setIsAddingParticipant(true);
-    setFormParticipant({
-      addName: "",
-      company: "",
-      role: "",
-      email: "",
-      phone: "",
-      isPCD: null,
-      pcdDescription: "",
-    });
-  };
-
-  const handleSaveParticipant = () => {
-    let updatedParticipants: AdditionalParticipant[];
-
-    if (editingParticipantId) {
-      // Update existing
-      updatedParticipants = additionalParticipants.map((p) =>
-        p.id === editingParticipantId ? { ...p, ...formParticipant } : p,
-      );
-      setAdditionalParticipants(updatedParticipants);
-      setEditingParticipantId(null);
-    } else {
-      // Add new
-      const newParticipant: AdditionalParticipant = {
-        id: Date.now().toString(),
-        ...formParticipant,
-      };
-      updatedParticipants = [...additionalParticipants, newParticipant];
-      setAdditionalParticipants(updatedParticipants);
-    }
-    setIsAddingParticipant(false);
-    setFormParticipant({
-      addName: "",
-      company: "",
-      role: "",
-      email: "",
-      phone: "",
-      isPCD: null,
-      pcdDescription: "",
-    });
-
-    // Update parent form data with additional participants (using the updated list)
-    const participantsForForm = updatedParticipants.map((p) => ({
-      addName: p.addName,
-      role: p.role,
-      email: p.email,
-      phone: p.phone,
-      isPCD: p.isPCD,
-      pcdDescription: p.pcdDescription,
-    }));
-    onFormDataChange({
-      ...formData,
-      additionalParticipants: participantsForForm,
-    });
-  };
-
-  const handleEditParticipant = (participant: AdditionalParticipant) => {
-    setFormParticipant({
-      addName: participant.addName,
-      company: participant.company,
-      role: participant.role,
-      email: participant.email,
-      phone: participant.phone,
-      isPCD: participant.isPCD,
-      pcdDescription: participant.pcdDescription,
-    });
-    setEditingParticipantId(participant.id);
-    setIsAddingParticipant(true);
+  const handleEditParticipant = (participant: AdditionalParticipantWithId) => {
+    handleEdit(participant);
   };
 
   const handleDeleteParticipant = (id: string) => {
-    setAdditionalParticipants((prev) => prev.filter((p) => p.id !== id));
-    // Update parent form data
-    const updatedParticipants = additionalParticipants.filter(
-      (p) => p.id !== id,
-    );
-    const participantsForForm = updatedParticipants.map((p) => ({
-      addName: p.addName,
-      role: p.role,
-      email: p.email,
-      phone: p.phone,
-      isPCD: p.isPCD,
-      pcdDescription: p.pcdDescription,
-    }));
-    onFormDataChange({
-      ...formData,
-      additionalParticipants: participantsForForm,
-    });
-  };
-
-  const handleCancel = () => {
-    setIsAddingParticipant(false);
-    setEditingParticipantId(null);
-    setFormParticipant({
-      addName: "",
-      company: "",
-      role: "",
-      email: "",
-      phone: "",
-      isPCD: null,
-      pcdDescription: "",
-    });
+    handleDelete(id);
   };
 
   const maxParticipants = 2;
@@ -289,6 +146,7 @@ export function EnrollFormFoundations({
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
                   />
                 </div>
+
                 {/* Necessidade especial */}
                 <p className="text-sm font-semibold text-[#212121]">
                   Necessidades Especiais (PCD)*
@@ -337,7 +195,7 @@ export function EnrollFormFoundations({
                   </label>
                 </div>
 
-                {/* PCD Description Textarea - Always visible but disabled unless "Sim" is selected */}
+                {/* PCD Description */}
                 <Input
                   type="text"
                   placeholder="Descreva qual a sua necessidade, caso necessário*"
@@ -364,7 +222,7 @@ export function EnrollFormFoundations({
               className="w-full flex items-center justify-between py-2 hover:opacity-80 transition-opacity"
             >
               <h4 className="text-normal font-normal text-[#00233f]">
-                Dados do participante
+                Dados da empresa
               </h4>
               {isCompanyDataExpanded ? (
                 <ChevronUp className="w-5 h-5 text-[#5F7990]" />
@@ -413,7 +271,7 @@ export function EnrollFormFoundations({
             )}
           </div>
 
-          {/* Aditional Participant */}
+          {/* Additional Participants */}
           <div className="mb-6">
             <button
               type="button"
@@ -441,13 +299,10 @@ export function EnrollFormFoundations({
                     className="border rounded-lg p-4 space-y-3"
                   >
                     <div className="relative flex items-start justify-between">
-                      {/* Linha em background, ocupando 100% */}
                       <div className="absolute left-0 right-0 top-[30px] border-b border-gray-200" />
-
                       <h5 className="text-sm font-medium text-[#212121] relative z-10">
                         Participante adicional {index + 1}
                       </h5>
-
                       <div className="flex gap-2 relative z-10">
                         <button
                           type="button"
@@ -456,7 +311,6 @@ export function EnrollFormFoundations({
                         >
                           <Edit2 className="w-4 h-4 text-gray-600" />
                         </button>
-
                         <button
                           type="button"
                           onClick={() =>
@@ -515,10 +369,7 @@ export function EnrollFormFoundations({
                         placeholder="Nome completo *"
                         value={formParticipant.addName}
                         onChange={(e) =>
-                          setFormParticipant({
-                            ...formParticipant,
-                            addName: e.target.value,
-                          })
+                          setFormParticipant({ addName: e.target.value })
                         }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C]"
                       />
@@ -527,10 +378,7 @@ export function EnrollFormFoundations({
                         placeholder="Cargo/Função *"
                         value={formParticipant.role}
                         onChange={(e) =>
-                          setFormParticipant({
-                            ...formParticipant,
-                            role: e.target.value,
-                          })
+                          setFormParticipant({ role: e.target.value })
                         }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C]"
                       />
@@ -542,10 +390,7 @@ export function EnrollFormFoundations({
                         placeholder="E-mail corporativo *"
                         value={formParticipant.email}
                         onChange={(e) =>
-                          setFormParticipant({
-                            ...formParticipant,
-                            email: e.target.value,
-                          })
+                          setFormParticipant({ email: e.target.value })
                         }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C]"
                       />
@@ -554,10 +399,7 @@ export function EnrollFormFoundations({
                         placeholder="Telefone *"
                         value={formParticipant.phone}
                         onChange={(e) =>
-                          setFormParticipant({
-                            ...formParticipant,
-                            phone: e.target.value,
-                          })
+                          setFormParticipant({ phone: e.target.value })
                         }
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C]"
                       />
@@ -573,12 +415,7 @@ export function EnrollFormFoundations({
                           <input
                             type="radio"
                             checked={formParticipant.isPCD === true}
-                            onChange={() =>
-                              setFormParticipant({
-                                ...formParticipant,
-                                isPCD: true,
-                              })
-                            }
+                            onChange={() => setFormParticipant({ isPCD: true })}
                             className="w-4 h-4 cursor-pointer"
                           />
                           <span className="text-sm text-[#212121]">
@@ -590,47 +427,41 @@ export function EnrollFormFoundations({
                             type="radio"
                             checked={formParticipant.isPCD === false}
                             onChange={() =>
-                              setFormParticipant({
-                                ...formParticipant,
-                                isPCD: false,
-                              })
+                              setFormParticipant({ isPCD: false })
                             }
                             className="w-4 h-4 cursor-pointer"
                           />
                           <span className="text-sm text-[#212121]">Não</span>
                         </label>
                       </div>
+
+                      <Input
+                        type="text"
+                        placeholder="Descreva qual a sua necessidade, caso necessário*"
+                        value={formParticipant.pcdDescription}
+                        onChange={(e) =>
+                          setFormParticipant({ pcdDescription: e.target.value })
+                        }
+                        disabled={formParticipant.isPCD !== true}
+                        className="mt-4 w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] disabled:bg-white disabled:text-[#DCDCDD] disabled:cursor-not-allowed"
+                      />
                     </div>
 
-                    <input
-                      type="text"
-                      placeholder="Descreva qual a sua necessidade, caso necessário*"
-                      value={formParticipant.pcdDescription}
-                      onChange={(e) =>
-                        setFormParticipant({
-                          ...formParticipant,
-                          pcdDescription: e.target.value,
-                        })
-                      }
-                      disabled={formParticipant.isPCD !== true}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent disabled:bg-white disabled:text-[#DCDCDD] disabled:cursor-not-allowed"
-                    />
-
-                    {/* Buttons */}
-                    <div className="flex gap-3 justify-end">
+                    {/* Action buttons */}
+                    <div className="flex gap-2">
                       <button
                         type="button"
                         onClick={handleCancel}
-                        className="px-6 py-2 border-transparent bg-[#EBF3FA] rounded-sm text-[#206EB0] hover:bg-[#E3F1FD] text-base font-medium"
+                        className="flex-1 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
                       >
                         Cancelar
                       </button>
                       <button
                         type="button"
                         onClick={handleSaveParticipant}
-                        className="px-6 py-2 border border-[#0D5B9C] text-[#0D5B9C] rounded-sm hover:bg-[#f1f9ff] text-base font-medium"
+                        className="flex-1 py-2 text-sm text-white bg-[#0D5B9C] rounded-lg hover:bg-[#0D5B9C]/90"
                       >
-                        Salvar
+                        {editingParticipantId ? "Salvar" : "Adicionar"}
                       </button>
                     </div>
                   </div>
@@ -638,27 +469,29 @@ export function EnrollFormFoundations({
               </div>
             )}
           </div>
-        </form>
-      </div>
 
-      {/* Fixed Footer - Privacy Checkbox and Submit Button */}
-      <div className="border-b rounded-2xl p-6 bg-white">
-        <form onSubmit={onSubmit}>
-          {/* Privacy Checkbox */}
-          <div className="flex items-start gap-3 mb-6">
-            <input
-              type="checkbox"
-              name="agreePrivacy"
-              checked={formData.agreePrivacy}
-              onChange={handleInputChange}
-              required
-              className="mt-1 w-4 h-4 rounded border-gray-300 text-[#0D5B9C] cursor-pointer"
-            />
-            <label className="text-xs text-[#5F7990] cursor-pointer">
-              Ao enviar este formulário, concordo com a utilização de todos
-              dados informados para o recebimento de contato comercial. Confirmo
-              que li e concordo com a Política de Privacidade.
-            </label>
+          {/* Terms Checkbox */}
+          <div className="pt-5 border-t mt-auto">
+            <div className="flex gap-3 mb-4">
+              <input
+                type="checkbox"
+                name="agreePrivacy"
+                checked={formData.agreePrivacy}
+                onChange={(e) =>
+                  onFormDataChange({
+                    ...formData,
+                    agreePrivacy: e.target.checked,
+                  })
+                }
+                required
+                className="mt-1 w-4 h-4 rounded border-gray-300 text-[#0D5B9C] cursor-pointer"
+              />
+              <label className="text-xs text-[#5F7990] cursor-pointer">
+                Ao enviar este formulário, concordo com a utilização de todos
+                dados informados para o recebimento de contato comercial.
+                Confirmo que li e concordo com a Política de Privacidade.
+              </label>
+            </div>
           </div>
 
           {/* Submit Button */}

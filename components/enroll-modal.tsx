@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useEnrollment } from "@/contexts/enrollment-context";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   ArrowLeft,
@@ -16,48 +15,8 @@ import {
   MonitorPlay,
 } from "lucide-react";
 import { EnrollFormEssentials } from "@/components/enroll-form-essentials";
-import { EnrollFormFoundations } from "@/components/enroll-form-foundations";
-import { EnrollFormExpert } from "@/components/enroll-form-expert";
-
-interface TrainingSession {
-  id: string;
-  date: string;
-  location: string;
-  duration: string;
-}
-
-interface EnrollModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  level: "essentials" | "foundations" | "expert";
-  session?: TrainingSession | null;
-}
-
-interface FormData {
-  fullName: string;
-  role: string;
-  company: string;
-  email: string;
-  phone: string;
-  agreePrivacy: boolean;
-  experience?: string;
-  department?: string;
-  currentSolution?: string;
-  goals?: string;
-  budget?: string;
-  compFinName?: string;
-  compFinEmail?: string;
-  isPCD?: boolean | null;
-  pcdDescription?: string;
-  additionalParticipants?: Array<{
-    addName: string;
-    role: string;
-    email: string;
-    phone: string;
-    isPCD?: boolean | null;
-    pcdDescription?: string;
-  }>;
-}
+import { EnrollFormAdvanced } from "@/components/enroll-form-advanced";
+import type { EnrollModalProps, AdvancedFormData } from "@/types/enrollment";
 
 export function EnrollModal({
   isOpen,
@@ -68,7 +27,7 @@ export function EnrollModal({
   const router = useRouter();
   const { setConfirmationData } = useEnrollment();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<AdvancedFormData>({
     fullName: "",
     role: "",
     company: "",
@@ -314,44 +273,27 @@ export function EnrollModal({
   };
 
   const renderForm = () => {
-    switch (level) {
-      case "essentials":
-        return (
-          <EnrollFormEssentials
-            formData={formData}
-            onFormDataChange={setFormData}
-            onSubmit={handleSubmit}
-            isSubmitting={isSubmitting}
-          />
-        );
-      case "foundations":
-        return (
-          <EnrollFormFoundations
-            formData={formData}
-            onFormDataChange={setFormData}
-            onSubmit={handleSubmit}
-            isSubmitting={isSubmitting}
-          />
-        );
-      case "expert":
-        return (
-          <EnrollFormExpert
-            formData={formData}
-            onFormDataChange={setFormData}
-            onSubmit={handleSubmit}
-            isSubmitting={isSubmitting}
-          />
-        );
-      default:
-        return (
-          <EnrollFormEssentials
-            formData={formData}
-            onFormDataChange={setFormData}
-            onSubmit={handleSubmit}
-            isSubmitting={isSubmitting}
-          />
-        );
+    if (level === "essentials") {
+      return (
+        <EnrollFormEssentials
+          formData={formData}
+          onFormDataChange={setFormData}
+          onSubmit={handleSubmit}
+          isSubmitting={isSubmitting}
+        />
+      );
     }
+
+    // Foundations and Expert use the same advanced form
+    return (
+      <EnrollFormAdvanced
+        level={level}
+        formData={formData}
+        onFormDataChange={setFormData}
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+      />
+    );
   };
 
   if (!isOpen) return null;
