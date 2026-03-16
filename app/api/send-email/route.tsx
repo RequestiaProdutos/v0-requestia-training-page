@@ -101,8 +101,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Erro ao enviar e-mail:", error);
+    console.error("[v0] SMTP_HOST:", process.env.SMTP_HOST);
+    console.error("[v0] SMTP_PORT:", process.env.SMTP_PORT);
+    console.error("[v0] SMTP_USER:", process.env.SMTP_USER ? "****" : "NÃO CONFIGURADO");
+    console.error("[v0] SMTP_PASS:", process.env.SMTP_PASS ? "****" : "NÃO CONFIGURADO");
+    console.error("[v0] SMTP_FROM:", process.env.SMTP_FROM);
+    console.error("[v0] MAIL_TO_INTERNAL:", process.env.MAIL_TO_INTERNAL);
     return NextResponse.json(
-      { ok: false, error: "Falha no envio" },
+      { ok: false, error: "Falha no envio", details: String(error) },
       { status: 500 },
     );
   }
