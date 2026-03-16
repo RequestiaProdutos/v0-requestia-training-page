@@ -202,7 +202,7 @@ export default function Home() {
                 <div key={level.id} className="relative flex items-center">
                   <button
                     onClick={() => setSelectedLevel(level.id)}
-                    className={`relative z-10 px-5 py-2 rounded-full text-base sm:text-xl font-regular transition-all
+                    className={`cursor-pointer relative z-10 px-5 py-2 rounded-full text-base sm:text-xl font-regular transition-all
             ${
               selectedLevel === level.id
                 ? "bg-[#0D5B9C] text-white"
