@@ -62,10 +62,10 @@ export default function ConfirmationPage() {
               <LockKeyhole className="w-10 h-10 text-[#0D5B9C]" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-[#212121] mb-2">
             Inscrição confirmada!
           </h1>
-          <p className="text-gray-600">
+          <p className="text-xl text-[#787979]">
             Recebemos sua solicitação de inscrição para o treinamento
           </p>
         </div>
@@ -79,7 +79,7 @@ export default function ConfirmationPage() {
 
           {/* Level Name */}
           <div className="mb-8 border-b pb-5">
-            <h2 className="text-3xl font-medium text-[#00233f] mb-2">
+            <h2 className="text-4xl font-medium text-[#212121] mb-2">
               {confirmationData.levelName}
             </h2>
           </div>
@@ -88,42 +88,40 @@ export default function ConfirmationPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-gray-200">
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <CalendarCheck className="w-7 h-7 text-gray-700" />
-                <p className="text-sm text-[#5F7990] font-medium">Data</p>
+                <CalendarCheck className="w-7 h-7 text-[#212121]" />
+                <p className="text-sm text-[#5F7990]">Data</p>
               </div>
-              <p className="text-base font-medium text-gray-800 ml-9">
+              <p className="text-base text-[#212121] ml-9">
                 {confirmationData.date}
               </p>
             </div>
 
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <MapPin className="w-7 h-7 text-gray-700" />
-                <p className="text-sm text-[#5F7990] font-medium">Local</p>
+                <MapPin className="w-7 h-7 text-[#212121]" />
+                <p className="text-sm text-[#5F7990]">Local</p>
               </div>
-              <p className="text-base font-medium text-gray-800 ml-9">
+              <p className="text-base text-[#212121] ml-9">
                 {confirmationData.location}
               </p>
             </div>
 
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <ClockFading className="w-7 h-7 text-gray-700" />
-                <p className="text-sm text-[#5F7990] font-medium">Duração</p>
+                <ClockFading className="w-7 h-7 text-[#212121]" />
+                <p className="text-sm text-[#5F7990]">Duração</p>
               </div>
-              <p className="text-base font-medium text-gray-800 ml-9">
+              <p className="text-base text-[#212121] ml-9">
                 {confirmationData.duration}
               </p>
             </div>
 
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <Award className="w-7 h-7 text-gray-700" />
-                <p className="text-sm text-[#5F7990] font-medium">
-                  Certificação
-                </p>
+                <Award className="w-7 h-7 text-[#212121]" />
+                <p className="text-sm text-[#5F7990]">Certificação</p>
               </div>
-              <p className="text-base font-medium text-gray-800 ml-9">
+              <p className="text-base text-[#212121] ml-9">
                 {confirmationData.certification}
               </p>
             </div>
@@ -131,97 +129,66 @@ export default function ConfirmationPage() {
 
           {/* Participant Info */}
           <div className="mb-8">
-            <h3 className="text-lg font-bold text-gray-900 mb-6">
+            <h3 className="text-lg font-semibold text-[#212121] mb-4">
               Dados do participante
             </h3>
 
             <div className="grid grid-cols-3 gap-12">
-              {/* Column 1 */}
-              <div className="space-y-6">
-                <div>
-                  <span className="text-sm text-gray-600">Nome</span>
-                  <p className="font-semibold text-gray-900">
-                    {confirmationData.fullName}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-sm text-gray-600">Email</span>
-                  <p className="font-semibold text-gray-900 break-all">
-                    {confirmationData.email}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-sm text-gray-600">Cargo</span>
-                  <p className="font-semibold text-gray-900">
-                    {confirmationData.role}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-sm text-gray-600">Telefone</span>
-                  <p className="font-semibold text-gray-900">
-                    {confirmationData.phone}
-                  </p>
-                </div>
+              {/* Column 1 - Personal Info */}
+              <div className="space-y-1">
+                <p className="text-sm text-[#212121]">
+                  {confirmationData.fullName}
+                </p>
+                <p className="text-xs text-gray-600 break-all">
+                  {confirmationData.email}
+                </p>
+                <p className="text-xs text-gray-600">{confirmationData.role}</p>
+                <p className="text-xs text-gray-600">
+                  {confirmationData.phone}
+                </p>
               </div>
 
-              {/* Column 2 */}
-              <div className="space-y-6">
+              {/* Column 2 - PCD */}
+              <div className="space-y-1">
                 {confirmationData.level !== "essentials" && (
                   <>
-                    <div>
-                      <span className="text-sm text-gray-600">
-                        Necessidades Especiais (PCD)
-                      </span>
-                      <p className="font-semibold text-gray-900">
-                        {confirmationData.isPCD === null ||
-                        confirmationData.isPCD === undefined
-                          ? "—"
-                          : confirmationData.isPCD
-                            ? "Sim"
-                            : "Não"}
-                      </p>
-                    </div>
+                    <p className="text-sm text-[#212121]">
+                      Necessidades Especiais (PCD)
+                    </p>
+                    <p className="text-xs text-[#787979]">
+                      {confirmationData.isPCD === null ||
+                      confirmationData.isPCD === undefined
+                        ? "—"
+                        : confirmationData.isPCD
+                          ? "Sim"
+                          : "Não"}
+                    </p>
                     {confirmationData.pcdDescription && (
-                      <div>
-                        <span className="text-sm text-gray-600">
-                          Descrição PCD
-                        </span>
-                        <p className="font-semibold text-gray-900">
-                          {confirmationData.pcdDescription}
-                        </p>
-                      </div>
+                      <p className="text-xs text-[#787979]">
+                        {confirmationData.pcdDescription}
+                      </p>
                     )}
                   </>
                 )}
               </div>
 
-              {/* Column 3 */}
-              <div className="space-y-6">
-                <div>
-                  <span className="text-sm text-gray-600">Empresa</span>
-                  <p className="font-semibold text-gray-900">
-                    {confirmationData.company}
-                  </p>
-                </div>
+              {/* Column 3 - Company */}
+              <div className="space-y-1">
+                <p className="text-sm text-[#212121]">Empresa</p>
+                <p className="text-xs text-[#787979]">
+                  {confirmationData.company}
+                </p>
                 {confirmationData.compFinName && (
-                  <div>
-                    <span className="text-sm text-gray-600">
-                      Responsável Financeiro
-                    </span>
-                    <p className="font-semibold text-gray-900">
+                  <>
+                    <p className="text-xs text-[#787979]">
                       {confirmationData.compFinName}
                     </p>
-                  </div>
-                )}
-                {confirmationData.compFinEmail && (
-                  <div>
-                    <span className="text-sm text-gray-600">
-                      Email (Financeiro)
-                    </span>
-                    <p className="font-semibold text-gray-900 break-all">
-                      {confirmationData.compFinEmail}
-                    </p>
-                  </div>
+                    {confirmationData.compFinEmail && (
+                      <p className="text-xs text-[#787979]">
+                        {confirmationData.compFinEmail}
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -231,46 +198,43 @@ export default function ConfirmationPage() {
           {confirmationData.additionalParticipants &&
             confirmationData.additionalParticipants.length > 0 && (
               <div className="mb-8 pt-8 border-t border-gray-200">
-                <h3 className="text-lg font-bold text-gray-900 mb-6">
+                <h3 className="text-sm font-semibold text-[#212121] mb-4">
                   Participantes Adicionais
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {confirmationData.additionalParticipants.map(
                     (participant, index) => (
-                      <div key={index} className="bg-gray-50 rounded-lg p-4">
-                        <div className="flex items-start gap-4">
-                          <div className="font-semibold text-gray-700 bg-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
-                            {index + 1}
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-semibold text-gray-900">
-                              {participant.addName}
+                      <div key={index} className="flex items-start gap-4">
+                        <div className="text-sm text-[#00233F] bg-[#E3EDF5] rounded-full w-8 h-8 flex items-center justify-center shrink-0">
+                          {index + 1}
+                        </div>
+                        <div className="flex-1 space-y-1">
+                          <p className="text-sm text-[#212121]">
+                            {participant.addName}
+                          </p>
+                          <p className="text-xs text-[#787979]">
+                            {participant.email}
+                          </p>
+                          <p className="text-xs text-[#787979]">
+                            {participant.role}
+                          </p>
+                          <p className="text-xs text-[#787979]">
+                            {participant.phone}
+                          </p>
+                          <p className="text-xs text-[#787979]">
+                            Necessidades Especiais (PCD):{" "}
+                            {participant.isPCD === null ||
+                            participant.isPCD === undefined
+                              ? "—"
+                              : participant.isPCD
+                                ? "Sim"
+                                : "Não"}
+                          </p>
+                          {participant.isPCD && participant.pcdDescription && (
+                            <p className="text-xs text-[#787979]">
+                              Descrição: {participant.pcdDescription}
                             </p>
-                            <p className="text-sm text-gray-600">
-                              {participant.email}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              {participant.role}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              {participant.phone}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              Necessidades Especiais (PCD):{" "}
-                              {participant.isPCD === null ||
-                              participant.isPCD === undefined
-                                ? "—"
-                                : participant.isPCD
-                                  ? "Sim"
-                                  : "Não"}
-                            </p>
-                            {participant.isPCD &&
-                              participant.pcdDescription && (
-                                <p className="text-sm text-gray-600">
-                                  Descrição: {participant.pcdDescription}
-                                </p>
-                              )}
-                          </div>
+                          )}
                         </div>
                       </div>
                     ),
@@ -282,21 +246,21 @@ export default function ConfirmationPage() {
 
         {/* Next Steps Card */}
         <div className="bg-white rounded-lg border border-gray-200 p-8 mb-8">
-          <h3 className="text-lg font-bold text-gray-900 mb-6">
+          <h3 className="text-lg font-semibold text-[#212121] mb-4">
             Próximos passos
           </h3>
           <div className="space-y-4">
             <div className="flex gap-4">
               <div className="shrink-0">
-                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">
+                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-[#E3EDF5] text-[#00233F] text-sm">
                   1
                 </div>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900">
+                <h4 className="text-[#212121] text-lg">
                   Confirmação por e-mail
                 </h4>
-                <p className="text-gray-600 text-sm">
+                <p className="text-[#787979] text-sm">
                   Você receberá um e-mail de confirmação com todos os detalhes
                   da inscrição.
                 </p>
@@ -305,15 +269,13 @@ export default function ConfirmationPage() {
 
             <div className="flex gap-4">
               <div className="shrink-0">
-                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">
+                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-[#E3EDF5] text-[#00233F] text-sm">
                   2
                 </div>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900">
-                  Validação da equipe
-                </h4>
-                <p className="text-gray-600 text-sm">
+                <h4 className="text-[#212121] text-lg">Validação da equipe</h4>
+                <p className="text-[#787979] text-sm">
                   Nossa equipe de treinamento validará sua inscrição em até 2
                   dias úteis.
                 </p>
@@ -322,15 +284,15 @@ export default function ConfirmationPage() {
 
             <div className="flex gap-4">
               <div className="shrink-0">
-                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">
+                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-[#E3EDF5] text-[#00233F] text-sm">
                   3
                 </div>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900">
+                <h4 className="text-[#212121] text-lg">
                   Instruções de preparação
                 </h4>
-                <p className="text-gray-600 text-sm">
+                <p className="text-[#787979] text-sm">
                   Após a validação, você receberá instruções detalhadas de
                   preparação e acesso ao material do treinamento.
                 </p>
@@ -341,14 +303,12 @@ export default function ConfirmationPage() {
 
         {/* Help Section */}
         <div className="bg-white rounded-lg border border-gray-200 p-8 mb-2">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">
-            Precisa de ajuda?
-          </h3>
-          <p className="text-gray-600 mb-4">
+          <h3 className="text-lg text-[#212121] mb-3">Precisa de ajuda?</h3>
+          <p className="text-[#787979] mb-4">
             Entre em contato com nossa equipe de suporte em caso de dúvidas ou
             alterações necessárias.
           </p>
-          <p className="text-gray-900 font-semibold">mkt@requestia.com</p>
+          <p className="text-[#212121]">mkt@requestia.com</p>
         </div>
       </main>
     </div>

@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import { z } from "zod";
 
 import { renderParticipantEmail } from "@/lib/email/templates";
+import { renderInternalEmail } from "@/lib/email/templates/internal";
 
 const optionalEmail = z.preprocess((value) => {
   if (typeof value !== "string") return value;
@@ -45,39 +46,6 @@ const payloadSchema = z.object({
     .optional(),
 });
 
-type EmailPayload = z.infer<typeof payloadSchema>;
-
-function buildAdminHtml(data: EmailPayload) {
-  const p = data.participant;
-  const extras = (data.additionalParticipants ?? [])
-    .map(
-      (x, i) =>
-        `<li>${i + 1}. ${x.addName} | ${x.email} | ${x.role} | ${x.phone}</li>`,
-    )
-    .join("");
-
-  return `
-    <h2>Nova inscrição de treinamento</h2>
-    <p><strong>Nível:</strong> ${data.level}</p>
-    <p><strong>Data:</strong> ${data.training.date ?? "-"}</p>
-    <p><strong>Local:</strong> ${data.training.location ?? "-"}</p>
-    <p><strong>Duração:</strong> ${data.training.duration ?? "-"}</p>
-    <p><strong>Certificação:</strong> ${data.training.certification ?? "-"}</p>
-    <hr/>
-    <p><strong>Nome:</strong> ${p.fullName}</p>
-    <p><strong>Cargo:</strong> ${p.role}</p>
-    <p><strong>Empresa:</strong> ${p.company}</p>
-    <p><strong>E-mail:</strong> ${p.email}</p>
-    <p><strong>Telefone:</strong> ${p.phone}</p>
-    <p><strong>Financeiro:</strong> ${p.compFinName ?? "-"} (${p.compFinEmail ?? "-"})</p>
-    <p><strong>PCD:</strong> ${p.isPCD == null ? "-" : p.isPCD ? "Sim" : "Não"}</p>
-    <p><strong>Descrição PCD:</strong> ${p.pcdDescription ?? "-"}</p>
-    <hr/>
-    <p><strong>Participantes adicionais:</strong></p>
-    <ul>${extras || "<li>Nenhum</li>"}</ul>
-  `;
-}
-
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -99,6 +67,7 @@ export async function POST(req: Request) {
 
     const data = parsed.data;
     const participantHtml = await renderParticipantEmail(data);
+    const internalHtml = await renderInternalEmail(data);
 
     const internalRecipients = (process.env.MAIL_TO_INTERNAL ?? "")
       .split(/[;,]/)
@@ -119,7 +88,7 @@ export async function POST(req: Request) {
       from: process.env.SMTP_FROM,
       to: internalRecipients,
       subject: `[Treinamento] Nova inscrição - ${data.level}`,
-      html: buildAdminHtml(data),
+      html: internalHtml,
     });
 
     await transporter.sendMail({

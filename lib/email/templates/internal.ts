@@ -1,10 +1,6 @@
 import type { EmailPayload } from "../types";
 import { loadPublicTemplate, renderTemplate } from "../template-engine";
-
-function firstName(fullName: string): string {
-  const trimmed = fullName.trim();
-  return trimmed ? trimmed.split(/\s+/)[0] : "";
-}
+import { renderEssentialsInternalEmail } from "./internal-essentials";
 
 function pcdLabel(value?: boolean | null): string {
   if (value === true) return "Sim";
@@ -12,26 +8,27 @@ function pcdLabel(value?: boolean | null): string {
   return "—";
 }
 
-function pickTemplateFile(guestCount: number): string {
-  if (guestCount <= 0) return "fe-inscricaorecebido.html";
-  if (guestCount === 1) return "fe-inscricao_1_participanterecebido.html";
-  return "fe-inscricao_2_participanterecebido.html";
+function pickFeInternalTemplateFile(guestCount: number): string {
+  if (guestCount <= 0) return "fe-inscricaorecebido-internal.html";
+  if (guestCount === 1)
+    return "fe-inscricao_1_participanterecebido-internal.html";
+  return "fe-inscricao_2_participanterecebido-internal.html";
 }
 
-export async function renderFeParticipantEmail(
-  data: EmailPayload,
-): Promise<string> {
+function levelLabel(level: EmailPayload["level"]): string {
+  return level === "expert" ? "Requestia Expert" : "Requestia Foundations";
+}
+
+async function renderFeInternalEmail(data: EmailPayload): Promise<string> {
   const guests = (data.additionalParticipants ?? []).slice(0, 2);
   const [g1, g2] = guests;
 
-  const template = await loadPublicTemplate(pickTemplateFile(guests.length));
-
-  const levelLabel =
-    data.level === "expert" ? "Requestia Expert" : "Requestia Foundations";
+  const template = await loadPublicTemplate(
+    pickFeInternalTemplateFile(guests.length),
+  );
 
   const vars: Record<string, string> = {
-    nickname: firstName(data.participant.fullName),
-    level: levelLabel,
+    level: levelLabel(data.level),
     date: data.training.date ?? "A confirmar",
 
     fullName: data.participant.fullName,
@@ -61,4 +58,12 @@ export async function renderFeParticipantEmail(
   };
 
   return renderTemplate(template, vars);
+}
+
+export async function renderInternalEmail(data: EmailPayload): Promise<string> {
+  if (data.level === "essentials") {
+    return renderEssentialsInternalEmail(data);
+  }
+
+  return renderFeInternalEmail(data);
 }

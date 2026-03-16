@@ -38,7 +38,7 @@ export function EnrollFormEssentials({
       </h3>
 
       <form className="flex flex-col flex-1" onSubmit={onSubmit}>
-        <div className="flex-1 overflow-y-auto no-scrollbar pr-2">
+        <div className="flex-1 overflow-y-auto no-scrollbar px-2">
           <button
             type="button"
             onClick={() =>
@@ -132,7 +132,14 @@ export function EnrollFormEssentials({
             <label className="text-xs text-[#5F7990] cursor-pointer">
               Ao enviar este formulário, concordo com a utilização de todos
               dados informados para o recebimento de contato comercial. Confirmo
-              que li e concordo com a Política de Privacidade.
+              que li e concordo com a{" "}
+              <a
+                className="text-[#206EB0] hover:underline"
+                href="https://requestia.com/politica-e-seguranca"
+                target="_blank"
+              >
+                Política de Privacidade.
+              </a>
             </label>
           </div>
 

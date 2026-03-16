@@ -1,21 +1,14 @@
-// lib/email/templates/essentials.ts
 import type { EmailPayload } from "../types";
 import { loadPublicTemplate, renderTemplate } from "../template-engine";
 
-function firstName(fullName: string): string {
-  const trimmed = fullName.trim();
-  if (!trimmed) return "";
-  return trimmed.split(/\s+/)[0] || trimmed;
-}
-
-export async function renderEssentialsParticipantEmail(
+export async function renderEssentialsInternalEmail(
   data: EmailPayload,
 ): Promise<string> {
-  const template = await loadPublicTemplate("treinamento-essentials.html");
+  const template = await loadPublicTemplate(
+    "essentials-inscricaorecebida-internal.html",
+  );
 
   const vars: Record<string, string> = {
-    nickname: firstName(data.participant.fullName),
-    level: "Requestia Essentials",
     fullName: data.participant.fullName,
     role: data.participant.role,
     company: data.participant.company,

@@ -305,7 +305,7 @@ export function EnrollModal({
         <div className="p-8 pb-2 flex items-center gap-3">
           <button
             onClick={onClose}
-            className="text-[#0D5B9C] hover:text-[#0D5B9C]/80 flex items-center gap-1"
+            className="cursor-pointer text-[#0D5B9C] hover:text-[#0D5B9C]/80 flex items-center gap-1"
           >
             <ArrowLeft className="w-5 h-5" />
             <span className="text-sm font-normal">

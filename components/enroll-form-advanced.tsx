@@ -28,9 +28,9 @@ export function EnrollFormAdvanced({
   // Section expansion states
   const [isParticipantDataExpanded, setIsParticipantDataExpanded] =
     useState(true);
-  const [isCompanyDataExpanded, setIsCompanyDataExpanded] = useState(true);
+  const [isCompanyDataExpanded, setIsCompanyDataExpanded] = useState(false);
   const [isAddParticipantExpanded, setIsAddParticipantExpanded] =
-    useState(true);
+    useState(false);
 
   // PCD states
   const [isPCDNeeded, setIsPCDNeeded] = useState<boolean | null>(null);
@@ -489,7 +489,14 @@ export function EnrollFormAdvanced({
               <label className="text-xs text-[#5F7990] cursor-pointer">
                 Ao enviar este formulário, concordo com a utilização de todos
                 dados informados para o recebimento de contato comercial.
-                Confirmo que li e concordo com a Política de Privacidade.
+                Confirmo que li e concordo com a{" "}
+                <a
+                  className="text-[#206EB0] hover:underline"
+                  href="https://requestia.com/politica-e-seguranca"
+                  target="_blank"
+                >
+                  Política de Privacidade.
+                </a>
               </label>
             </div>
           </div>
