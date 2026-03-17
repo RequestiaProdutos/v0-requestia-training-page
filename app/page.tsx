@@ -395,7 +395,7 @@ export default function Home() {
                     <div className="flex-1">
                       <p className="font-regular text-gray-600">
                         {" "}
-                        <b>1 a 3 de setembro</b> | Terça a quinta-feira
+                        <b>14 a 16 de setembro</b> | Segunda a quarta-feira
                       </p>
                     </div>
                     <button>
@@ -458,7 +458,7 @@ export default function Home() {
                   <div className="flex-1">
                     <p className="font-regular text-gray-600">
                       {" "}
-                      <b>03 a 05 de novembro</b> | Terça a quinta-feira
+                      <b>09 a 11 de novembro</b> | Segunda a quarta-feira
                     </p>
                   </div>
                   <button>
