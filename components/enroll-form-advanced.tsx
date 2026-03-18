@@ -642,14 +642,14 @@ export function EnrollFormAdvanced({
                       <button
                         type="button"
                         onClick={handleCancel}
-                        className="flex-1 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                        className="flex-1 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer"
                       >
                         Cancelar
                       </button>
                       <button
                         type="button"
                         onClick={handleSaveParticipant}
-                        className="flex-1 py-2 text-sm text-white bg-[#0D5B9C] rounded-lg hover:bg-[#0D5B9C]/90"
+                        className="flex-1 py-2 text-sm text-white bg-[#0D5B9C] rounded-lg hover:bg-[#0D5B9C]/90 cursor-pointer"
                       >
                         {editingParticipantId ? "Salvar" : "Adicionar"}
                       </button>
