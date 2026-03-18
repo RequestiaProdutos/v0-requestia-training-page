@@ -121,7 +121,8 @@ function ContactForm({
         <FormField
           type="text"
           name="name"
-          placeholder="Nome Completo *"
+          label="Nome Completo"
+          placeholder="Escreva seu nome..."
           value={formData.name}
           onChange={onInputChange}
           validation="name"
@@ -132,7 +133,8 @@ function ContactForm({
         <FormField
           type="tel"
           name="phone"
-          placeholder="Telefone *"
+          label="Telefone"
+          placeholder="(00) 00000-0000"
           value={formData.phone}
           onChange={onInputChange}
           validation="phone"
@@ -144,7 +146,8 @@ function ContactForm({
         <FormField
           type="email"
           name="email"
-          placeholder="E-mail *"
+          label="E-mail"
+          placeholder="seu@email.com"
           value={formData.email}
           onChange={onInputChange}
           validation="email"

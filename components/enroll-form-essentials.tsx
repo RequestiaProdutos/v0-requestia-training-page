@@ -33,7 +33,7 @@ export function EnrollFormEssentials({
   };
 
   return (
-    <div className="md:col-span-2 border p-6 shadow-lg shadow-[#004680]/10 rounded-2xl flex flex-col h-[65vh]">
+    <div className="md:col-span-2 border p-6 shadow-lg shadow-[#004680]/10 rounded-2xl flex flex-col max-h-[100vh] sm:h-[65vh]">
       <h3 className="text-2xl font-normal text-[#00233f] mb-6">
         Dados para inscrição
       </h3>
@@ -64,7 +64,8 @@ export function EnrollFormEssentials({
                 <FormField
                   type="text"
                   name="fullName"
-                  placeholder="Nome completo *"
+                  label="Nome completo"
+                  placeholder="Escreva seu nome..."
                   value={formData.fullName}
                   onChange={handleInputChange}
                   validation="name"
@@ -73,11 +74,12 @@ export function EnrollFormEssentials({
               </div>
 
               {/* Role and Company */}
-              <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <FormField
                   type="text"
                   name="role"
-                  placeholder="Cargo/Função *"
+                  label="Cargo/Função"
+                  placeholder="Ex: Gerente"
                   value={formData.role}
                   onChange={handleInputChange}
                   validation="textOnly"
@@ -86,7 +88,8 @@ export function EnrollFormEssentials({
                 <FormField
                   type="text"
                   name="company"
-                  placeholder="Nome da Empresa *"
+                  label="Nome da Empresa"
+                  placeholder="Ex: Empresa LTDA"
                   value={formData.company}
                   onChange={handleInputChange}
                   validation="required"
@@ -95,11 +98,12 @@ export function EnrollFormEssentials({
               </div>
 
               {/* Email and Phone */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FormField
                   type="email"
                   name="email"
-                  placeholder="E-mail corporativo *"
+                  label="E-mail corporativo"
+                  placeholder="seu@empresa.com"
                   value={formData.email}
                   onChange={handleInputChange}
                   validation="email"
@@ -108,7 +112,8 @@ export function EnrollFormEssentials({
                 <FormField
                   type="tel"
                   name="phone"
-                  placeholder="Telefone *"
+                  label="Telefone"
+                  placeholder="(00) 00000-0000"
                   value={formData.phone}
                   onChange={handleInputChange}
                   validation="phone"
@@ -129,7 +134,7 @@ export function EnrollFormEssentials({
               checked={formData.agreePrivacy}
               onChange={handleInputChange}
               required
-              className="mt-1 w-4 h-4 rounded border-gray-300 text-[#0D5B9C] cursor-pointer"
+              className="mt-1 w-4 h-4 rounded border-gray-300 accent-[#0D5B9C] cursor-pointer"
             />
             <label className="text-xs text-[#5F7990] cursor-pointer">
               Ao enviar este formulário, concordo com a utilização de todos
