@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Loader2 } from "lucide-react";
+import { FormField } from "@/components/form/form-field";
 import type { EnrollFormEssentialsProps } from "@/types/enrollment";
 
 export function EnrollFormEssentials({
@@ -60,58 +61,59 @@ export function EnrollFormEssentials({
             <div className="mt-4 space-y-4">
               {/* Full Name */}
               <div className="mb-4">
-                <input
+                <FormField
                   type="text"
                   name="fullName"
                   placeholder="Nome completo *"
                   value={formData.fullName}
                   onChange={handleInputChange}
+                  validation="name"
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
                 />
               </div>
 
               {/* Role and Company */}
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <input
+                <FormField
                   type="text"
                   name="role"
                   placeholder="Cargo/Função *"
                   value={formData.role}
                   onChange={handleInputChange}
+                  validation="textOnly"
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
                 />
-                <input
+                <FormField
                   type="text"
                   name="company"
                   placeholder="Nome da Empresa *"
                   value={formData.company}
                   onChange={handleInputChange}
+                  validation="required"
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
                 />
               </div>
 
               {/* Email and Phone */}
               <div className="grid grid-cols-2 gap-4">
-                <input
+                <FormField
                   type="email"
                   name="email"
                   placeholder="E-mail corporativo *"
                   value={formData.email}
                   onChange={handleInputChange}
+                  validation="email"
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
                 />
-                <input
+                <FormField
                   type="tel"
                   name="phone"
                   placeholder="Telefone *"
                   value={formData.phone}
                   onChange={handleInputChange}
+                  validation="phone"
+                  formatAsPhone
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
                 />
               </div>
             </div>

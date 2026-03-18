@@ -33,10 +33,11 @@ interface UseAdditionalParticipantsReturn {
   editingId: string | null;
   handleAdd: () => void;
   handleCancel: () => void;
-  handleSave: () => AdditionalParticipant[];
+  handleSave: () => AdditionalParticipant[] | null;
   handleEdit: (participant: AdditionalParticipantWithId) => void;
   handleDelete: (id: string) => AdditionalParticipant[];
   handleFormChange: (data: Partial<ParticipantFormData>) => void;
+  validatePCD: () => string | null;
 }
 
 export function useAdditionalParticipants(
@@ -142,6 +143,13 @@ export function useAdditionalParticipants(
     setFormData((prev) => ({ ...prev, ...data }));
   }, []);
 
+  const validatePCD = useCallback((): string | null => {
+    if (formData.isPCD === null) {
+      return "Por favor, selecione uma opção de PCD";
+    }
+    return null;
+  }, [formData.isPCD]);
+
   return {
     participants,
     isAdding,
@@ -153,5 +161,6 @@ export function useAdditionalParticipants(
     handleEdit,
     handleDelete,
     handleFormChange,
+    validatePCD,
   };
 }

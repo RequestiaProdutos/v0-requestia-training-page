@@ -4,7 +4,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Edit2, Trash2, Loader2 } from "lucide-react";
 import { Input } from "./ui/input";
+import { FormField } from "@/components/form/form-field";
 import { useAdditionalParticipants } from "@/hooks/use-additional-participants";
+import {
+  validateAdvancedForm,
+  validateAdditionalParticipant,
+  type FieldErrors,
+} from "@/lib/form/validators";
 import type {
   AdvancedFormData,
   Level,
@@ -32,9 +38,41 @@ export function EnrollFormAdvanced({
   const [isAddParticipantExpanded, setIsAddParticipantExpanded] =
     useState(false);
 
+  // Accordion behavior - only one section open at a time
+  const toggleParticipantData = () => {
+    const newState = !isParticipantDataExpanded;
+    setIsParticipantDataExpanded(newState);
+    if (newState) {
+      setIsCompanyDataExpanded(false);
+      setIsAddParticipantExpanded(false);
+    }
+  };
+
+  const toggleCompanyData = () => {
+    const newState = !isCompanyDataExpanded;
+    setIsCompanyDataExpanded(newState);
+    if (newState) {
+      setIsParticipantDataExpanded(false);
+      setIsAddParticipantExpanded(false);
+    }
+  };
+
+  const toggleAddParticipant = () => {
+    const newState = !isAddParticipantExpanded;
+    setIsAddParticipantExpanded(newState);
+    if (newState) {
+      setIsParticipantDataExpanded(false);
+      setIsCompanyDataExpanded(false);
+    }
+  };
+
   // PCD states
   const [isPCDNeeded, setIsPCDNeeded] = useState<boolean | null>(null);
   const [pcdDescription, setPCDDescription] = useState("");
+
+  // Form validation errors
+  const [formErrors, setFormErrors] = useState<FieldErrors>({});
+  const [participantErrors, setParticipantErrors] = useState<FieldErrors>({});
 
   // Additional participants hook
   const {
@@ -43,8 +81,8 @@ export function EnrollFormAdvanced({
     formData: formParticipant,
     editingId: editingParticipantId,
     handleAdd: handleAddParticipant,
-    handleCancel,
-    handleSave: handleSaveParticipant,
+    handleCancel: handleCancelParticipant,
+    handleSave: saveParticipant,
     handleEdit,
     handleDelete,
     handleFormChange: setFormParticipant,
@@ -52,11 +90,64 @@ export function EnrollFormAdvanced({
     onFormDataChange({ ...formData, additionalParticipants: participants });
   });
 
+  const handleCancel = () => {
+    setParticipantErrors({});
+    handleCancelParticipant();
+  };
+
+  const handleSaveParticipant = () => {
+    const errors = validateAdditionalParticipant(formParticipant);
+    if (Object.keys(errors).length > 0) {
+      setParticipantErrors(errors);
+      return;
+    }
+    setParticipantErrors({});
+    saveParticipant();
+  };
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     onFormDataChange({ ...formData, [name]: value });
+  };
+
+  const validateAndSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validate all form fields
+    const errors = validateAdvancedForm({
+      fullName: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      role: formData.role,
+      company: formData.company,
+      compFinName: formData.compFinName ?? "",
+      compFinEmail: formData.compFinEmail ?? "",
+      isPCD: isPCDNeeded,
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      // Expand sections with errors
+      if (
+        errors.fullName ||
+        errors.email ||
+        errors.phone ||
+        errors.role ||
+        errors.isPCD
+      ) {
+        setIsParticipantDataExpanded(true);
+      }
+      if (errors.company || errors.compFinName || errors.compFinEmail) {
+        setIsCompanyDataExpanded(true);
+      }
+      return;
+    }
+
+    // Clear errors and submit
+    setFormErrors({});
+    onSubmit(e);
   };
 
   const handleEditParticipant = (participant: AdditionalParticipantWithId) => {
@@ -81,15 +172,13 @@ export function EnrollFormAdvanced({
 
       {/* Scrollable Form Content */}
       <div className="flex-1 overflow-y-auto no-scrollbar p-6">
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form onSubmit={validateAndSubmit} className="space-y-4">
           {/* Participant Data Section */}
           <div className="mb-6 border-b pb-4">
             <button
               type="button"
-              onClick={() =>
-                setIsParticipantDataExpanded(!isParticipantDataExpanded)
-              }
-              className="w-full flex items-center justify-between py-2 hover:opacity-80 transition-opacity"
+              onClick={toggleParticipantData}
+              className="w-full flex items-center justify-between py-2 hover:opacity-80 transition-opacity cursor-pointer"
             >
               <h4 className="text-normal font-normal text-[#00233f]">
                 Dados do participante
@@ -105,45 +194,66 @@ export function EnrollFormAdvanced({
               <div className="mt-4 space-y-4">
                 {/* FullName and Phone */}
                 <div className="grid grid-cols-2 gap-4 mb-4">
-                  <input
+                  <FormField
                     type="text"
                     name="fullName"
                     placeholder="Nome Completo *"
                     value={formData.fullName}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                      if (formErrors.fullName)
+                        setFormErrors((prev) => ({ ...prev, fullName: "" }));
+                    }}
+                    validation="name"
+                    externalError={formErrors.fullName}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
                   />
-                  <input
+                  <FormField
                     type="tel"
                     name="phone"
                     placeholder="Telefone *"
                     value={formData.phone}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                      if (formErrors.phone)
+                        setFormErrors((prev) => ({ ...prev, phone: "" }));
+                    }}
+                    validation="phone"
+                    formatAsPhone
+                    externalError={formErrors.phone}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
                   />
                 </div>
 
                 {/* Email and Role */}
                 <div className="grid grid-cols-2 gap-4">
-                  <input
+                  <FormField
                     type="email"
                     name="email"
                     placeholder="E-mail corporativo *"
                     value={formData.email}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                      if (formErrors.email)
+                        setFormErrors((prev) => ({ ...prev, email: "" }));
+                    }}
+                    validation="email"
+                    externalError={formErrors.email}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
                   />
-                  <input
+                  <FormField
                     type="text"
                     name="role"
                     placeholder="Cargo/Função *"
                     value={formData.role}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                      if (formErrors.role)
+                        setFormErrors((prev) => ({ ...prev, role: "" }));
+                    }}
+                    validation="textOnly"
+                    externalError={formErrors.role}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
                   />
                 </div>
 
@@ -167,6 +277,7 @@ export function EnrollFormAdvanced({
                       checked={isPCDNeeded === true}
                       onChange={() => {
                         setIsPCDNeeded(true);
+                        setFormErrors((prev) => ({ ...prev, isPCD: "" }));
                         onFormDataChange({ ...formData, isPCD: true });
                       }}
                       className="w-4 h-4 cursor-pointer"
@@ -182,6 +293,7 @@ export function EnrollFormAdvanced({
                       checked={isPCDNeeded === false}
                       onChange={() => {
                         setIsPCDNeeded(false);
+                        setFormErrors((prev) => ({ ...prev, isPCD: "" }));
                         setPCDDescription("");
                         onFormDataChange({
                           ...formData,
@@ -194,6 +306,11 @@ export function EnrollFormAdvanced({
                     <span className="text-sm text-[#212121]">Não</span>
                   </label>
                 </div>
+                {formErrors.isPCD && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {formErrors.isPCD}
+                  </p>
+                )}
 
                 {/* PCD Description */}
                 <Input
@@ -218,8 +335,8 @@ export function EnrollFormAdvanced({
           <div className="mb-6 border-b pb-4">
             <button
               type="button"
-              onClick={() => setIsCompanyDataExpanded(!isCompanyDataExpanded)}
-              className="w-full flex items-center justify-between py-2 hover:opacity-80 transition-opacity"
+              onClick={toggleCompanyData}
+              className="w-full flex items-center justify-between py-2 hover:opacity-80 transition-opacity cursor-pointer"
             >
               <h4 className="text-normal font-normal text-[#00233f]">
                 Dados da empresa
@@ -235,36 +352,61 @@ export function EnrollFormAdvanced({
               <div className="mt-4 space-y-4">
                 {/* Role and Company */}
                 <div className="grid grid-cols-3 gap-4 mb-4">
-                  <input
-                    type="text"
-                    name="compFinName"
-                    placeholder="Nome do Responsável Financeiro da sua empresa *"
-                    value={formData.compFinName}
-                    onChange={handleInputChange}
-                    required
-                    className="col-span-2 w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
-                  />
-                  <input
-                    type="text"
-                    name="company"
-                    placeholder="Nome da Empresa *"
-                    value={formData.company}
-                    onChange={handleInputChange}
-                    required
-                    className="col-span-1 w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
-                  />
+                  <div className="col-span-2">
+                    <FormField
+                      type="text"
+                      name="compFinName"
+                      placeholder="Nome do Responsável Financeiro da sua empresa *"
+                      value={formData.compFinName ?? ""}
+                      onChange={(e) => {
+                        handleInputChange(e);
+                        if (formErrors.compFinName)
+                          setFormErrors((prev) => ({
+                            ...prev,
+                            compFinName: "",
+                          }));
+                      }}
+                      validation="name"
+                      externalError={formErrors.compFinName}
+                      required
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <FormField
+                      type="text"
+                      name="company"
+                      placeholder="Nome da Empresa *"
+                      value={formData.company}
+                      onChange={(e) => {
+                        handleInputChange(e);
+                        if (formErrors.company)
+                          setFormErrors((prev) => ({ ...prev, company: "" }));
+                      }}
+                      validation="required"
+                      externalError={formErrors.company}
+                      required
+                    />
+                  </div>
                 </div>
 
                 {/* compFinEmail */}
                 <div className="mb-4">
-                  <input
-                    type="text"
+                  <FormField
+                    type="email"
                     name="compFinEmail"
                     placeholder="E-mail do Responsável Financeiro da sua empresa *"
-                    value={formData.compFinEmail}
-                    onChange={handleInputChange}
+                    value={formData.compFinEmail ?? ""}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                      if (formErrors.compFinEmail)
+                        setFormErrors((prev) => ({
+                          ...prev,
+                          compFinEmail: "",
+                        }));
+                    }}
+                    validation="email"
+                    externalError={formErrors.compFinEmail}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C] focus:border-transparent"
                   />
                 </div>
               </div>
@@ -275,10 +417,8 @@ export function EnrollFormAdvanced({
           <div className="mb-6">
             <button
               type="button"
-              onClick={() =>
-                setIsAddParticipantExpanded(!isAddParticipantExpanded)
-              }
-              className="w-full flex items-center justify-between py-2 hover:opacity-80 transition-opacity"
+              onClick={toggleAddParticipant}
+              className="w-full flex items-center justify-between py-2 hover:opacity-80 transition-opacity cursor-pointer"
             >
               <h4 className="text-normal font-normal text-[#00233f]">
                 Participantes adicionais
@@ -352,56 +492,91 @@ export function EnrollFormAdvanced({
                   <button
                     type="button"
                     onClick={handleAddParticipant}
-                    className="w-full py-3 text-sm text-center text-gray-500 border border-dashed border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="w-full py-3 text-sm text-center text-gray-500 border border-dashed border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer"
                   >
                     Adicionar participantes (máximo {remainingSlots})
                   </button>
                 ) : isAddingParticipant ? (
                   <div className="border rounded-lg p-4 space-y-4">
                     <h5 className="font-semibold text-[#00233f]">
-                      Participante adicional {additionalParticipants.length + 1}
+                      {editingParticipantId
+                        ? `Editando participante adicional ${additionalParticipants.findIndex((p) => p.id === editingParticipantId) + 1}`
+                        : `Participante adicional ${additionalParticipants.length + 1}`}
                     </h5>
 
                     {/* Form fields */}
                     <div className="grid grid-cols-2 gap-4">
-                      <input
+                      <FormField
                         type="text"
+                        name="addName"
                         placeholder="Nome completo *"
                         value={formParticipant.addName}
-                        onChange={(e) =>
-                          setFormParticipant({ addName: e.target.value })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C]"
+                        onChange={(e) => {
+                          setFormParticipant({ addName: e.target.value });
+                          if (participantErrors.addName)
+                            setParticipantErrors((prev) => ({
+                              ...prev,
+                              addName: "",
+                            }));
+                        }}
+                        validation="name"
+                        externalError={participantErrors.addName}
+                        required
                       />
-                      <input
+                      <FormField
                         type="text"
+                        name="role"
                         placeholder="Cargo/Função *"
                         value={formParticipant.role}
-                        onChange={(e) =>
-                          setFormParticipant({ role: e.target.value })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C]"
+                        onChange={(e) => {
+                          setFormParticipant({ role: e.target.value });
+                          if (participantErrors.role)
+                            setParticipantErrors((prev) => ({
+                              ...prev,
+                              role: "",
+                            }));
+                        }}
+                        validation="textOnly"
+                        externalError={participantErrors.role}
+                        required
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                      <input
+                      <FormField
                         type="email"
+                        name="email"
                         placeholder="E-mail corporativo *"
                         value={formParticipant.email}
-                        onChange={(e) =>
-                          setFormParticipant({ email: e.target.value })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C]"
+                        onChange={(e) => {
+                          setFormParticipant({ email: e.target.value });
+                          if (participantErrors.email)
+                            setParticipantErrors((prev) => ({
+                              ...prev,
+                              email: "",
+                            }));
+                        }}
+                        validation="email"
+                        externalError={participantErrors.email}
+                        required
                       />
-                      <input
+                      <FormField
                         type="tel"
+                        name="phone"
                         placeholder="Telefone *"
                         value={formParticipant.phone}
-                        onChange={(e) =>
-                          setFormParticipant({ phone: e.target.value })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D5B9C]"
+                        onChange={(e) => {
+                          setFormParticipant({ phone: e.target.value });
+                          if (participantErrors.phone)
+                            setParticipantErrors((prev) => ({
+                              ...prev,
+                              phone: "",
+                            }));
+                        }}
+                        validation="phone"
+                        formatAsPhone
+                        externalError={participantErrors.phone}
+                        required
                       />
                     </div>
 
@@ -415,7 +590,13 @@ export function EnrollFormAdvanced({
                           <input
                             type="radio"
                             checked={formParticipant.isPCD === true}
-                            onChange={() => setFormParticipant({ isPCD: true })}
+                            onChange={() => {
+                              setFormParticipant({ isPCD: true });
+                              setParticipantErrors((prev) => ({
+                                ...prev,
+                                isPCD: "",
+                              }));
+                            }}
                             className="w-4 h-4 cursor-pointer"
                           />
                           <span className="text-sm text-[#212121]">
@@ -426,14 +607,23 @@ export function EnrollFormAdvanced({
                           <input
                             type="radio"
                             checked={formParticipant.isPCD === false}
-                            onChange={() =>
-                              setFormParticipant({ isPCD: false })
-                            }
+                            onChange={() => {
+                              setFormParticipant({ isPCD: false });
+                              setParticipantErrors((prev) => ({
+                                ...prev,
+                                isPCD: "",
+                              }));
+                            }}
                             className="w-4 h-4 cursor-pointer"
                           />
                           <span className="text-sm text-[#212121]">Não</span>
                         </label>
                       </div>
+                      {participantErrors.isPCD && (
+                        <p className="text-xs text-red-500 mt-1">
+                          {participantErrors.isPCD}
+                        </p>
+                      )}
 
                       <Input
                         type="text"

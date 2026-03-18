@@ -115,7 +115,7 @@ export function EnrollModal({
           description:
             "Domine funcionalidades avançadas e otimize a plataforma.",
           tInfo1: "Data",
-          rInfo1: "3 a 5 de novembro de 2026",
+          rInfo1: "9 a 11 de novembro de 2026",
           tInfo2: "Local",
           access: "Campinas-SP",
           tInfo3: "Duração",
@@ -172,7 +172,7 @@ export function EnrollModal({
       }
       if (level === "expert") {
         return {
-          date: "3 a 5 de novembro de 2026",
+          date: "9 a 11 de novembro de 2026",
           location: "Campinas, SP",
           duration: "3 dias intensivos",
           certification: "Requestia Expert",

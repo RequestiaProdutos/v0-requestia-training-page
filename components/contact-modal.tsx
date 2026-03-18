@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { X, MessageSquareWarning, Loader2 } from "lucide-react";
 import { FeedbackState, feedbackConfig } from "@/components/feedback";
+import { FormField } from "@/components/form/form-field";
 import { useContactForm } from "@/hooks/use-contact-form";
 
 export function ContactModal() {
@@ -117,36 +118,37 @@ function ContactForm({
         className="space-y-3 w-full flex flex-col flex-1"
       >
         {/* Full Name Input */}
-        <input
+        <FormField
           type="text"
           name="name"
           placeholder="Nome Completo *"
           value={formData.name}
           onChange={onInputChange}
+          validation="name"
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#206EB0] focus:border-transparent transition"
         />
 
         {/* Phone Input */}
-        <input
+        <FormField
           type="tel"
           name="phone"
           placeholder="Telefone *"
           value={formData.phone}
           onChange={onInputChange}
+          validation="phone"
+          formatAsPhone
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#206EB0] focus:border-transparent transition"
         />
 
         {/* Email Input */}
-        <input
+        <FormField
           type="email"
           name="email"
           placeholder="E-mail *"
           value={formData.email}
           onChange={onInputChange}
+          validation="email"
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#206EB0] focus:border-transparent transition"
         />
 
         {/* Message Textarea */}
