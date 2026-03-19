@@ -37,8 +37,7 @@ export const feedbackConfig = {
   contactSuccess: {
     type: "success" as const,
     title: "Agradecemos o seu contato!",
-    message:
-      "Recebemos a sua mensagem. Fique tranquilo, logo entraremos em contato com você.",
+    message: "Recebemos a sua mensagem. Logo entraremos em contato com você.",
   },
   contactError: {
     type: "error" as const,

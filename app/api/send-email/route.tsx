@@ -68,6 +68,7 @@ export async function POST(req: Request) {
     const data = parsed.data;
     const participantHtml = await renderParticipantEmail(data);
     const internalHtml = await renderInternalEmail(data);
+    const firstName = data.participant.fullName.split(" ")[0];
 
     const internalRecipients = (process.env.MAIL_TO_INTERNAL ?? "")
       .split(/[;,]/)
@@ -87,16 +88,25 @@ export async function POST(req: Request) {
     await transporter.sendMail({
       from: process.env.SMTP_FROM,
       to: internalRecipients,
-      subject: `[Treinamento] Nova inscrição - ${data.level}`,
+      subject: `Nova Inscrição - Requestia ${data.level}`,
       html: internalHtml,
     });
 
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM,
-      to: data.participant.email,
-      subject: "Confirmação de inscrição - Requestia",
-      html: participantHtml,
-    });
+    if (data.level === "essentials") {
+      await transporter.sendMail({
+        from: process.env.SMTP_FROM,
+        to: data.participant.email,
+        subject: `Bem-vindo ao Requestia ${data.level}`,
+        html: participantHtml,
+      });
+    } else {
+      await transporter.sendMail({
+        from: process.env.SMTP_FROM,
+        to: data.participant.email,
+        subject: `${firstName}, recebemos sua inscrição - Treinamento ${data.level}`,
+        html: participantHtml,
+      });
+    }
 
     return NextResponse.json({ ok: true });
   } catch (error) {

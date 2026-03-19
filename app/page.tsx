@@ -59,13 +59,46 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-[linear-gradient(180deg,#FFF6F2_25%,#FFFFFF_50%,#F6FBFF_75%,#F4F7FA_100%)] pb-2 sm:pb-20 lg:pb-32">
         {/* Decorative dot pattern - left side */}
-        <div className="absolute left-10 top-5 w-32 h-full pointer-events-none">
+        <div className="absolute left-10 top-5 w-32 h-full pointer-events-none hidden lg:block">
           <img
             src="/L_Dots.png"
             alt="Decorative dots pattern"
             width={67}
             height={317}
           />
+        </div>
+
+        <div className="block lg:hidden absolute right-0">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="89"
+            height="116"
+            viewBox="0 0 89 116"
+            fill="none"
+          >
+            <path
+              opacity="0.5"
+              d="M88.5 115.5H32.5C14.8269 115.5 0.5 101.173 0.5 83.5V0.5"
+              stroke="#5F7990"
+              strokeLinecap="round"
+              strokeDasharray="6 6"
+            />
+          </svg>
+        </div>
+
+        <div className="absolute block lg:hidden left-10 top-5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="8"
+            height="56"
+            viewBox="0 0 8 56"
+            fill="none"
+          >
+            <path
+              d="M3.18164 55.5C3.18164 55.7761 3.4055 56 3.68164 56C3.95778 56 4.18164 55.7761 4.18164 55.5H3.68164H3.18164ZM4.03519 0.146446C3.83993 -0.0488167 3.52335 -0.0488167 3.32809 0.146446L0.146107 3.32843C-0.0491555 3.52369 -0.0491555 3.84027 0.146107 4.03553C0.341369 4.2308 0.657951 4.2308 0.853214 4.03553L3.68164 1.20711L6.51007 4.03553C6.70533 4.2308 7.02191 4.2308 7.21717 4.03553C7.41244 3.84027 7.41244 3.52369 7.21717 3.32843L4.03519 0.146446ZM3.68164 55.5H4.18164V53.5357H3.68164H3.18164V55.5H3.68164ZM3.68164 49.6071H4.18164L4.18164 45.6786H3.68164H3.18164V49.6071H3.68164ZM3.68164 41.75H4.18164V37.8214H3.68164H3.18164V41.75H3.68164ZM3.68164 33.8929H4.18164V29.9643H3.68164H3.18164L3.18164 33.8929H3.68164ZM3.68164 26.0357H4.18164V22.1071H3.68164H3.18164L3.18164 26.0357H3.68164ZM3.68164 18.1786H4.18164V14.25H3.68164H3.18164L3.18164 18.1786H3.68164ZM3.68164 10.3214H4.18164V6.39286H3.68164H3.18164L3.18164 10.3214H3.68164ZM3.68164 2.46429H4.18164V0.5H3.68164H3.18164L3.18164 2.46429H3.68164ZM3.18164 55.5C3.18164 55.7761 3.4055 56 3.68164 56C3.95778 56 4.18164 55.7761 4.18164 55.5H3.68164H3.18164ZM4.03519 0.146446C3.83993 -0.0488167 3.52335 -0.0488167 3.32809 0.146446L0.146107 3.32843C-0.0491555 3.52369 -0.0491555 3.84027 0.146107 4.03553C0.341369 4.2308 0.657951 4.2308 0.853214 4.03553L3.68164 1.20711L6.51007 4.03553C6.70533 4.2308 7.02191 4.2308 7.21717 4.03553C7.41244 3.84027 7.41244 3.52369 7.21717 3.32843L4.03519 0.146446ZM3.68164 55.5H4.18164V53.5357H3.68164H3.18164V55.5H3.68164ZM3.68164 49.6071H4.18164L4.18164 45.6786H3.68164H3.18164V49.6071H3.68164ZM3.68164 41.75H4.18164V37.8214H3.68164H3.18164V41.75H3.68164ZM3.68164 33.8929H4.18164V29.9643H3.68164H3.18164L3.18164 33.8929H3.68164ZM3.68164 26.0357H4.18164V22.1071H3.68164H3.18164L3.18164 26.0357H3.68164ZM3.68164 18.1786H4.18164V14.25H3.68164H3.18164L3.18164 18.1786H3.68164ZM3.68164 10.3214H4.18164V6.39286H3.68164H3.18164L3.18164 10.3214H3.68164ZM3.68164 2.46429H4.18164V0.5H3.68164H3.18164L3.18164 2.46429H3.68164Z"
+              fill="#5F7990"
+            />
+          </svg>
         </div>
 
         {/* SVG 2 (lateral right lines) */}
@@ -87,10 +120,10 @@ export default function Home() {
           />
         </svg>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mt-10 lg:mt-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-8 lg:gap-12 items-center">
             {/* Left Content */}
-            <div className="space-y-8 pt-8">
+            <div className="space-y-8 pt-8 text-center lg:text-left">
               {/* Badge */}
               <div className="inline-flex">
                 <Badge
@@ -102,12 +135,12 @@ export default function Home() {
               </div>
 
               {/* Title */}
-              <h1 className="text-4xl sm:text-4xl lg:text-4xl font-bold text-[#00233f] leading-tight">
+              <h1 className="text-[28px] sm:text-4xl lg:text-4xl font-bold text-[#00233f] leading-tight mb-[16px]">
                 Trilha de Capacitação Requestia
               </h1>
 
               {/* Description */}
-              <p className="text-sm sm:text-lg text-gray-600 leading-relaxed max-w-xl">
+              <p className="text-xl sm:text-lg text-gray-600 leading-relaxed lg:max-w-xl">
                 Desenvolva suas habilidades por meio de uma jornada estruturada
                 de aprendizagem, com conteúdo prático e certificação oficial.
               </p>
@@ -120,7 +153,12 @@ export default function Home() {
                 <img
                   src="/hero-mob.png"
                   alt="Professional profile"
-                  className="w-full h-auto object-contain"
+                  className="w-full h-auto object-contain z-2"
+                />
+                <img
+                  src="/dots.svg"
+                  alt="dots"
+                  className="absolute bottom-2 left-0 max-h-[90px]"
                 />
               </div>
 
@@ -278,8 +316,26 @@ export default function Home() {
         </div>
       </section>
 
+      <div className="absolute w-full top-[80%] hidden lg:block">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 915"
+          className="w-full"
+          fill="none"
+        >
+          <path
+            opacity="0.5"
+            d="M-7.12276e-06 0.25H28.8521C46.5252 0.25 60.8521 14.5769 60.8521 32.25V422.25C60.8521 439.923 75.179 454.25 92.8521 454.25H1356.62C1374.3 454.25 1388.62 468.577 1388.62 486.25V882.25C1388.62 899.923 1402.95 914.25 1420.62 914.25H1440"
+            stroke="#5F7990"
+            strokeWidth="0.5"
+            strokeLinecap="round"
+            strokeDasharray="6 6"
+          />
+        </svg>
+      </div>
+
       {/* Course Card Section */}
-      <section className="bg-white max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:pt-16 pb-4 rounded-2xl">
+      <section className="bg-white max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:pt-16 pb-4 rounded-2xl relative">
         {/* Level indicator */}
         <div className="flex items-start gap-4 mb-12">
           <div className="w-12 h-12 rounded-full bg-gradient-to-b from-[#003765] to-[#206EB0] text-white flex items-center justify-center text-xl font-regular shrink-0">
@@ -343,7 +399,7 @@ export default function Home() {
                   {[
                     "Navegue pela plataforma e entenda sua estrutura",
                     "Realize as configurações iniciais de administração",
-                    "Realize as configurações iniciais de administração",
+                    "Gerencie usuários e permissões",
                   ].map((objective, index) => (
                     <div key={index} className="flex items-start gap-3">
                       <CircleCheck className="w-5 h-5 text-[#0d5b9c] shrink-0 mt-0.5" />
@@ -375,9 +431,6 @@ export default function Home() {
                         <b>4 a 6 de maio</b> | Segunda a quarta-feira
                       </p>
                     </div>
-                    <button>
-                      <Info className="w-5 h-5 text-gray-600" />
-                    </button>
                   </div>
 
                   {/* Course description */}
@@ -436,9 +489,9 @@ export default function Home() {
                         <b>14 a 16 de setembro</b> | Segunda a quarta-feira
                       </p>
                     </div>
-                    <button>
+                    {/* <button>
                       <Info className="w-5 h-5 text-gray-600" />
-                    </button>
+                    </button> */}
                   </div>
 
                   {/* Course description */}
@@ -499,9 +552,9 @@ export default function Home() {
                       <b>09 a 11 de novembro</b> | Segunda a quarta-feira
                     </p>
                   </div>
-                  <button>
+                  {/* <button>
                     <Info className="w-5 h-5 text-gray-600" />
-                  </button>
+                  </button> */}
                 </div>
 
                 {/* Course description */}

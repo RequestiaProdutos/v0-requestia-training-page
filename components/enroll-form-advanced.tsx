@@ -287,7 +287,7 @@ export function EnrollFormAdvanced({
                       className="w-4 h-4 cursor-pointer"
                     />
                     <span className="text-sm text-[#212121]">
-                      Sim, sou PCD e preciso de acomodações.
+                      Sim, sou PCD e preciso de acomodações
                     </span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -611,7 +611,7 @@ export function EnrollFormAdvanced({
                             className="w-4 h-4 cursor-pointer"
                           />
                           <span className="text-sm text-[#212121]">
-                            Sim, sou PCD e preciso de acomodações.
+                            Sim, o participante é PCD e precisa de acomodações 
                           </span>
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer">

@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     await transporter.sendMail({
       from: process.env.SMTP_FROM,
       to: internalRecipients,
-      subject: "[Treinamento] Nova dúvida recebida",
+      subject: `Contato recebido de ${data.name}`,
       html,
     });
 
