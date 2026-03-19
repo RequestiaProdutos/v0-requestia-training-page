@@ -57,7 +57,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-[linear-gradient(180deg,#FFF6F2_25%,#FFFFFF_50%,#F6FBFF_75%,#F4F7FA_100%)] pb-20 lg:pb-32">
+      <section className="relative overflow-hidden bg-[linear-gradient(180deg,#FFF6F2_25%,#FFFFFF_50%,#F6FBFF_75%,#F4F7FA_100%)] pb-2 sm:pb-20 lg:pb-32">
         {/* Decorative dot pattern - left side */}
         <div className="absolute left-10 top-5 w-32 h-full pointer-events-none">
           <img
@@ -115,87 +115,97 @@ export default function Home() {
 
             {/* Right Image - Profile Circle */}
             <div className="relative h-80 sm:h-96 lg:h-96 flex items-center justify-center pt-8 lg:pt-0">
-              {/* SVG Lines Container - Positioned absolutely */}
-              <div className="absolute inset-0 pointer-events-none w-full h-full">
-                <div className="absolute left-[-6px] top-7">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="8"
-                    height="56"
-                    viewBox="0 0 8 56"
-                    fill="none"
-                  >
-                    <path
-                      d="M3.18164 55.5C3.18164 55.7761 3.4055 56 3.68164 56C3.95778 56 4.18164 55.7761 4.18164 55.5H3.68164H3.18164ZM4.03519 0.146446C3.83993 -0.0488167 3.52335 -0.0488167 3.32809 0.146446L0.146107 3.32843C-0.0491555 3.52369 -0.0491555 3.84027 0.146107 4.03553C0.341369 4.2308 0.657951 4.2308 0.853214 4.03553L3.68164 1.20711L6.51007 4.03553C6.70533 4.2308 7.02191 4.2308 7.21717 4.03553C7.41244 3.84027 7.41244 3.52369 7.21717 3.32843L4.03519 0.146446ZM3.68164 55.5H4.18164V53.5357H3.68164H3.18164V55.5H3.68164ZM3.68164 49.6071H4.18164L4.18164 45.6786H3.68164H3.18164V49.6071H3.68164ZM3.68164 41.75H4.18164V37.8214H3.68164H3.18164V41.75H3.68164ZM3.68164 33.8929H4.18164V29.9643H3.68164H3.18164L3.18164 33.8929H3.68164ZM3.68164 26.0357H4.18164V22.1071H3.68164H3.18164L3.18164 26.0357H3.68164ZM3.68164 18.1786H4.18164V14.25H3.68164H3.18164L3.18164 18.1786H3.68164ZM3.68164 10.3214H4.18164V6.39286H3.68164H3.18164L3.18164 10.3214H3.68164ZM3.68164 2.46429H4.18164V0.5H3.68164H3.18164L3.18164 2.46429H3.68164ZM3.18164 55.5C3.18164 55.7761 3.4055 56 3.68164 56C3.95778 56 4.18164 55.7761 4.18164 55.5H3.68164H3.18164ZM4.03519 0.146446C3.83993 -0.0488167 3.52335 -0.0488167 3.32809 0.146446L0.146107 3.32843C-0.0491555 3.52369 -0.0491555 3.84027 0.146107 4.03553C0.341369 4.2308 0.657951 4.2308 0.853214 4.03553L3.68164 1.20711L6.51007 4.03553C6.70533 4.2308 7.02191 4.2308 7.21717 4.03553C7.41244 3.84027 7.41244 3.52369 7.21717 3.32843L4.03519 0.146446ZM3.68164 55.5H4.18164V53.5357H3.68164H3.18164V55.5H3.68164ZM3.68164 49.6071H4.18164L4.18164 45.6786H3.68164H3.18164V49.6071H3.68164ZM3.68164 41.75H4.18164V37.8214H3.68164H3.18164V41.75H3.68164ZM3.68164 33.8929H4.18164V29.9643H3.68164H3.18164L3.18164 33.8929H3.68164ZM3.68164 26.0357H4.18164V22.1071H3.68164H3.18164L3.18164 26.0357H3.68164ZM3.68164 18.1786H4.18164V14.25H3.68164H3.18164L3.18164 18.1786H3.68164ZM3.68164 10.3214H4.18164V6.39286H3.68164H3.18164L3.18164 10.3214H3.68164ZM3.68164 2.46429H4.18164V0.5H3.68164H3.18164L3.18164 2.46429H3.68164Z"
-                      fill="#5F7990"
-                    />
-                  </svg>
-                </div>
-                <div className="absolute right-[-20px] top-83">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="8"
-                    height="56"
-                    viewBox="0 0 8 56"
-                    fill="none"
-                  >
-                    <path
-                      d="M3.18164 55.5C3.18164 55.7761 3.4055 56 3.68164 56C3.95778 56 4.18164 55.7761 4.18164 55.5H3.68164H3.18164ZM4.03519 0.146446C3.83993 -0.0488167 3.52335 -0.0488167 3.32809 0.146446L0.146107 3.32843C-0.0491555 3.52369 -0.0491555 3.84027 0.146107 4.03553C0.341369 4.2308 0.657951 4.2308 0.853214 4.03553L3.68164 1.20711L6.51007 4.03553C6.70533 4.2308 7.02191 4.2308 7.21717 4.03553C7.41244 3.84027 7.41244 3.52369 7.21717 3.32843L4.03519 0.146446ZM3.68164 55.5H4.18164V53.5357H3.68164H3.18164V55.5H3.68164ZM3.68164 49.6071H4.18164L4.18164 45.6786H3.68164H3.18164V49.6071H3.68164ZM3.68164 41.75H4.18164V37.8214H3.68164H3.18164V41.75H3.68164ZM3.68164 33.8929H4.18164V29.9643H3.68164H3.18164L3.18164 33.8929H3.68164ZM3.68164 26.0357H4.18164V22.1071H3.68164H3.18164L3.18164 26.0357H3.68164ZM3.68164 18.1786H4.18164V14.25H3.68164H3.18164L3.18164 18.1786H3.68164ZM3.68164 10.3214H4.18164V6.39286H3.68164H3.18164L3.18164 10.3214H3.68164ZM3.68164 2.46429H4.18164V0.5H3.68164H3.18164L3.18164 2.46429H3.68164ZM3.18164 55.5C3.18164 55.7761 3.4055 56 3.68164 56C3.95778 56 4.18164 55.7761 4.18164 55.5H3.68164H3.18164ZM4.03519 0.146446C3.83993 -0.0488167 3.52335 -0.0488167 3.32809 0.146446L0.146107 3.32843C-0.0491555 3.52369 -0.0491555 3.84027 0.146107 4.03553C0.341369 4.2308 0.657951 4.2308 0.853214 4.03553L3.68164 1.20711L6.51007 4.03553C6.70533 4.2308 7.02191 4.2308 7.21717 4.03553C7.41244 3.84027 7.41244 3.52369 7.21717 3.32843L4.03519 0.146446ZM3.68164 55.5H4.18164V53.5357H3.68164H3.18164V55.5H3.68164ZM3.68164 49.6071H4.18164L4.18164 45.6786H3.68164H3.18164V49.6071H3.68164ZM3.68164 41.75H4.18164V37.8214H3.68164H3.18164V41.75H3.68164ZM3.68164 33.8929H4.18164V29.9643H3.68164H3.18164L3.18164 33.8929H3.68164ZM3.68164 26.0357H4.18164V22.1071H3.68164H3.18164L3.18164 26.0357H3.68164ZM3.68164 18.1786H4.18164V14.25H3.68164H3.18164L3.18164 18.1786H3.68164ZM3.68164 10.3214H4.18164V6.39286H3.68164H3.18164L3.18164 10.3214H3.68164ZM3.68164 2.46429H4.18164V0.5H3.68164H3.18164L3.18164 2.46429H3.68164Z"
-                      fill="#5F7990"
-                    />
-                  </svg>
-                </div>
-                {/* SVG 1 (principal horizontal lines) */}
-                <svg
-                  className="absolute"
-                  style={{ left: "20px", top: "-40px" }}
-                  width="540"
-                  height="483"
-                  viewBox="0 0 540 483"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  preserveAspectRatio="none"
-                >
-                  <path
-                    d="M0.5 0V122C0.5 139.673 14.8269 154 32.5 154H507.5C525.173 154 539.5 168.327 539.5 186V362.5C539.5 380.173 525.173 394.5 507.5 394.5H178.312C160.638 394.5 146.312 408.827 146.312 426.5V483"
-                    stroke="#5F7990"
-                    strokeDasharray="6 6"
-                    strokeWidth="1.5"
-                  />
-                </svg>
+              {/* Mobile Hero Image - visible only on small screens */}
+              <div className="lg:hidden relative z-20">
+                <img
+                  src="/hero-mob.png"
+                  alt="Professional profile"
+                  className="w-full h-auto object-contain"
+                />
               </div>
 
-              {/* Profile Circle - In front of SVG */}
-              <div className="relative z-20 w-fit">
-                {/* Imagem (âncora central) */}
-                <div className="relative z-20 flex items-center justify-center">
-                  <div className="w-32 h-32 sm:w-48 sm:h-48 lg:w-[280px] lg:h-[280px] rounded-full overflow-hidden shrink-0">
-                    <img
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Group%206-uDdFg4i84mgBmvtbBQ5htK3jJSPzV7.png"
-                      alt="Professional profile"
-                      className="w-full h-full object-cover"
+              {/* Desktop Version - hidden on mobile */}
+              <div className="hidden lg:block relative">
+                {/* SVG Lines Container */}
+                <div className="absolute inset-0 pointer-events-none w-full h-full">
+                  <div className="absolute left-[-150px] top-10">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="8"
+                      height="56"
+                      viewBox="0 0 8 56"
+                      fill="none"
+                    >
+                      <path
+                        d="M3.18164 55.5C3.18164 55.7761 3.4055 56 3.68164 56C3.95778 56 4.18164 55.7761 4.18164 55.5H3.68164H3.18164ZM4.03519 0.146446C3.83993 -0.0488167 3.52335 -0.0488167 3.32809 0.146446L0.146107 3.32843C-0.0491555 3.52369 -0.0491555 3.84027 0.146107 4.03553C0.341369 4.2308 0.657951 4.2308 0.853214 4.03553L3.68164 1.20711L6.51007 4.03553C6.70533 4.2308 7.02191 4.2308 7.21717 4.03553C7.41244 3.84027 7.41244 3.52369 7.21717 3.32843L4.03519 0.146446ZM3.68164 55.5H4.18164V53.5357H3.68164H3.18164V55.5H3.68164ZM3.68164 49.6071H4.18164L4.18164 45.6786H3.68164H3.18164V49.6071H3.68164ZM3.68164 41.75H4.18164V37.8214H3.68164H3.18164V41.75H3.68164ZM3.68164 33.8929H4.18164V29.9643H3.68164H3.18164L3.18164 33.8929H3.68164ZM3.68164 26.0357H4.18164V22.1071H3.68164H3.18164L3.18164 26.0357H3.68164ZM3.68164 18.1786H4.18164V14.25H3.68164H3.18164L3.18164 18.1786H3.68164ZM3.68164 10.3214H4.18164V6.39286H3.68164H3.18164L3.18164 10.3214H3.68164ZM3.68164 2.46429H4.18164V0.5H3.68164H3.18164L3.18164 2.46429H3.68164ZM3.18164 55.5C3.18164 55.7761 3.4055 56 3.68164 56C3.95778 56 4.18164 55.7761 4.18164 55.5H3.68164H3.18164ZM4.03519 0.146446C3.83993 -0.0488167 3.52335 -0.0488167 3.32809 0.146446L0.146107 3.32843C-0.0491555 3.52369 -0.0491555 3.84027 0.146107 4.03553C0.341369 4.2308 0.657951 4.2308 0.853214 4.03553L3.68164 1.20711L6.51007 4.03553C6.70533 4.2308 7.02191 4.2308 7.21717 4.03553C7.41244 3.84027 7.41244 3.52369 7.21717 3.32843L4.03519 0.146446ZM3.68164 55.5H4.18164V53.5357H3.68164H3.18164V55.5H3.68164ZM3.68164 49.6071H4.18164L4.18164 45.6786H3.68164H3.18164V49.6071H3.68164ZM3.68164 41.75H4.18164V37.8214H3.68164H3.18164V41.75H3.68164ZM3.68164 33.8929H4.18164V29.9643H3.68164H3.18164L3.18164 33.8929H3.68164ZM3.68164 26.0357H4.18164V22.1071H3.68164H3.18164L3.18164 26.0357H3.68164ZM3.68164 18.1786H4.18164V14.25H3.68164H3.18164L3.18164 18.1786H3.68164ZM3.68164 10.3214H4.18164V6.39286H3.68164H3.18164L3.18164 10.3214H3.68164ZM3.68164 2.46429H4.18164V0.5H3.68164H3.18164L3.18164 2.46429H3.68164Z"
+                        fill="#5F7990"
+                      />
+                    </svg>
+                  </div>
+                  <div className="absolute right-[-190px] top-75">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="8"
+                      height="56"
+                      viewBox="0 0 8 56"
+                      fill="none"
+                    >
+                      <path
+                        d="M3.18164 55.5C3.18164 55.7761 3.4055 56 3.68164 56C3.95778 56 4.18164 55.7761 4.18164 55.5H3.68164H3.18164ZM4.03519 0.146446C3.83993 -0.0488167 3.52335 -0.0488167 3.32809 0.146446L0.146107 3.32843C-0.0491555 3.52369 -0.0491555 3.84027 0.146107 4.03553C0.341369 4.2308 0.657951 4.2308 0.853214 4.03553L3.68164 1.20711L6.51007 4.03553C6.70533 4.2308 7.02191 4.2308 7.21717 4.03553C7.41244 3.84027 7.41244 3.52369 7.21717 3.32843L4.03519 0.146446ZM3.68164 55.5H4.18164V53.5357H3.68164H3.18164V55.5H3.68164ZM3.68164 49.6071H4.18164L4.18164 45.6786H3.68164H3.18164V49.6071H3.68164ZM3.68164 41.75H4.18164V37.8214H3.68164H3.18164V41.75H3.68164ZM3.68164 33.8929H4.18164V29.9643H3.68164H3.18164L3.18164 33.8929H3.68164ZM3.68164 26.0357H4.18164V22.1071H3.68164H3.18164L3.18164 26.0357H3.68164ZM3.68164 18.1786H4.18164V14.25H3.68164H3.18164L3.18164 18.1786H3.68164ZM3.68164 10.3214H4.18164V6.39286H3.68164H3.18164L3.18164 10.3214H3.68164ZM3.68164 2.46429H4.18164V0.5H3.68164H3.18164L3.18164 2.46429H3.68164ZM3.18164 55.5C3.18164 55.7761 3.4055 56 3.68164 56C3.95778 56 4.18164 55.7761 4.18164 55.5H3.68164H3.18164ZM4.03519 0.146446C3.83993 -0.0488167 3.52335 -0.0488167 3.32809 0.146446L0.146107 3.32843C-0.0491555 3.52369 -0.0491555 3.84027 0.146107 4.03553C0.341369 4.2308 0.657951 4.2308 0.853214 4.03553L3.68164 1.20711L6.51007 4.03553C6.70533 4.2308 7.02191 4.2308 7.21717 4.03553C7.41244 3.84027 7.41244 3.52369 7.21717 3.32843L4.03519 0.146446ZM3.68164 55.5H4.18164V53.5357H3.68164H3.18164V55.5H3.68164ZM3.68164 49.6071H4.18164L4.18164 45.6786H3.68164H3.18164V49.6071H3.68164ZM3.68164 41.75H4.18164V37.8214H3.68164H3.18164V41.75H3.68164ZM3.68164 33.8929H4.18164V29.9643H3.68164H3.18164L3.18164 33.8929H3.68164ZM3.68164 26.0357H4.18164V22.1071H3.68164H3.18164L3.18164 26.0357H3.68164ZM3.68164 18.1786H4.18164V14.25H3.68164H3.18164L3.18164 18.1786H3.68164ZM3.68164 10.3214H4.18164V6.39286H3.68164H3.18164L3.18164 10.3214H3.68164ZM3.68164 2.46429H4.18164V0.5H3.68164H3.18164L3.18164 2.46429H3.68164Z"
+                        fill="#5F7990"
+                      />
+                    </svg>
+                  </div>
+                  <svg
+                    className="absolute"
+                    style={{ left: "-120px", top: "-40px" }}
+                    width="540"
+                    height="483"
+                    viewBox="0 0 540 483"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    preserveAspectRatio="none"
+                  >
+                    <path
+                      d="M0.5 0V122C0.5 139.673 14.8269 154 32.5 154H507.5C525.173 154 539.5 168.327 539.5 186V362.5C539.5 380.173 525.173 394.5 507.5 394.5H178.312C160.638 394.5 146.312 408.827 146.312 426.5V483"
+                      stroke="#5F7990"
+                      strokeDasharray="6 6"
+                      strokeWidth="1.5"
                     />
-                  </div>
+                  </svg>
                 </div>
 
-                {/* Novo ícone à esquerda (fixo em relação à imagem) */}
-                <div className="absolute z-20 top-1/2 right-full -translate-y-38 -translate-x-15">
-                  <div className="w-4 h-4 sm:w-8 sm:h-8 lg:w-16 lg:h-16 rounded-full bg-[#DEEAF4] flex items-center justify-center">
-                    <GraduationCap className="text-[#0D5B9C] w-8 h-8" />
+                {/* Profile Circle - In front of SVG */}
+                <div className="relative z-20 w-fit">
+                  <div className="relative z-20 flex items-center justify-center">
+                    <div className="w-[280px] h-[280px] rounded-full overflow-hidden shrink-0">
+                      <img
+                        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Group%206-uDdFg4i84mgBmvtbBQ5htK3jJSPzV7.png"
+                        alt="Professional profile"
+                        className="w-full h-full object-cover absolute top-[60px]"
+                      />
+                    </div>
                   </div>
-                </div>
 
-                {/* Ícone à direita (fixo em relação à imagem) */}
-                <div className="absolute z-20 top-1/2 left-full -translate-y-18 translate-x-14">
-                  <div className="w-4 h-4 sm:w-8 sm:h-8 lg:w-16 lg:h-16 rounded-full bg-[#DEEAF4] flex items-center justify-center">
-                    <Brain className="text-[#0D5B9C] w-7 h-7" />
+                  {/* Ícone à esquerda */}
+                  <div className="absolute z-20 top-[190px] right-[265px] -translate-y-38 -translate-x-15">
+                    <div className="w-16 h-16 rounded-full bg-[#DEEAF4] flex items-center justify-center">
+                      <GraduationCap className="text-[#0D5B9C] w-8 h-8" />
+                    </div>
                   </div>
-                </div>
 
-                {/* Novo ícone ao meio (fixo em relação à imagem) */}
-                <div className="absolute z-20 top-1/2 right-full translate-y-43 translate-x-14">
-                  <div className="w-4 h-4 sm:w-8 sm:h-8 lg:w-8 lg:h-8 rounded-full bg-[#DEEAF4] flex items-center justify-center">
-                    <BookOpen className="text-[#0D5B9C] w-4 h-4" />
+                  {/* Ícone à direita */}
+                  <div className="absolute z-20 top-[200px] left-[290px] -translate-y-18 translate-x-14">
+                    <div className="w-16 h-16 rounded-full bg-[#DEEAF4] flex items-center justify-center">
+                      <Brain className="text-[#0D5B9C] w-7 h-7" />
+                    </div>
+                  </div>
+
+                  {/* Ícone ao meio */}
+                  <div className="absolute z-20 bottom-[50px] right-[270px] translate-y-43 translate-x-14">
+                    <div className="w-8 h-8 rounded-full bg-[#DEEAF4] flex items-center justify-center">
+                      <BookOpen className="text-[#0D5B9C] w-4 h-4" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -219,7 +229,7 @@ export default function Home() {
 
           {/* Level buttons */}
           <div className="flex justify-center mb-12">
-            <div className="relative flex items-center bg-[#E3EDF5] p-5 rounded-full">
+            <div className="relative flex items-center gap-1 sm:gap-0 bg-[#E3EDF5] p-2 sm:p-5 rounded-full">
               {(
                 [
                   { id: "essentials", label: "Essentials" },
@@ -230,7 +240,7 @@ export default function Home() {
                 <div key={level.id} className="relative flex items-center">
                   <button
                     onClick={() => setSelectedLevel(level.id)}
-                    className={`cursor-pointer relative z-10 px-5 py-2 rounded-full text-base sm:text-xl font-regular transition-all
+                    className={`cursor-pointer relative z-10 px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-sm sm:text-xl font-regular transition-all
             ${
               selectedLevel === level.id
                 ? "bg-[#0D5B9C] text-white"
@@ -240,9 +250,9 @@ export default function Home() {
                     {level.label}
                   </button>
 
-                  {/* Conector */}
+                  {/* Conector - hidden on mobile */}
                   {index < arr.length - 1 && (
-                    <div className="relative flex items-center w-10">
+                    <div className="relative hidden sm:flex items-center w-10">
                       {/* Linha conectora */}
                       <div
                         className={`absolute w-[68%] h-[2px] ${
