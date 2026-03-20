@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useEnrollment } from "@/contexts/enrollment-context";
 import { Badge } from "@/components/ui/badge";
@@ -137,6 +137,19 @@ export function EnrollModal({
   };
 
   const data = getLevelData();
+
+  // Block body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -299,8 +312,8 @@ export function EnrollModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto no-scrollbar p-4 pt-10">
-      <div className="w-full max-w-5xl bg-white rounded-lg mt-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto p-0 sm:p-4 sm:pt-10">
+      <div className="w-full max-w-5xl bg-white sm:rounded-lg sm:mt-4 min-h-screen sm:min-h-0">
         {/* Header */}
         <div className="p-8 pb-2 flex items-center gap-3">
           <button
@@ -333,7 +346,7 @@ export function EnrollModal({
             </div>
 
             {/* Info Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 justify-items-center gap-4 pb-6">
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
                   {level === "essentials" ? (

@@ -267,7 +267,7 @@ export default function Home() {
 
           {/* Level buttons */}
           <div className="flex justify-center mb-12">
-            <div className="relative flex items-center gap-1 sm:gap-0 bg-[#E3EDF5] p-2 sm:p-5 rounded-full">
+            <div className="relative flex items-center gap-4 sm:gap-0 bg-[#E3EDF5] p-2 sm:p-5 rounded-full">
               {(
                 [
                   { id: "essentials", label: "Essentials" },
@@ -278,7 +278,7 @@ export default function Home() {
                 <div key={level.id} className="relative flex items-center">
                   <button
                     onClick={() => setSelectedLevel(level.id)}
-                    className={`cursor-pointer relative z-10 px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-sm sm:text-xl font-regular transition-all
+                    className={`cursor-pointer relative z-10 px-5 sm:px-5 py-1.5 sm:py-2 rounded-full text-sm sm:text-xl font-regular transition-all
             ${
               selectedLevel === level.id
                 ? "bg-[#0D5B9C] text-white"
@@ -413,7 +413,7 @@ export default function Home() {
                   onClick={() => openEnrollModal()}
                   className="cursor-pointer w-full px-6 py-[12px] min-h-[45px] bg-white border-2 border-[#e35205] text-[#E35205] hover:bg-[#e35205]/5 font-semibold text-lg leading-[140%]"
                 >
-                  Inscrever-se
+                  Inscreva-se
                 </Button>
               </div>
             )}
@@ -474,7 +474,7 @@ export default function Home() {
                     }
                     className="cursor-pointer w-full px-6 py-[12px] min-h-[45px] bg-white border-2 border-[#e35205] text-[#E35205] hover:bg-[#e35205]/5 font-semibold text-lg leading-[140%]"
                   >
-                    Inscrever-se
+                    Inscreva-se
                   </Button>
                 </div>
 
@@ -535,7 +535,7 @@ export default function Home() {
                     }
                     className="cursor-pointer w-full px-6 py-[12px] min-h-[45px] bg-white border-2 border-[#e35205] text-[#E35205] hover:bg-[#e35205]/5 font-semibold text-lg leading-[140%]"
                   >
-                    Inscrever-se
+                    Inscreva-se
                   </Button>
                 </div>
               </>
@@ -589,7 +589,7 @@ export default function Home() {
                   onClick={() => openEnrollModal()}
                   className="cursor-pointer w-full px-6 py-[12px] min-h-[45px] bg-white border-2 border-[#e35205] text-[#E35205] hover:bg-[#e35205]/5 font-semibold text-lg leading-[140%]"
                 >
-                  Inscrever-se
+                  Inscreva-se
                 </Button>
               </div>
             )}

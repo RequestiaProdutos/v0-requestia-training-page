@@ -100,7 +100,7 @@ export function FormField({
           ${
             shouldFloat
               ? "-top-2.5 text-xs bg-white"
-              : "top-1/2 -translate-y-1/2 text-sm bg-transparent"
+              : "top-3 text-sm bg-transparent"
           }
           ${
             hasError

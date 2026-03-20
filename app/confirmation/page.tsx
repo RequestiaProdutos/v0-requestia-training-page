@@ -85,7 +85,7 @@ export default function ConfirmationPage() {
           </div>
 
           {/* Details Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-gray-200">
+          <div className="grid grid-cols-2 md:grid-cols-4 justify-items-center gap-8 mb-8 pb-8 border-b border-gray-200">
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <CalendarCheck className="w-7 h-7 text-[#212121]" />
@@ -133,7 +133,7 @@ export default function ConfirmationPage() {
               Dados do participante
             </h3>
 
-            <div className="grid grid-cols-3 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-12">
               {/* Column 1 - Personal Info */}
               <div className="space-y-1">
                 <p className="text-sm text-[#212121]">
