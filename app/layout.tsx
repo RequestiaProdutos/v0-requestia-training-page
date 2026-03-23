@@ -4,6 +4,8 @@ import { Analytics } from "@vercel/analytics/next";
 import { EnrollmentProvider } from "@/contexts/enrollment-context";
 import "./globals.css";
 
+import ClarityProvider from "@/components/clarity";
+
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
@@ -36,6 +38,7 @@ export default function RootLayout({
         className={`${roboto.variable} font-sans antialiased bg-gradient-to-b from-[#f4f7fa] to-white`}
       >
         <EnrollmentProvider>{children}</EnrollmentProvider>
+        <ClarityProvider />
         <Analytics />
       </body>
     </html>
