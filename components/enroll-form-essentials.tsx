@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import { FormField } from "@/components/form/form-field";
+import { getValidator } from "@/lib/form/validators";
 import type { EnrollFormEssentialsProps } from "@/types/enrollment";
 
 export function EnrollFormEssentials({
@@ -14,6 +15,38 @@ export function EnrollFormEssentials({
 }: EnrollFormEssentialsProps) {
   const [isParticipantDataExpanded, setIsParticipantDataExpanded] =
     useState(true);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  const validateAll = (): boolean => {
+    const validators: Array<{
+      name: string;
+      value: string;
+      validation: "name" | "email" | "phone" | "required" | "textOnly";
+    }> = [
+      { name: "fullName", value: formData.fullName, validation: "name" },
+      { name: "role", value: formData.role, validation: "textOnly" },
+      { name: "company", value: formData.company, validation: "required" },
+      { name: "email", value: formData.email, validation: "email" },
+      { name: "phone", value: formData.phone, validation: "phone" },
+    ];
+
+    const errors: Record<string, string> = {};
+    for (const field of validators) {
+      const result = getValidator(field.validation)(field.value);
+      if (!result.isValid && result.error) {
+        errors[field.name] = result.error;
+      }
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!validateAll()) return;
+    onSubmit(e);
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -29,6 +62,14 @@ export function EnrollFormEssentials({
         ...formData,
         [name]: value,
       });
+      // Clear field error when user edits the field
+      if (fieldErrors[name]) {
+        setFieldErrors((prev) => {
+          const next = { ...prev };
+          delete next[name];
+          return next;
+        });
+      }
     }
   };
 
@@ -38,7 +79,7 @@ export function EnrollFormEssentials({
         Dados para inscrição
       </h3>
 
-      <form className="flex flex-col flex-1" onSubmit={onSubmit}>
+      <form className="flex flex-col flex-1" onSubmit={handleSubmit}>
         <div className="flex-1 overflow-y-auto no-scrollbar px-2">
           <button
             type="button"
@@ -69,6 +110,7 @@ export function EnrollFormEssentials({
                   value={formData.fullName}
                   onChange={handleInputChange}
                   validation="name"
+                  externalError={fieldErrors.fullName}
                   required
                 />
               </div>
@@ -83,6 +125,7 @@ export function EnrollFormEssentials({
                   value={formData.role}
                   onChange={handleInputChange}
                   validation="textOnly"
+                  externalError={fieldErrors.role}
                   required
                 />
                 <FormField
@@ -93,6 +136,7 @@ export function EnrollFormEssentials({
                   value={formData.company}
                   onChange={handleInputChange}
                   validation="required"
+                  externalError={fieldErrors.company}
                   required
                 />
               </div>
@@ -107,6 +151,7 @@ export function EnrollFormEssentials({
                   value={formData.email}
                   onChange={handleInputChange}
                   validation="email"
+                  externalError={fieldErrors.email}
                   required
                 />
                 <FormField
@@ -117,6 +162,7 @@ export function EnrollFormEssentials({
                   value={formData.phone}
                   onChange={handleInputChange}
                   validation="phone"
+                  externalError={fieldErrors.phone}
                   formatAsPhone
                   required
                 />
@@ -154,7 +200,7 @@ export function EnrollFormEssentials({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full px-8 py-6 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-sm disabled:opacity-70 disabled:cursor-not-allowed"
+            className="cursor-pointer w-full px-8 py-6 bg-[#0D5B9C] text-white hover:bg-[#0D5B9C]/90 font-semibold text-sm rounded-sm disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <>
