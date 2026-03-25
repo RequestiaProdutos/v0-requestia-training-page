@@ -14,6 +14,7 @@ export async function renderEssentialsInternalEmail(
     company: data.participant.company,
     email: data.participant.email,
     phone: data.participant.phone,
+    date: data.training.date ?? "-",
   };
 
   return renderTemplate(template, vars);
