@@ -74,13 +74,13 @@ export function EnrollFormEssentials({
   };
 
   return (
-    <div className="md:col-span-2 border p-6 shadow-lg shadow-[#004680]/10 rounded-2xl flex flex-col max-h-[100vh] sm:h-[65vh]">
+    <div className="md:col-span-2 border p-6 shadow-lg shadow-[#004680]/10 rounded-2xl flex flex-col">
       <h3 className="text-2xl font-normal text-[#00233f] mb-6">
         Dados para inscrição
       </h3>
 
       <form className="flex flex-col flex-1" onSubmit={handleSubmit}>
-        <div className="flex-1 overflow-y-auto no-scrollbar px-2">
+        <div className="px-2">
           <button
             type="button"
             onClick={() =>
@@ -99,7 +99,7 @@ export function EnrollFormEssentials({
           </button>
 
           {isParticipantDataExpanded && (
-            <div className="mt-4 space-y-4">
+            <div className="mt-4 mb-8 space-y-4">
               {/* Full Name */}
               <div className="mb-4">
                 <FormField
