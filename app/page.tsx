@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -30,15 +30,58 @@ interface TrainingSession {
   duration: string;
 }
 
+const SESSION_DATA: Record<string, TrainingSession> = {
+  "foundations-maio-2026": {
+    id: "foundations-maio-2026",
+    date: "4 a 6 de maio de 2026",
+    location: "Campinas, SP",
+    duration: "3 dias intensivos",
+  },
+  "foundations-setembro-2026": {
+    id: "foundations-setembro-2026",
+    date: "14 a 16 de setembro de 2026",
+    location: "Campinas, SP",
+    duration: "3 dias intensivos",
+  },
+};
+
+const ENROLLMENT_LEVEL: Record<string, Level> = {
+  "essentials": "essentials",
+  "foundations-maio-2026": "foundations",
+  "foundations-setembro-2026": "foundations",
+  "expert-novembro-2026": "expert",
+};
+
 export default function Home() {
   const [selectedLevel, setSelectedLevel] = useState<Level>("essentials");
   const [enrollModalOpen, setEnrollModalOpen] = useState(false);
   const [selectedSession, setSelectedSession] =
     useState<TrainingSession | null>(null);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const inscricao = params.get("inscricao");
+    if (inscricao && ENROLLMENT_LEVEL[inscricao]) {
+      setSelectedLevel(ENROLLMENT_LEVEL[inscricao]);
+      setSelectedSession(SESSION_DATA[inscricao] ?? null);
+      setEnrollModalOpen(true);
+    }
+  }, []);
+
   const openEnrollModal = (session: TrainingSession | null = null) => {
     setSelectedSession(session);
     setEnrollModalOpen(true);
+    const key = session
+      ? session.id
+      : selectedLevel === "expert"
+        ? "expert-novembro-2026"
+        : "essentials";
+    window.history.replaceState({}, "", `?inscricao=${key}`);
+  };
+
+  const closeEnrollModal = () => {
+    setEnrollModalOpen(false);
+    window.history.replaceState({}, "", window.location.pathname);
   };
 
   return (
@@ -466,7 +509,7 @@ export default function Home() {
                   <Button
                     onClick={() =>
                       openEnrollModal({
-                        id: "foundations-may-2026",
+                        id: "foundations-maio-2026",
                         date: "4 a 6 de maio de 2026",
                         location: "Campinas, SP",
                         duration: "3 dias intensivos",
@@ -527,7 +570,7 @@ export default function Home() {
                   <Button
                     onClick={() =>
                       openEnrollModal({
-                        id: "foundations-september-2026",
+                        id: "foundations-setembro-2026",
                         date: "14 a 16 de setembro de 2026",
                         location: "Campinas, SP",
                         duration: "3 dias intensivos",
@@ -586,7 +629,14 @@ export default function Home() {
 
                 {/* Enroll button */}
                 <Button
-                  onClick={() => openEnrollModal()}
+                  onClick={() =>
+                    openEnrollModal({
+                      id: "expert-novembro-2026",
+                      date: "9 a 11 de novembro de 2026",
+                      location: "Campinas, SP",
+                      duration: "3 dias intensivos",
+                    })
+                  }
                   className="cursor-pointer w-full px-6 py-[12px] min-h-[45px] bg-white border-2 border-[#e35205] text-[#E35205] hover:bg-[#e35205]/5 font-semibold text-lg leading-[140%]"
                 >
                   Inscreva-se
@@ -636,7 +686,7 @@ export default function Home() {
       {/* Enroll Modal */}
       <EnrollModal
         isOpen={enrollModalOpen}
-        onClose={() => setEnrollModalOpen(false)}
+        onClose={closeEnrollModal}
         level={selectedLevel}
         session={selectedSession}
       />
