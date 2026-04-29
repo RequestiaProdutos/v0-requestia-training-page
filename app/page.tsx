@@ -31,12 +31,6 @@ interface TrainingSession {
 }
 
 const SESSION_DATA: Record<string, TrainingSession> = {
-  "foundations-maio-2026": {
-    id: "foundations-maio-2026",
-    date: "4 a 6 de maio de 2026",
-    location: "Campinas, SP",
-    duration: "3 dias intensivos",
-  },
   "foundations-setembro-2026": {
     id: "foundations-setembro-2026",
     date: "14 a 16 de setembro de 2026",
@@ -47,7 +41,6 @@ const SESSION_DATA: Record<string, TrainingSession> = {
 
 const ENROLLMENT_LEVEL: Record<string, Level> = {
   "essentials": "essentials",
-  "foundations-maio-2026": "foundations",
   "foundations-setembro-2026": "foundations",
   "expert-novembro-2026": "expert",
 };
@@ -463,65 +456,7 @@ export default function Home() {
 
             {selectedLevel === "foundations" && (
               <>
-                {/* Foundation Course Card 1 */}
-                <div className="bg-white rounded-2xl border border-gray-300 overflow-hidden p-6">
-                  {/* Date section */}
-                  <div className="mb-6 p-4 bg-[#E9EEF2] rounded-lg flex items-center gap-3">
-                    <CalendarCheck className="w-5 h-5 text-gray-700" />
-                    <div className="flex-1">
-                      <p className="font-regular text-gray-600">
-                        {" "}
-                        <b>4 a 6 de maio</b> | Segunda a quarta-feira
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Course description */}
-                  <p className="text-gray-600 text-sm mb-6">
-                    Crie e edite processos, configure fluxos e formulários e
-                    evolua processos com mais autonomia no dia a dia da
-                    administração da plataforma.
-                  </p>
-
-                  {/* Course info items */}
-                  <div className="flex flex-wrap gap-6 mb-6 pb-6 border-b border-gray-200">
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-5 h-5 text-gray-700" />
-                      <span className="text-sm text-gray-700">
-                        Campinas, SP
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <ClockFading className="w-5 h-5 text-gray-700" />
-                      <span className="text-sm text-gray-700">
-                        3 dias intensivos
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Award className="w-5 h-5 text-gray-700" />
-                      <span className="text-sm text-gray-700">
-                        Certificado oficial
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Enroll button */}
-                  <Button
-                    onClick={() =>
-                      openEnrollModal({
-                        id: "foundations-maio-2026",
-                        date: "4 a 6 de maio de 2026",
-                        location: "Campinas, SP",
-                        duration: "3 dias intensivos",
-                      })
-                    }
-                    className="cursor-pointer w-full px-6 py-[12px] min-h-[45px] bg-white border-2 border-[#e35205] text-[#E35205] hover:bg-[#e35205]/5 font-semibold text-lg leading-[140%]"
-                  >
-                    Inscreva-se
-                  </Button>
-                </div>
-
-                {/* Foundation Course Card 2 */}
+                {/* Foundation Course Card */}
                 <div className="bg-white rounded-2xl border border-gray-300 overflow-hidden p-6">
                   {/* Date section */}
                   <div className="mb-6 p-4 bg-[#E9EEF2] rounded-lg flex items-center gap-3">
